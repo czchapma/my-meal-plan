@@ -1,0 +1,52 @@
+body {
+width:100%;
+background-color:black;
+margin:auto;
+font-family:sans-serif;
+}
+
+#logo{
+display:block;
+width:300px;
+height:100px;
+margin:0 auto;
+background-color:white;
+}
+
+#nav_bar {
+width:100%;
+background-color:lime;
+}
+
+#nav_buttons {
+width:600px;
+margin:auto;
+}
+
+#nav_buttons a{
+display:inline-block;
+height:30px;
+padding:0 10px 0 10px;
+
+font-size:16pt;
+text-decoration:none;
+}
+
+#nav_buttons a:link{
+color:darkgreen;
+vertical-align:center;
+}
+
+#nav_buttons a:hover{
+color:lime;
+background-color:darkgreen;
+}
+
+.content_box {
+width:600px;
+height:600px;
+margin:auto;
+color:white;
+background-color:#0F0F0F;
+
+}
