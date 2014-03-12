@@ -1,8 +1,26 @@
+@font-face
+{
+	font-family: Antonio;
+	src: url(antonio/Antonio-Regular.ttf);
+}
+
+@font-face
+{
+	font-family: Antonio-Light;
+	src: url(antonio/Antonio-Light.ttf);
+}
+
+@font-face
+{
+	font-family: Antonio-Bold;
+	src: url(antonio/Antonio-Bold);
+}
+
 body {
 width:100%;
 background-color:black;
 margin:auto;
-font-family:sans-serif;
+font-family: Antonio;
 }
 
 #logo{
@@ -19,7 +37,7 @@ background-color:lime;
 }
 
 #nav_buttons {
-width:600px;
+width:456px;
 margin:auto;
 }
 
@@ -27,7 +45,7 @@ margin:auto;
 display:inline-block;
 height:30px;
 padding:0 10px 0 10px;
-
+color: black;
 font-size:16pt;
 text-decoration:none;
 }
