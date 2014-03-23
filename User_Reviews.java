@@ -34,9 +34,16 @@ public class User_Reviews {
 		{
 			nextComma = buffer.indexOf(','); //find the next comma
 			prevOutput = curOutput; //save the previous word
-			curOutput = buffer.substring(0,nextComma); //and take everything up to that comma
-			buffer = buffer.substring(nextComma + 1); //leaving the rest of the string in buffer
-			
+			if(nextComma != -1)
+			{
+				curOutput = buffer.substring(0,nextComma); //and take everything up to that comma
+				buffer = buffer.substring(nextComma + 1); //leaving the rest of the string in buffer
+			}
+			else
+			{
+				curOutput = buffer;
+				buffer = "";
+			}
 			//figure out which field to fill in, then do so
 			if(whichField == 0)
 			{
@@ -77,5 +84,8 @@ public class User_Reviews {
 			}
 			whichField ++; //increment the field counter
 		}
+		System.out.println("User Id" + userId);
+		System.out.println("Name" + userName);
+		System.out.println("birth year" + birthYear);
 	}
 }
