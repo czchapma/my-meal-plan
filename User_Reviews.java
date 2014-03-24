@@ -88,4 +88,56 @@ public class User_Reviews {
 		System.out.println("Name" + userName);
 		System.out.println("birth year" + birthYear);
 	}
+	
+	public HashMap<String,Integer> getReviews()
+	{
+		return reviews;
+	}
+	
+	
+	public int getUserId()
+	{
+		return userId;
+	}
+	public String getUserName()
+	{
+		return userName;
+	}
+	public int getIdentity()
+	{
+		return genderIdentity;
+	}
+	public String getIdDescription()
+	{
+		return other;
+	}
+	public int getBirthYear()
+	{
+		return birthYear;
+	}
+	public int getBirthMonth()
+	{
+		return birthMonth;
+	}
+	
+	public double diff(User_Reviews otherUser)
+	{
+		double diff = 0;
+		if(otherUser.getIdentity() != genderIdentity)
+			diff += 10;//later make this scalable so training phase can pick best parameter
+		diff += Math.pow(((birthMonth/ 12.0 + birthYear)
+			 - (otherUser.getBirthMonth()/ 12.0 + otherUser.getBirthYear())),2); //later add in scalable parameter for training phase
+		
+		Set<String> myreviewed = reviews.keySet();
+		Set<String> theirReviewed = otherUser.getReviews().keySet();
+		
+		myreviewed.retainAll(theirReviewed);
+		
+		for(String key : myreviewed.toArray())
+		{
+			diff += Math.pow((reviews.get(key) - otherUser.getReviews().get(key)),2);
+		}
+		
+		return diff;
+	}
 }
