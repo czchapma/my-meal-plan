@@ -41,11 +41,11 @@ public class ML_Client
 		{
 			users.put(newUser.getUserId(),newUser); //add the new user to the map of users.
 			HashMap<Integer, Double> newDist = new HashMap<Integer,Double>();
-
 			for(User_Reviews user : users.values()) //now go through each user
 			{
 				newDist.put(user.getUserId(), user.diff(newUser)); //add their dist to newUser to the newDist
-				dists.get(user.getUserId()).put(newUser.getUserId(),user.diff(newUser)); //and add the dist to the other user's dists.
+				if(user.getUserId() != newUser.getUserId())	
+					dists.get(user.getUserId()).put(newUser.getUserId(),user.diff(newUser)); //and add the dist to the other user's dists.
 			}
 			dists.put(newUser.getUserId(),newDist);//and add the newDist into dists.
 				
@@ -103,6 +103,21 @@ public class ML_Client
 	//TODO: We really really need a toString for testing. Should print the contents of both data structures in a legible way.
 	public String toString()
 	{
+		String output = "";
+		for(User_Reviews user : users.values()) //now go through each user
+		{
+			output += user.getUserId();
+			output += " is the following distance from each user id:\n";
+			System.out.println(dists.keySet());
+			for(Integer userId : dists.get(user.getUserId()).keySet())
+			{
+				output += userId;
+				output += " Is this distance away: ";
+				output += dists.get(user.getUserId()).get(userId);
+				output += '\n';
+			}
+		}
+		return output;
 	}	
 
 }
