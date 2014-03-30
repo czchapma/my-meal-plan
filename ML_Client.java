@@ -29,7 +29,7 @@ public class ML_Client
 		return false;
 	}
 
-	//TODO: Test that the method does the following: add newUser into users. If id number already exists, should issue a warning that the user already existed. Then update dists so that there is a new "column and row" for that user. 
+	
 	public void addUser(User_Reviews newUser)
 	{
 		if(users.containsKey(newUser.getUserId()))
@@ -40,51 +40,119 @@ public class ML_Client
 		else
 		{
 			users.put(newUser.getUserId(),newUser); //add the new user to the map of users.
-			HashMap<Integer, Double> newDist = new HashMap<Integer,Double>();
-			for(User_Reviews user : users.values()) //now go through each user
-			{
-				newDist.put(user.getUserId(), user.diff(newUser)); //add their dist to newUser to the newDist
-				if(user.getUserId() != newUser.getUserId())	
-					dists.get(user.getUserId()).put(newUser.getUserId(),user.diff(newUser)); //and add the dist to the other user's dists.
-			}
-			dists.put(newUser.getUserId(),newDist);//and add the newDist into dists.
-				
+			updateDists(newUser);	
 		}
 			
 	}
 
-	//TODO: should go to the user in users indicated by the curId (j) and update the name
+	private void updateDists(User_Reviews existentUser)
+	{
+		//TODO: Issue warning if user does not already exist in client
+		HashMap<Integer, Double> newDist = new HashMap<Integer,Double>();
+		for(User_Reviews user : users.values()) //now go through each user
+		{
+			newDist.put(user.getUserId(), user.diff(existentUser)); //add their dist to newUser to the newDist
+			if(user.getUserId() != existentUser.getUserId())	
+				dists.get(user.getUserId()).put(existentUser.getUserId(),user.diff(existentUser)); //and add the dist to the other user's dists.
+			
+		}
+		dists.put(existentUser.getUserId(),newDist);//and add the newDist into dists.			
+
+	}
+	//TODO: test to make sure this works:  should go to the user in users indicated by the curId (j) and update the name
 	public void updateUserName(int curId, String newName)
 	{
+		User_Reviews theUser = users.get(curId);
+		if(theUser == null)
+		{
+			System.out.println("Warning: this update process attempted to a user who does not exist. Aborting. ");
+			return;
+		}
+		theUser.setUserName(newName);
+		users.put(curId,theUser);
+		
 	}
 
-	//TODO: should go to the user in users indicated by the curId (j) and update the genderId
+	//TODO: test to make sure this works:  should go to the user in users indicated by the curId (j) and update the genderId
 	//Then update dists with this info. (Only need to look at jth row and col)
-	public void updateGenderId(int curId, int genderId)
+	public void updateIdentity(int curId, int genderId)
 	{
+		User_Reviews theUser = users.get(curId);
+		if(theUser == null)
+		{
+			System.out.println("Warning: this update process attempted to a user who does not exist. Aborting. ");
+			return;
+		}
+		
+		theUser.setIdentity(genderId);
+		users.put(curId,theUser);
+		updateDists(theUser);
+		
 	}
 
-	//TODO: should go to the user in users indicated by the curId (j) and update the genderDescriptions
-	public void updateGenderDescription(int curId, String genderDescription)
+	//TODO: test to make sure this works:  should go to the user in users indicated by the curId (j) and update the genderDescriptions
+	public void updateIdDescription(int curId, String genderDescription)
 	{
+		User_Reviews theUser = users.get(curId);
+		if(theUser == null)
+		{
+			System.out.println("Warning: this update process attempted to a user who does not exist. Aborting. ");
+			return;
+		}
+		
+		theUser.setIdDescription(genderDescription);
+		users.put(curId,theUser);
+		
 	}
 
-	//TODO: should go to the user in users indicated by the curId (j) and update the birthYear
+	//TODO: test to make sure this works:  should go to the user in users indicated by the curId (j) and update the birthYear
 	//Then update dists with this info. (Only need to look at jth row and col)
 	public void updateBirthYear(int curId, int birthYear)
 	{
+		User_Reviews theUser = users.get(curId);
+		if(theUser == null)
+		{
+			System.out.println("Warning: this update process attempted to a user who does not exist. Aborting. ");
+			return;
+		}
+		
+		theUser.setBirthYear(birthYear);
+		users.put(curId,theUser);
+		updateDists(theUser);
+		
 	}
 
-	//TODO: should go to the user in users indicated by the curId (j) and update the birthMonth
+	//TODO: test to make sure this works:  should go to the user in users indicated by the curId (j) and update the birthMonth
 	//Then update dists with this info. (Only need to look at jth row and col)
 	public void updateBirthMonth(int curId, int birthMonth)
 	{
+		User_Reviews theUser = users.get(curId);
+		if(theUser == null)
+		{
+			System.out.println("Warning: this update process attempted to a user who does not exist. Aborting. ");
+			return;
+		}
+		
+		theUser.setBirthMonth(birthMonth);
+		users.put(curId,theUser);
+		updateDists(theUser);
 	}
 
-	//TODO: should go to the user in users indicated by the curId (j) and add the given review if it doesn't exist, or modify it if it does. A review value of -1 means the review should be removed. 
+	//TODO: test to make sure this works:  should go to the user in users indicated by the curId (j) and add the given review if it doesn't exist, or modify it if it does. A review value of -1 means the review should be removed. 
 	//Then update dists with this info. (Only need to look at jth row and col)
 	public void updateReview(int curId, String food, int review)
 	{
+
+		User_Reviews theUser = users.get(curId);
+		if(theUser == null)
+		{
+			System.out.println("Warning: this update process attempted to a user who does not exist. Aborting. ");
+			return;
+		}
+		
+		theUser.addFood(food, review);
+		users.put(curId,theUser);
+		updateDists(theUser);
 	}
 
 	//TODO: Get the k nearest neighbors to user indicated by curId that have reviewed item food, then average or majority rule (we can decide this later) their reviews, and return this number. Return -1 if there are not enough neighbors who have reviewed item food. 
@@ -100,7 +168,6 @@ public class ML_Client
 		return suggestions;
 	}
 	
-	//TODO: We really really need a toString for testing. Should print the contents of both data structures in a legible way.
 	public String toString()
 	{
 		String output = "";

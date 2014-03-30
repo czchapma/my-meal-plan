@@ -19,6 +19,11 @@ public class testRunner
 		client1.addUser(person2);
 		client1.addUser(person3);
 		System.out.println(client1);
+
+		client1.updateReview(234,"Chobani",2);
+		client1.updateReview(345,"Chobani",5);
+		//users 234 and 345 should now be farther away. 
+		System.out.println(client1);
 	}
 
 	//double near equivalence test. Because sometimes rounding errors are sad. 

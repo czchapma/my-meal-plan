@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class User_Reviews {
-	private int userId;
+	private int userId; //NOTE: UserIds should be COMPLETELY unique. In MySQL should do autoincrement thingy to ensure. start at 1 or 0, whichever that does, then increment by 1. This'll help with the distances matrix in ML_Client
 	private String userName;
 	private int genderIdentity; //not a boolean because gender is a spectrum. 0 for male, 1 for female, 2 for other
 	private String other; //if gender id is 0 or 1, this should be '', otherwise it has the individual's gender identity
@@ -84,9 +84,6 @@ public class User_Reviews {
 			}
 			whichField ++; //increment the field counter
 		}
-		System.out.println("User Id" + userId);
-		System.out.println("Name" + userName);
-		System.out.println("birth year" + birthYear);
 	}
 	
 	public HashMap<String,Integer> getReviews()
@@ -120,6 +117,34 @@ public class User_Reviews {
 		return birthMonth;
 	}
 	
+	//NOTE: There is no userId mutator. Ids should NEVER be altered. 
+
+	public void setUserName(String name)
+	{
+		userName = name;
+	}
+	public void setIdentity(int gender)
+	{
+		genderIdentity = gender;
+	}
+	public void setIdDescription(String identity)
+	{
+		other = identity;
+	}
+	public void setBirthYear(int year)
+	{
+		birthYear = year;
+	}
+	public void setBirthMonth(int month)
+	{
+		birthMonth = month;
+	}
+
+	public void addFood(String food, int review)
+	{
+		reviews.put(food,review);
+	}
+
 	public double diff(User_Reviews otherUser)
 	{
 		double diff = 0;
@@ -133,9 +158,9 @@ public class User_Reviews {
 		
 		myreviewed.retainAll(theirReviewed);
 		
-		for(String key : myreviewed.toArray())
+		for(Object key : myreviewed.toArray())
 		{
-			diff += Math.pow((reviews.get(key) - otherUser.getReviews().get(key)),2);
+			diff += Math.pow((reviews.get((String) key) - otherUser.getReviews().get((String) key)),2);
 		}
 		
 		return diff;
