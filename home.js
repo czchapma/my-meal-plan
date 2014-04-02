@@ -2,9 +2,15 @@ $(document).ready(function(){
 	$('a').each(function(){
 		$(this).click(function(event){
 			event.preventDefault();
-			$.get('/' + $(this).attr('id'));
+			var url = $(this).attr('id');
+			$(location).attr('href', url);
 		});	
 	});
+
+	//Generate Ratty menu
+	$.ajax({
+		url: "/rattymenu"
+		}).done(function(result) { console.log(result);});
 }); 
 
 

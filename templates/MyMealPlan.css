@@ -37,7 +37,7 @@ body {
 }
 
 #nav_buttons {
-    width:456px;
+    width:468px;
     margin:auto;
 }
 
@@ -135,4 +135,9 @@ body {
     -o-animation-duration: 0.5s;
     -moz-animation-duration: 0.5s;
     animation-duration: 0.5s;
+}
+
+/* TODO remove later */
+#testing {
+    color : white;   
 }
