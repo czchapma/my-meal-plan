@@ -20,6 +20,8 @@ public class User_Reviews {
 		reviews = new HashMap<String,Integer>();
 	}
 	
+
+	//TODO: Fix parsing here...csv parsing isn't working right
 	//user constructor with a CSV containing all the data (probably the easiest input from node)
 	public User_Reviews(String myCSV)
 	{
@@ -152,17 +154,31 @@ public class User_Reviews {
 			diff += 10;//later make this scalable so training phase can pick best parameter
 		diff += Math.pow(((birthMonth/ 12.0 + birthYear)
 			 - (otherUser.getBirthMonth()/ 12.0 + otherUser.getBirthYear())),2); //later add in scalable parameter for training phase
-		
 		Set<String> myreviewed = reviews.keySet();
 		Set<String> theirReviewed = otherUser.getReviews().keySet();
 		
-		myreviewed.retainAll(theirReviewed);
-		
-		for(Object key : myreviewed.toArray())
+		for(String s: myreviewed)
 		{
-			diff += Math.pow((reviews.get((String) key) - otherUser.getReviews().get((String) key)),2);
+			if(theirReviewed.contains(s))
+			{
+				diff += Math.pow((reviews.get(s) - otherUser.getReviews().get(s)),2);
+			}
 		}
-		
 		return diff;
+	}
+
+	public String toString()
+	{
+
+		String out = "";
+		out+= userId;
+		out+= ", ";
+		out+= userName;
+		out+= ", ";
+		for(String food : reviews.keySet())
+		{
+			out += food + " " + reviews.get(food) + " ";
+		}
+		return out;
 	}
 }
