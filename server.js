@@ -165,7 +165,7 @@ app.get('/status/ratty', function(req, res) {
 			toReturn['message'] = 'Closed! Re-opens tomorrow at 7:30AM';
 		}
 	}
-	return res.json(JSON.stringify(toReturn));
+	res.json(JSON.stringify(toReturn));
 });
 
 app.get('/status/vdub', function(req, res) {
@@ -202,7 +202,7 @@ app.get('/status/vdub', function(req, res) {
 			toReturn['message'] = 'Closed! Re-opens tomorrow at 7:30AM';
 		}
 	}
-	return res.json(JSON.stringify(toReturn));
+	res.json(JSON.stringify(toReturn));
 });
 
 //TODO: known bug - will display wrong message if it's the morning before opening
@@ -239,7 +239,7 @@ app.get('/status/blueroom', function(req, res){
 			}
 		}
 	}
-	return res.json(JSON.stringify(toReturn));
+	res.json(JSON.stringify(toReturn));
 });
 
 app.get('/status/ivyroom', function(req, res) {
@@ -265,7 +265,7 @@ app.get('/status/ivyroom', function(req, res) {
 			toReturn['message'] =  'Closed! Re-opens today at 7:30PM';
 		}
 	}
-	return res.json(JSON.stringify(toReturn));
+	res.json(JSON.stringify(toReturn));
 });
 
 app.get('/status/aco', function(req,res) {
@@ -278,7 +278,7 @@ app.get('/status/aco', function(req,res) {
 		toReturn['open'] = 'false';
 		toReturn['message'] = 'Closed! Re-opens today at 11AM';
 	}
-	return res.json(JSON.stringify(toReturn));
+	res.json(JSON.stringify(toReturn));
 });
 
 app.get('/status/jos', function(req,res){
@@ -291,8 +291,32 @@ app.get('/status/jos', function(req,res){
 		toReturn['open'] = 'false';
 		toReturn['message'] = 'Closed! Re-opens today at 6PM';
 	}
-	return res.json(JSON.stringify(toReturn));
+	res.json(JSON.stringify(toReturn));
 
+});
+
+app.get('/times/ratty', function(req,res){
+	res.end('Monday - Saturday: 7:30AM - 7:30PM\nSunday: 10:30AM - 7:30PM');
+});
+
+app.get('/times/vdub', function(req,res){
+	res.end('Weekdays\nBreakfast: 7:30AM - 9:30AM\nContinental Breakfast: 9:30AM - 11AM\nLunch: 11AM - 2PM\nDinner: 4:30PM-7:30PM\nSaturday/Sunday: Closed');
+});
+
+app.get('/times/blueroom', function(req,res){
+	res.end('Weekdays: 7:30AM - 9PM\nWeekends: 9AM - 5PM');
+});
+
+app.get('/times/ivyroom', function(req,res){
+	res.end('Weekday Lunch: 11:30AM - 1:45PM\nSunday - Thursday Dinner: 7:30PM - Midnight');
+});
+
+app.get('/times/jos', function(req,res){
+	res.end('6PM - 2AM daily');
+});
+
+app.get('/times/aco', function(req,res){
+	res.end('11AM - 2AM daily');
 });
 
 app.get('/', function(req, res){

@@ -147,6 +147,15 @@ body {
     color: #0F0F0F;
 }
 
+.times {
+    padding-bottom: 10px;
+}
+.times li {
+    display: block;
+    float: none;
+    text-align: center;
+}
+
 .open {
     color: lime;
     text-align: center;
