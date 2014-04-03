@@ -9,10 +9,10 @@ app.set('views', __dirname + '/templates'); // tell Express where to find templa
 app.use(express.static(__dirname)); //allows css to work with rendered html
 
 app.use(express.bodyParser());
- 
 //Navigates to Brown's get portal to get credit/points info
 app.get('/login', function(req, res){
-	makeRequest('/getportal', function(body){
+	passport.authenticate('http://www.brown.edu/getportal');
+	makeRequest('https://get.cbord.com/brown/full/funds_home.php', function(body){
 		$ = cheerio.load(body);
 		console.log(body);
 		var values = {}
@@ -31,9 +31,6 @@ app.get('/login', function(req, res){
 	});
 });
 
-app.get('/getportal', function(req,res){
-	res.redirect('http://www.brown.edu/getportal');
-});
 app.get('/dininghalls', function(req, res) {
 	res.render('dininghalls.html');
 });
@@ -46,7 +43,7 @@ app.get('/mydining', function(req, res) {
 	res.render('mydining.html');
 });
 
-app.get('/rattymenu', function(req, res) {
+app.get('/menu/ratty', function(req, res) {
 	makeRequest('http://www.brown.edu/Student_Services/Food_Services/eateries/refectory_menu.php',function(body){
 		$ = cheerio.load(body);
 		var bSrc = $('#Breakfast').attr('src');
@@ -68,12 +65,29 @@ app.get('/rattymenu', function(req, res) {
 	});
 });
 
-app.get('/vdubmenu', function(req,res) {
+app.get('/menu/vdub', function(req,res) {
 	makeRequest('http://www.brown.edu/Student_Services/Food_Services/eateries/verneywoolley_menu.php', function(body){
 		$ = cheerio.load(body);
 		var src = $('iframe').first().attr('src');
-		var ignoreList = ["",".","Opens for lunch","Opens for Lunch",'spring 1', 'spring 2', 'spring 3', 'spring 4', 'Breakfast','Lunch','Dinner', 'Daily Sidebars'];
+		var ignoreList = ["",".","Opens for lunch","Opens for Lunch",'spring 1', 'spring 2', 'spring 3', 'spring 4', 'spring 5', 'Breakfast','Lunch','Dinner', 'Daily Sidebars'];
 		makeRattyVDubMenu(res,src,ignoreList);
+	});
+});
+
+app.get('/menu/blueroom', function(req,res) {
+	makeRequest('https://www.google.com/calendar/htmlembed?showTitle=0&showNav=0&showDate=0&showPrint=0&showTabs=0&showCalendars=0&showTz=0&mode=AGENDA&height=500&wkst=1&bgcolor=%23FFFFFF&src=brown.edu_ecua9ff3gkcocn27ffon8700dk%40group.calendar.google.com&color=%23B1440E&src=brown.edu_1qo9psm1828mt6apg4df9rb9dc%40group.calendar.google.com&color=%23875509&src=brown.edu_eof6uj287ti6bvajbhsbfest90%40group.calendar.google.com&color=%232F6309&src=brown.edu_urf3617tirt011tjh67jc8l3o8%40group.calendar.google.com&color=%232F6309&ctz=America%2FNew_York', function(body){
+		console.log(body);
+		$ = cheerio.load(body);
+		var day = $('.events').first();
+		var obj = {}
+		var items = day.find('span[class=event-summary]').each(function(idx, elm){
+			if (idx === 0){
+				obj['soups'] = $(this).text();
+			} else if (idx === 1){
+				obj['dinner'] = $(this).text();
+			}
+		});
+		res.json(obj);
 	});
 });
 
