@@ -60,6 +60,7 @@ body {
     background-color:darkgreen;
 }
 
+
 .content_box {
     width:600px;
     height:600px;
@@ -137,6 +138,10 @@ body {
     animation-duration: 0.5s;
 }
 
+.menus *{
+	display: inline-block;
+	width: 50%;
+}
 /* TODO remove later */
 #testing {
     color : white;   
