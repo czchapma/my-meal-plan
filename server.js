@@ -32,16 +32,31 @@ app.get('/rattymenu', function(req, res) {
 		var bSrc = $('#Breakfast').attr('src');
 		var lSrc = $('#Lunch').attr('src');
 		var dSrc = $('#Dinner').attr('src');
-		//Breakfast
 		var ignoreList = ["",".","Opens for lunch","Opens for Lunch", "Roots & Shoots","Grill","Bistro","Chef\'s Corner"];
-		makeRattyMenu(bSrc,ignoreList);
-		//Lunch
-		makeRattyMenu(lSrc,ignoreList);
-		//Dinner
-		makeRattyMenu(dSrc, ignoreList);
+		var time = new Date().getHours();
+		if (time < 11 || time > 18){
+			//Breakfast
+			makeRattyVDubMenu(res,bSrc,ignoreList);
+		} else if (time < 15){
+			//Lunch
+			makeRattyVDubMenu(res,lSrc,ignoreList);
+		} else {
+			//Dinner
+			console.log('dinner');
+			makeRattyVDubMenu(res, dSrc, ignoreList);
+		}
 	});
-	res.end('done!');
 });
+
+app.get('/vdubmenu', function(req,res) {
+	makeRequest('http://www.brown.edu/Student_Services/Food_Services/eateries/verneywoolley_menu.php', function(body){
+		$ = cheerio.load(body);
+		var src = $('iframe').first().attr('src');
+		var ignoreList = ["",".","Opens for lunch","Opens for Lunch",'spring 1', 'spring 2', 'spring 3', 'spring 4', 'Breakfast','Lunch','Dinner', 'Daily Sidebars'];
+		makeRattyVDubMenu(res,src,ignoreList);
+	});
+});
+
 app.get('/', function(req, res){
 	res.render('home.html');
 });
@@ -61,17 +76,18 @@ function makeRequest(url, callback){
 	});
 }
 
-function makeRattyMenu(menuUrl, ignoreList){
-	var toReturn = [];
-	makeRequest(menuUrl, function(body){
+function makeRattyVDubMenu(response, menuUrl, ignoreList){
+	function callback(body){
+		var toReturn = ""
 		$ = cheerio.load(body);
 		$('td').each(function(idx, elem) {
 			var text = $(this).text();
 			//items not to include in our menu
 			if (ignoreList.indexOf(text) === -1) {
-				toReturn.push(text);	
+				toReturn += text + '\n';
 			}
 		});
-		return toReturn;
-	});
+		response.end(toReturn.substr(0,toReturn.length - 2));
+	}
+	makeRequest(menuUrl, callback);
 }
