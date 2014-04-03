@@ -39,4 +39,39 @@ $(document).ready(function(){
 			// 	parent.append(li);
 			// }
 		});
+
+
+	//Generate Ivy Room menu
+	$.ajax({
+		url: "/menu/ivyroom"
+		}).done(function(result) {
+			var parent = $('#tab-content4 ul');
+			var split = result.split('\n');
+			for (var i=0; i<split.length; i++){
+				var li ='<li>'+ split[i] + '</li>';
+				parent.append(li);
+			}
+		});
+	//Generate Andrews Commons menu
+	$.ajax({
+		url: "/menu/andrews"
+		}).done(function(result) {
+			var parent = $('#tab-content5 ul');
+			var split = result.split('\n');
+			for (var i=0; i<split.length; i++){
+				var li ='<li>'+ split[i] + '</li>';
+				parent.append(li);
+			}
+		});
+	//Generate Andrews Commons menu
+	$.ajax({
+		url: "/menu/jos"
+		}).done(function(result) {
+			var parent = $('#tab-content6 ul');
+			var split = result.split('\n');
+			for (var i=0; i<split.length; i++){
+				var li ='<li>'+ split[i] + '</li>';
+				parent.append(li);
+			}
+		});
 });
