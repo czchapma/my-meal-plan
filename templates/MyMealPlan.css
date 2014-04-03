@@ -147,6 +147,16 @@ body {
     color: #0F0F0F;
 }
 
+.open {
+    color: lime;
+    text-align: center;
+}
+
+.closed {
+    color: black;
+    text-align: center;
+}
+
 /* TODO remove later */
 #testing {
     color : white;   

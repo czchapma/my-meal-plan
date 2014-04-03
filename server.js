@@ -60,7 +60,6 @@ app.get('/menu/ratty', function(req, res) {
 			makeRattyVDubMenu(res,lSrc,ignoreList);
 		} else {
 			//Dinner
-			console.log('dinner');
 			makeRattyVDubMenu(res, dSrc, ignoreList);
 		}
 	});
@@ -102,7 +101,7 @@ app.get('/menu/ivyroom', function(req, res){
 			makeRattyVDubMenu(res,src,ignoreList);
 		} else {
 			//Dinner Menu
-			res.write('Mac and Cheese\nFalafel Wrap\nTacos\nPizza\nSmoothies');
+			res.end('Mac and Cheese\nFalafel Wrap\nTacos\nPizza\nSmoothies');
 		}
 	});
 });
@@ -136,12 +135,173 @@ app.get('/menu/jos', function(req, res){
 	res.end('Three Burners\nCustom Salad\nSpicy With\nBeef Carb\nTurkey Carb\nChicken Carb\nMozerella Sticks\nFries\nOnion Rings');
 });
 
+app.get('/status/ratty', function(req, res) {
+	var hour = new Date().getHours();
+	var minute = new Date().getMinutes();
+	var day = moment().day();
+	var toReturn = {};
+	//Sunday Brunch 10:30 - 4PM
+	if ((day === 7) && (((hour === 10 && minute >= 30) || hour > 10) && hour < 16)) {
+		toReturn['open'] = 'true';
+		toReturn['message'] = "Currently open for Brunch until 4PM!";
+	//Breakfast: 7:30 - 11
+	} else if (day !== 7 && (((hour === 7 && minute > 30) || hour > 8) && hour < 11)){
+		toReturn['open'] = 'true';
+		toReturn['message'] = 'Currently open for Breakfast until 11AM!';
+	//Lunch: 11AM - 4PM
+	} else if(hour >= 11 && hour < 16){
+		toReturn['open'] = 'true';
+		toReturn['message'] = 'Currently open for Lunch until 4PM!';
+	//Dinner: 4PM - 7:30PM
+	} else if(hour >= 16 && (hour < 19 || (hour === 19 && minute < 30))) {
+		toReturn['open'] = 'true';
+		toReturn['message'] = 'Currently open for Dinner until 7:30PM!'
+	} else {
+		toReturn['open'] = 'false';
+		//Sunday brunch starts at 10:30am, otherwise 7:30AM
+		if(day === 6){
+			toReturn['message'] = 'Closed! Re-opens tomorrow at 10:30AM';
+		} else {
+			toReturn['message'] = 'Closed! Re-opens tomorrow at 7:30AM';
+		}
+	}
+	return res.json(JSON.stringify(toReturn));
+});
+
+app.get('/status/vdub', function(req, res) {
+	var hour = new Date().getHours();
+	var minute = new Date().getMinutes();
+	var day = moment().day();
+	var toReturn = {};
+	//Weekends closed
+	if (day === 6 || day === 7){
+		toReturn['open'] = 'false';
+		toReturn['message'] = 'Closed! Re-opens Monday at 7:30AM';
+	}
+	//Breakfast: 7:30 - 11
+	else if (((hour === 7 && minute > 30) || hour > 8) && hour < 11){
+		toReturn['open'] = 'true';
+		toReturn['message'] = 'Currently open for Breakfast until 11AM!';
+	//Lunch: 11AM - 2PM
+	} else if(hour >= 11 && hour < 14){
+		toReturn['open'] = 'true';
+		toReturn['message'] = 'Currently open for Lunch until 4:30PM!';
+	//Closed 2PM - 4:30PM
+	} else if (hour >= 14 && (hour < 16 || hour === 16 && minute < 30)) {
+		toReturn['open'] = 'false';
+		toReturn['message'] = 'Closed! Re-opens today at 4:30PM';
+	//Dinner: 4:30PM - 7:30PM
+	} else if((hour >= 16 || hour === 16 && minute >= 30) && (hour < 19 || (hour === 19 && minute < 30))) {
+		toReturn['open'] = 'true';
+		toReturn['message'] = 'Currently open for Dinner until 7:30PM!'
+	} else {
+		toReturn['open'] = 'false';
+		if(day === 5){
+			toReturn['message'] = 'Closed! Re-opens Monday at 7:30AM';
+		} else {
+			toReturn['message'] = 'Closed! Re-opens tomorrow at 7:30AM';
+		}
+	}
+	return res.json(JSON.stringify(toReturn));
+});
+
+//TODO: known bug - will display wrong message if it's the morning before opening
+app.get('/status/blueroom', function(req, res){
+	var hour = new Date().getHours();
+	var minute = new Date().getMinutes();
+	var day = moment().day();
+	var toReturn = {};
+	//Weekdays: 7:30AM - 9PM
+	if (day !== 6 && day !== 7){
+		if (((hour === 7 && minute >= 30) || hour > 7) && hour < 21) {
+			toReturn['open'] = 'true';
+			toReturn['message'] = 'Currently open until 9PM!';
+		} else {
+			toReturn['open'] = 'false';
+			//Fridays after closing, the next open time is 9
+			if (day === 5){
+				toReturn['message'] = 'Closed! Re-opens tomorrow at 9AM';
+			} else {
+				toReturn['message'] = 'Closed! Re-opens tomorrow at 7:30AM';
+			}
+		}
+	//Weekends: 9AM - 5PM
+	} else {
+		if (hour >= 9 && hour < 17){
+			toReturn['open'] = 'true';
+			toReturn['message'] = 'Currently open until 5PM';
+		} else {
+			toReturn['open'] = 'false';
+			if (day === 6){
+				toReturn['message'] = 'Closed! Re-opens tomorrow at 9AM';
+			} else {
+				toReturn['message'] = 'Closed! Re-opens tomorrow at 7:30AM';
+			}
+		}
+	}
+	return res.json(JSON.stringify(toReturn));
+});
+
+app.get('/status/ivyroom', function(req, res) {
+	var hour = new Date().getHours();
+	var minute = new Date().getMinutes();
+	var day = moment().day();
+	var toReturn = {};
+	//Lunch, Weekdays 11:30AM - 1:45PM
+	if (day < 6 && ((hour === 11 && minute >= 30) || (hour >= 12 && (hour < 13 || hour === 13 && minute <= 45)))) {
+		toReturn['open'] = 'true';
+		toReturn['message'] = 'Currently open for Lunch until 1:45PM';
+	} else if (day === 6 || day === 5){
+		toReturn['open'] = 'false';
+		toReturn['message'] = 'Closed! Re-opens Sunday at 7:30PM';
+	} else if (((hour === 19 && minute >= 30) || hour > 19) && hour < 24) {
+		toReturn['open'] = 'true';
+		toReturn['message'] = 'Open for Dinner until Midnight';
+	} else {
+		toReturn['open'] = 'false';
+		if (hour < 5){
+			toReturn['message'] = 'Closed! Re-opens tomorrow at 7:30PM';
+		} else {
+			toReturn['message'] =  'Closed! Re-opens today at 7:30PM';
+		}
+	}
+	return res.json(JSON.stringify(toReturn));
+});
+
+app.get('/status/aco', function(req,res) {
+	var hour = new Date().getHours();
+	var toReturn = {};
+	if ((hour > 0 && hour < 2) || hour > 11){
+		toReturn['open'] = 'true';
+		toReturn['message'] = 'Open until 2AM!';
+	} else {
+		toReturn['open'] = 'false';
+		toReturn['message'] = 'Closed! Re-opens today at 11AM';
+	}
+	return res.json(JSON.stringify(toReturn));
+});
+
+app.get('/status/jos', function(req,res){
+	var hour = new Date().getHours();
+	var toReturn = {};
+	if ((hour > 0 && hour < 2) || hour >= 18) {
+		toReturn['open'] = 'true';
+		toReturn['message'] = 'Open until 2AM!';
+	} else {
+		toReturn['open'] = 'false';
+		toReturn['message'] = 'Closed! Re-opens today at 6PM';
+	}
+	return res.json(JSON.stringify(toReturn));
+
+});
+
 app.get('/', function(req, res){
 	res.render('home.html');
 });
 
 app.get('*', function(req,res){
 });
+
 //Visit localhost:8080
 app.listen(8080, function(){
 	console.log("server running on port 8080");

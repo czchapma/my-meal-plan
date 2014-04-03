@@ -1,4 +1,30 @@
 $(document).ready(function(){
+	generateMenus();
+	generateStatues();
+});
+
+function generateStatues(){
+	var dininghalls = ['ratty','vdub', 'blueroom', 'ivyroom', 'aco', 'jos'];
+	dininghalls.forEach(function(entry){
+		$.ajax({
+			url: "/status/" + entry
+			}).done(function(result) {
+				var parsed = JSON.parse(result);
+				if (parsed['open'] === 'true') {
+					//open
+					$('#status-' + entry).attr('class','open');
+					$('#status-' + entry).text(parsed['message']);
+				} else{
+					//closed
+					$('#status-' + entry).attr('class','closed');
+					$('#status-' + entry).text(parsed['message']);
+				}
+		});
+
+	});
+}
+
+function generateMenus(){
 	//Generate Ratty menu
 	$.ajax({
 		url: "/menu/ratty"
@@ -28,7 +54,6 @@ $(document).ready(function(){
 		url: "/menu/blueroom"
 		}).done(function(result) {
 			var parent = $('#tab-content3 ul');
-			console.log(result);
 			var parsed = JSON.parse(JSON.stringify(result));
 			var soups ='<li>' + parsed['soups'] + '</li>';
 			var dinner ='<li>' + parsed['dinner'] + '</li>';
@@ -74,4 +99,4 @@ $(document).ready(function(){
 				parent.append(li);
 			}
 		});
-});
+}
