@@ -12,6 +12,26 @@ app.use(express.bodyParser());
  
 //Navigates to Brown's get portal to get credit/points info
 app.get('/login', function(req, res){
+	makeRequest('/getportal', function(body){
+		$ = cheerio.load(body);
+		console.log(body);
+		var values = {}
+		$('td').each(function(idx,elm){
+			console.log(idx);
+			if (idx === 0){
+				//Bear Bucks
+				values.add('bearbucks',elm.text());
+			} else if(idx === 1) {
+				//Flex Points
+				values.add('flexpoints',elm.text());
+			}
+		});
+		console.log(values);
+		res.render('mydining.html');
+	});
+});
+
+app.get('/getportal', function(req,res){
 	res.redirect('http://www.brown.edu/getportal');
 });
 app.get('/dininghalls', function(req, res) {
@@ -62,7 +82,6 @@ app.get('/', function(req, res){
 });
 
 app.get('*', function(req,res){
-	console.log('not implemented yet!');
 });
 //Visit localhost:8080
 app.listen(8080, function(){

@@ -4,7 +4,7 @@ $(document).ready(function(){
 			event.preventDefault();
 			var url = $(this).attr('id');
 			$(location).attr('href', url);
-		});	
+		});
 	});
 
 	//Generate Ratty menu
