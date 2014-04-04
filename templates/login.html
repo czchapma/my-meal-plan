@@ -2,10 +2,10 @@
 <html>
   <head>
     <title>MyMealPlan</title>
-    <link rel="icon" href="../imgs/avocado.png" type="image/x-icon">
+    <link rel="icon" href="../imgs/avocado.png" type="image/x-icon">    
     <link rel="stylesheet" type="text/css" href="templates/MyMealPlan.css" />
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="specials.js"></script>
+    <script type="text/javascript" src="login.js"></script>
   </head>
   <body>
     <img id="logo" src="templates/imgs/logo.png"/>
@@ -17,6 +17,11 @@
 	<a id="login" href="#">Login</a>
       </div>
     </div>
-  <ul id="specials-list"></ul>
-</body>
+    <button id="new-account">Create New Account</button>
+    <form method="post" action="/signIn">
+      <input id="username" name="username" type="text">
+      <input id="password" name="username" type="password">
+      <input id="submit" name="submit" type="submit">      
+    </form>
+  </body>
 </html>
