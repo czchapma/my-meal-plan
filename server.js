@@ -185,7 +185,7 @@ app.get('/status/vdub', function(req, res) {
 	//Lunch: 11AM - 2PM
 	} else if(hour >= 11 && hour < 14){
 		toReturn['open'] = 'true';
-		toReturn['message'] = 'Currently open for Lunch until 4:30PM!';
+		toReturn['message'] = 'Currently open for Lunch until 2PM!';
 	//Closed 2PM - 4:30PM
 	} else if (hour >= 14 && (hour < 16 || hour === 16 && minute < 30)) {
 		toReturn['open'] = 'false';
