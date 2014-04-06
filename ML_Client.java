@@ -1,4 +1,5 @@
 import java.util.*;
+
 public class ML_Client
 {
 	private HashMap<Integer, User_Reviews> users; // N users pointed to by their userId
@@ -123,7 +124,7 @@ public class ML_Client
 
 	//TODO: test to make sure this works:  should go to the user in users indicated by the curId (j) and update the genderId
 	//Then update dists with this info. (Only need to look at jth row and col)
-	public void updateIdentity(int curId, int genderId)
+	public void updateIdentity(int curId, User_Reviews.Gender genderId)
 	{
 		User_Reviews theUser = users.get(curId);
 		if(theUser == null)
@@ -310,6 +311,5 @@ public class ML_Client
 		}
 		return output;
 	}	
-
 }
 		

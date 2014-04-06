@@ -3,18 +3,18 @@ public class testRunner
 {
 	public static void main(String[] args)
 	{
-		User_Reviews test = new User_Reviews("234,Steven,0,,1992,3,Milk,2");
+		User_Reviews test = new User_Reviews("234,Steven,MALE,,1992,3,Milk,2");
 		System.out.println("Test 1 :" + doubEquals(test.diff(test),0)); //should be 0 since they are the same person
 		
-		User_Reviews person1 = new User_Reviews("123,Zach,0,,1992,3,Milk,2");
+		User_Reviews person1 = new User_Reviews("123,Zach,MALE,,1992,3,Milk,2");
 		System.out.println("Test 2: " + doubEquals(test.diff(person1),4.0)); 
 			//should be 4 because the only diff is the review of sandwich (3-1)^2 = 4
 
-		User_Reviews person2 = new User_Reviews("234,Christine,1,,1992,3,Milk,5,Ice Cream,2");
+		User_Reviews person2 = new User_Reviews("234,Christine,FEMALE,,1992,3,Milk,5,Ice Cream,2");
 		System.out.println("Test 3: " + doubEquals(test.diff(person2),10.0)); 
 			//should be (10 for gender) + 0 because all commonly reviewed items are ranked identically
 
-		User_Reviews person3 = new User_Reviews("345,Raymond,0,,1992,3,Milk,3,Ice Cream,2");
+		User_Reviews person3 = new User_Reviews("345,Raymond,MALE,,1992,3,Milk,3,Ice Cream,2");
 
 		ArrayList<String> foods = new ArrayList<String>();
 		foods.add("Chobani");

@@ -1,9 +1,10 @@
 import java.util.*;
 
 public class User_Reviews {
+		
 	private int userId; //NOTE: UserIds should be COMPLETELY unique. In MySQL should do autoincrement thingy to ensure. start at 1 or 0, whichever that does, then increment by 1. This'll help with the distances matrix in ML_Client
 	private String userName;
-	private int genderIdentity; //not a boolean because gender is a spectrum. 0 for male, 1 for female, 2 for other
+	private Gender genderIdentity; //not a boolean because gender is a spectrum. 0 for male, 1 for female, 2 for other
 	private String other; //if gender id is 0 or 1, this should be '', otherwise it has the individual's gender identity
 	private int birthYear;  // -1 if not given
 	private int birthMonth; // -1 if not given
@@ -13,7 +14,7 @@ public class User_Reviews {
 	public User_Reviews(){
 		userId = 0;
 		userName = "";
-		genderIdentity = 2;
+		genderIdentity = Gender.OTHER;
 		other = "";
 		birthYear = -1;
 		birthMonth = -1;
@@ -21,70 +22,20 @@ public class User_Reviews {
 	}
 	
 
-	//TODO: Fix parsing here...csv parsing isn't working right
-	//user constructor with a CSV containing all the data (probably the easiest input from node)
+	//user constructor with a CSV row containing all the data (probably the easiest input from node)
 	public User_Reviews(String myCSV)
 	{
-		String buffer = myCSV; //stick the csv into a buffer
-		String prevOutput;
-		String curOutput = "";
-		int nextComma;
-		int whichField = 0;//keep track of what fields we have filled already
-		boolean isKey = true; //to alternate between values and keys once we get there
+		String[] vals = myCSV.split(","); //stick the csv into a buffer
+		userId = Integer.parseInt(vals[0]);
+		userName = vals[1];
+		genderIdentity = Gender.valueOf(vals[2]);
+		other = vals[3];
+		birthYear = Integer.parseInt(vals[4]);
+		birthMonth = Integer.parseInt(vals[5]);
 		reviews = new HashMap<String,Integer>();
-		while(!buffer.equals("")) //until there is nothing left in the buffer
+		for (int i = 6; i < vals.length; i++)
 		{
-			nextComma = buffer.indexOf(','); //find the next comma
-			prevOutput = curOutput; //save the previous word
-			if(nextComma != -1)
-			{
-				curOutput = buffer.substring(0,nextComma); //and take everything up to that comma
-				buffer = buffer.substring(nextComma + 1); //leaving the rest of the string in buffer
-			}
-			else
-			{
-				curOutput = buffer;
-				buffer = "";
-			}
-			//figure out which field to fill in, then do so
-			if(whichField == 0)
-			{
-				userId = Integer.parseInt(curOutput);
-			}
-			else if(whichField == 1)
-			{
-				userName = curOutput;
-			}
-			else if(whichField == 2)
-			{
-				genderIdentity = Integer.parseInt(curOutput);
-			}
-			else if(whichField == 3)
-			{
-				other = curOutput;
-			}
-			else if(whichField == 4)
-			{
-				birthYear = Integer.parseInt(curOutput);
-			}
-			else if(whichField == 5)
-			{
-				birthMonth = Integer.parseInt(curOutput);
-			}
-			else 
-			{
-				//alternate between keys and values, only filling when you have all the data
-				if(isKey)
-				{
-					isKey = false;
-				}
-				else
-				{
-					reviews.put(prevOutput, Integer.parseInt(curOutput));
-					isKey = true;
-				}
-			}
-			whichField ++; //increment the field counter
+			reviews.put(vals[i], Integer.parseInt(vals[++i]));
 		}
 	}
 	
@@ -102,7 +53,7 @@ public class User_Reviews {
 	{
 		return userName;
 	}
-	public int getIdentity()
+	public Gender getIdentity()
 	{
 		return genderIdentity;
 	}
@@ -125,7 +76,7 @@ public class User_Reviews {
 	{
 		userName = name;
 	}
-	public void setIdentity(int gender)
+	public void setIdentity(Gender gender)
 	{
 		genderIdentity = gender;
 	}
@@ -180,5 +131,9 @@ public class User_Reviews {
 			out += food + " " + reviews.get(food) + " ";
 		}
 		return out;
+	}
+	
+	public static enum Gender {
+		MALE, FEMALE, OTHER;
 	}
 }
