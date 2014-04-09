@@ -12,24 +12,24 @@ app.use(express.static(__dirname)); //allows css to work with rendered html
 app.use(express.bodyParser());
 //Navigates to Brown's get portal to get credit/points info
 app.get('/login', function(req, res){
-	passport.authenticate('http://www.brown.edu/getportal');
-	makeRequest('https://get.cbord.com/brown/full/funds_home.php', function(body){
-		$ = cheerio.load(body);
-		console.log(body);
-		var values = {}
-		$('td').each(function(idx,elm){
-			console.log(idx);
-			if (idx === 0){
-				//Bear Bucks
-				values.add('bearbucks',elm.text());
-			} else if(idx === 1) {
-				//Flex Points
-				values.add('flexpoints',elm.text());
-			}
-		});
-		console.log(values);
-		res.render('mydining.html');
-	});
+	res.render('login.html');
+});
+
+app.get('/newaccount', function(req, res){
+	res.render('newaccount.html');
+});
+
+app.post('/storeUser', function(req, res) {
+	var name = req.body.name;
+	var email = req.body.email;
+	var birthday = req.body.birthday;
+	var gender = req.body.gender;
+	if (gender === 'other'){
+		//TODO: somehow otherType isn't going through
+		var otherType = req.body.otherType;
+	}
+	console.log('name',name,'email',email,'birthday',birthday,'gender',gender,'other type',otherType);
+	res.end();
 });
 
 app.get('/dininghalls', function(req, res) {
@@ -50,7 +50,7 @@ app.get('/menu/ratty', function(req, res) {
 		var bSrc = $('#Breakfast').attr('src');
 		var lSrc = $('#Lunch').attr('src');
 		var dSrc = $('#Dinner').attr('src');
-		var ignoreList = ["",".","Opens for lunch","Opens for Lunch", "Roots & Shoots","Grill","Bistro","Chef\'s Corner"];
+		var ignoreList = ["",".","OPENS FOR LUNCH", "Opens for lunch","Opens for Lunch", "Roots & Shoots","Grill","Bistro","Chef\'s Corner"];
 		var time = new Date().getHours();
 		if (time < 11 || time > 18){
 			//Breakfast

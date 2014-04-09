@@ -6,4 +6,9 @@ $(document).ready(function(){
 			$(location).attr('href', url);
 		});
 	});
+
+	$('#new-account').click(function(event){
+		event.preventDefault();		
+		$(location).attr('href', '/newaccount')
+	});
 });

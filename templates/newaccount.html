@@ -5,7 +5,7 @@
     <link rel="icon" href="../imgs/avocado.png" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="templates/MyMealPlan.css" />
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="login.js"></script>
+    <script type="text/javascript" src="newaccount.js"></script>
   </head>
   <body>
     <img id="logo" src="templates/imgs/logo.png"/>
@@ -17,15 +17,15 @@
 	<a id="login" href="#">Login</a>
       </div>
     </div>
-    <button id="new-account">Create New Account</button>
-    <form method="post" action="/storeUser">
-      <input id="name" name="name" type="text">
-      <input id="male" name="gender" type="radio">
-      <input id="female" name="gender" type="radio">
-      <input id="other" name="gender" type="radio">
-      <input id="other-type" name="other-type" type="text">
-      <input id="birthday" name="birthday" type="month">
-      <input id="submit" name="submit" type="submit">      
+    <form id="new-account-form" method="post" action="/storeUser">
+      Name:<input id="name" name="name" type="text"><br/>
+      Email:<input id="email" name="email" type="email"><br/>
+      Gender Identity:<br/><input id="female" name="gender" value="female" type="radio">Female<br/>
+      <input id="male" name="gender" value="male" type="radio">Male<br/>
+      <input id="other" name="gender" value="other" type="radio">Other
+      <input id="otherType" name="otherType" type="text"><br/>
+      Birthday:<input id="birthday" name="birthday" type="month"><br/>
+      <input id="submit" name="submit" type="submit"><br/>
     </form>
   </body>
 </html>
