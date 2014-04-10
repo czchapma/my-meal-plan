@@ -199,3 +199,7 @@ body {
     width: 172px;
     margin: 0 auto;
 }
+
+#logo {
+    cursor: pointer;
+}
