@@ -5,7 +5,7 @@ $(document).ready(function(){
 	generateTimes();
 
 	//Logo redirects to home
-	$('#logo').click(function(){
+    $('#logo').click(function(){
 		$(location).attr('href','/');
 	});
 
