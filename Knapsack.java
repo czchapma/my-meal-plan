@@ -3,12 +3,29 @@ public class Knapsack
 {
 	public static void main(String[] args)
 	{
-		String[] foods = new String[6]; //fill me in actually though
+		//get in in args[0] food1, price1,food2,price2....
+		//TODO: parse so that you get String[] of food, and give that to foods.
+		//TODO: parse and convert so that you get int[] of costs, and give to costs
+
+		//args[1] has the max price;
+		String[] foods = //fill me in //new String[10]; //fill me in actually though
+
+
 		int numFoods = foods.length;
-		int maxPrice = 680;
+		int maxPrice = Integer.parseInt(args[1]);
 		int[] values = new int[numFoods];
-		int[] costs = new int[numFoods]; 
-		
+		int[] costs = //fill me in
+		//foods[0] = "Chobani"; costs[0] = 280;
+		//foods[1] = "Spicy"; costs[1] = 450;
+		//foods[2] = "Apple"; costs[2] = 75;
+		//foods[3] = "Banana"; costs[3] = 100;
+		//foods[4] = "Odwalla"; costs[4] = 275;
+		//foods[5] = "Salad"; costs[5] = 500;
+		//foods[6] = "Drink?"; costs[6] = 150;
+		//foods[7] = "Gnocchi"; costs[7] = 575;
+		//foods[8] = "Cookie"; costs[8] = 65;
+		//foods[9] = "orange"; costs[9] = 50;
+
 		
 		//to fill napsack as much as possible:
 		values = costs;
