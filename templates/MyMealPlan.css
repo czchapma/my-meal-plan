@@ -203,3 +203,7 @@ body {
 #logo {
     cursor: pointer;
 }
+
+#specials-list li{
+    color: white;
+}
