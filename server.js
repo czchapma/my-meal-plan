@@ -71,13 +71,13 @@ app.get('/menu/ratty', function(req, res) {
 		var time = new Date().getHours();
 		if (time < 11 || time > 18){
 			//Breakfast
-			makeRattyVDubMenu(res,bSrc,ignoreList);
+			makeRattyIvyMenu(res,bSrc,ignoreList);
 		} else if (time < 15){
 			//Lunch
-			makeRattyVDubMenu(res,lSrc,ignoreList);
+			makeRattyIvyMenu(res,lSrc,ignoreList);
 		} else {
 			//Dinner
-			makeRattyVDubMenu(res, dSrc, ignoreList);
+			makeRattyIvyMenu(res, dSrc, ignoreList);
 		}
 	});
 });
@@ -87,7 +87,47 @@ app.get('/menu/vdub', function(req,res) {
 		$ = cheerio.load(body);
 		var src = $('iframe').first().attr('src');
 		var ignoreList = ["",".","OPENS FOR LUNCH","Opens for lunch","Opens for Lunch",'spring 1', 'spring 2', 'spring 3', 'spring 4', 'spring 5', 'Breakfast','Lunch','Dinner', 'Daily Sidebars'];
-		makeRattyVDubMenu(res,src,ignoreList);
+
+		function callback(body){
+			var toReturn = ["","","",""];
+			$ = cheerio.load(body);
+			var count = 0;
+			$('td').each(function(idx, elem) {
+				var text = $(this).text();
+				//items not to include in our menu
+				if (ignoreList.indexOf(text) === -1) {
+					toReturn[count] += text + '\n';
+				}
+
+				//increment count
+				if (text !== ".") {
+					count += 1;
+					if (count > 3){
+						count = 0;
+					}
+				}
+			});
+
+			//get rid of extra new line
+			for(var i=0; i< toReturn.length; i++){
+				toReturn[i] = toReturn[i].substr(0,toReturn[i].length - 1);
+			}
+
+			var time = new Date().getHours();
+			if (time < 11 || time > 19){
+				//Breakfast
+				res.end(toReturn[1]);
+			} else if (time < 15){
+				//Lunch
+				res.end(toReturn[2] + '\n' + toReturn[0]);
+			} else {
+				//Dinner
+				res.end(toReturn[3] + '\n' + toReturn[0]);
+			}
+
+
+		}
+		makeRequest(src, callback);
 	});
 });
 
@@ -115,7 +155,7 @@ app.get('/menu/ivyroom', function(req, res){
 		var time = new Date().getHours();
 		//Lunch Menu
 		if (time < 14){
-			makeRattyVDubMenu(res,src,ignoreList);
+			makeRattyIvyMenu(res,src,ignoreList);
 		} else {
 			//Dinner Menu
 			res.end('Mac and Cheese\nFalafel Wrap\nTacos\nPizza\nSmoothies');
@@ -355,7 +395,7 @@ function makeRequest(url, callback){
 	});
 }
 
-function makeRattyVDubMenu(response, menuUrl, ignoreList){
+function makeRattyIvyMenu(response, menuUrl, ignoreList){
 	function callback(body){
 		var toReturn = ""
 		$ = cheerio.load(body);
