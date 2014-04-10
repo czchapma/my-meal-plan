@@ -22,13 +22,14 @@ app.get('/newaccount', function(req, res){
 app.post('/storeUser', function(req, res) {
 	var name = req.body.name;
 	var email = req.body.email;
-	var birthday = req.body.birthday;
+	var month = req.body.month;
+	var day = req.body.day;
 	var gender = req.body.gender;
 	if (gender === 'other'){
 		//TODO: somehow otherType isn't going through
 		var otherType = req.body.otherType;
 	}
-	console.log('name',name,'email',email,'birthday',birthday,'gender',gender,'other type',otherType);
+	console.log('name',name,'email',email,'month',month,'day',day,'gender',gender,'other type',otherType);
 	res.end();
 });
 
@@ -287,7 +288,7 @@ app.get('/status/ivyroom', function(req, res) {
 app.get('/status/aco', function(req,res) {
 	var hour = new Date().getHours();
 	var toReturn = {};
-	if ((hour > 0 && hour < 2) || hour > 11){
+	if ((hour >= 0 && hour < 2) || hour > 11){
 		toReturn['open'] = 'true';
 		toReturn['message'] = 'Open until 2AM!';
 	} else {
@@ -300,7 +301,7 @@ app.get('/status/aco', function(req,res) {
 app.get('/status/jos', function(req,res){
 	var hour = new Date().getHours();
 	var toReturn = {};
-	if ((hour > 0 && hour < 2) || hour >= 18) {
+	if ((hour >= 0 && hour < 2) || hour >= 18) {
 		toReturn['open'] = 'true';
 		toReturn['message'] = 'Open until 2AM!';
 	} else {
