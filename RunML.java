@@ -27,12 +27,15 @@ public class RunML
 
 	public static void main(String[] args)
 	{
+		for(String arg: args)
+			System.out.println(arg);
 		//input should be COMMAND [optional specifier] USER INPUT
 		ML_Client client;
 		try {
 			//Load from file
 			client = loadClient();
 			System.out.println("loading client from file!");
+			
 		} catch(IOException e){
 			//if file not found (or corrupted), create new
 			System.out.println("no client serialization found, creating new");
@@ -58,49 +61,52 @@ public class RunML
 			foods.add("Tuna");
 			client = new ML_Client(foods);
 		}
-
-		if(args[0] == "ADD")
+		//for debugging purposes:
+		System.out.println(client);
+		if(args[0].equals("ADD"))
 		{
 			//input of type ADD "[id#],[name],[GENDER],[desc],[year],[month],[food],[review],[food],[review]..."
 			User_Reviews person = new User_Reviews(args[1]);
+			System.out.println(person);
 			client.addUser(person);
+			System.out.println(client);
 		}
-		else if(args[0] == "MODIFY")
+		else if(args[0].equals("MODIFY"))
 		{
-			if(args[1] == "NAME")
+			if(args[1].equals("NAME"))
 			{
 				//input of type MODIFY NAME [id#] [newName]
 				int arg2 = Integer.parseInt(args[2]);
 				client.updateUserName(arg2,args[3]);
 			}
-			else if(args[1] == "GENDER")
+			else if(args[1].equals("GENDER"))
 			{
 				//input of type MODIFY NAME [id#] [newGender]
 				int arg2 = Integer.parseInt(args[2]);
 				User_Reviews.Gender arg3 = User_Reviews.Gender.fromString(args[3]);
 				client.updateIdentity(arg2,arg3);
 			}
-			else if(args[1] == "DESC")
+			else if(args[1].equals("DESC"))
 			{
 				int arg2 = Integer.parseInt(args[2]);
 				client.updateIdDescription(arg2,args[3]);
 				//input of type MODIFY NAME [id#] [newDesc]
 			}
-			else if(args[1] == "YEAR")
+			else if(args[1].equals("YEAR"))
 			{
 				int arg2 = Integer.parseInt(args[2]);
 				int arg3 = Integer.parseInt(args[3]);
 				client.updateBirthYear(arg2,arg3);
 				//input of type MODIFY NAME [id#] [newYear]
 			}
-			else if(args[1] == "MONTH")
+			else if(args[1].equals("MONTH"))
 			{
 				int arg2 = Integer.parseInt(args[2]);
 				int arg3 = Integer.parseInt(args[3]);
 				client.updateBirthMonth(arg2,arg3);
 				//input of type MODIFY NAME [id#] [newMonth]
 			}
-			else if(args[1] == "REVIEW")
+			else if(args[1].equals("REVIEW"))
 			{
 				int arg2 = Integer.parseInt(args[2]);
 				int arg4 = Integer.parseInt(args[4]);
@@ -108,26 +114,32 @@ public class RunML
 				//input of type MODIFY NAME [id#] [newFood] [newReview]
 			}
 		}
-		else if(args[0] == "PING")
+		else if(args[0].equals("PING"))
 		{
-			if(args[1] == "SUGGEST")
+			if(args[1].equals("SUGGEST"))
 			{
 				//input of type PING SUGGEST [id#] [numWant] [k (how many nearest neighbors you want)]
 				int arg2 = Integer.parseInt(args[2]);
 				int arg3 = Integer.parseInt(args[3]);
 				int arg4 = Integer.parseInt(args[4]);
-				client.getRec(arg2,arg4,arg3);
+				String[] recs = client.getRec(arg2,arg4,arg3);
+				for(String rec: recs)
+				{
+					System.out.print(rec + ",");
+				}
+				System.out.println();
 
 			}
-			else if(args[1] == "GUESS")
+			else if(args[1].equals("GUESS"))
 			{
 				//input of type PING SUGGEST [id#] [foodName] [k]
 				int arg2 = Integer.parseInt(args[2]);
 				int arg4 = Integer.parseInt(args[4]);
-				client.getReviewGuess(args[3], arg4, arg2);
+				double guess = client.getReviewGuess(args[3], arg4, arg2);
+				System.out.println(guess);
 			}
 		}
-
+		System.out.println(client);
 		//Finally, serialize client
 		saveClient(client);
 	}

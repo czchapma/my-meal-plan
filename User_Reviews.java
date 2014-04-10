@@ -1,6 +1,6 @@
 import java.util.*;
-
-public class User_Reviews {
+import java.io.Serializable;
+public class User_Reviews implements Serializable {
 		
 	private int userId; //NOTE: UserIds should be COMPLETELY unique. In MySQL should do autoincrement thingy to ensure. start at 1 or 0, whichever that does, then increment by 1. This'll help with the distances matrix in ML_Client
 	private String userName;
