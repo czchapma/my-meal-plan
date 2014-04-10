@@ -62,12 +62,10 @@ public class RunML
 			client = new ML_Client(foods);
 		}
 		//for debugging purposes:
-		System.out.println(client);
 		if(args[0].equals("ADD"))
 		{
 			//input of type ADD "[id#],[name],[GENDER],[desc],[year],[month],[food],[review],[food],[review]..."
 			User_Reviews person = new User_Reviews(args[1]);
-			System.out.println(person);
 			client.addUser(person);
 			System.out.println(client);
 		}
@@ -113,6 +111,7 @@ public class RunML
 				client.updateReview(arg2, args[3], arg4);
 				//input of type MODIFY NAME [id#] [newFood] [newReview]
 			}
+			System.out.println(client);
 		}
 		else if(args[0].equals("PING"))
 		{
@@ -139,7 +138,7 @@ public class RunML
 				System.out.println(guess);
 			}
 		}
-		System.out.println(client);
+		
 		//Finally, serialize client
 		saveClient(client);
 	}
