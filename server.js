@@ -32,6 +32,22 @@ app.post('/storeUser', function(req, res) {
 	res.end();
 });
 
+app.post('/trackCredits', function(req, res){
+	var credits = parseInt(req.body.credits); //integer
+	var points = parseFloat(req.body.points); //might be float, could be integer
+	var obj = {};
+	var lastDay = moment('May 16, 2014');
+	var today = moment();
+	var daysLeft = lastDay.diff(today, 'days');
+	var creditsLeft = credits / daysLeft;
+	creditsLeft = Math.round(creditsLeft * 100) / 100;
+	var pointsLeft = points/ daysLeft;
+	pointsLeft = Math.round(pointsLeft * 100) / 100;
+	obj['credits'] = creditsLeft;
+	obj['points'] = pointsLeft;
+	res.json(JSON.stringify(obj));
+});
+
 app.get('/dininghalls', function(req, res) {
 	res.render('dininghalls.html');
 });
@@ -69,7 +85,7 @@ app.get('/menu/vdub', function(req,res) {
 	makeRequest('http://www.brown.edu/Student_Services/Food_Services/eateries/verneywoolley_menu.php', function(body){
 		$ = cheerio.load(body);
 		var src = $('iframe').first().attr('src');
-		var ignoreList = ["",".","Opens for lunch","Opens for Lunch",'spring 1', 'spring 2', 'spring 3', 'spring 4', 'spring 5', 'Breakfast','Lunch','Dinner', 'Daily Sidebars'];
+		var ignoreList = ["",".","OPENS FOR LUNCH","Opens for lunch","Opens for Lunch",'spring 1', 'spring 2', 'spring 3', 'spring 4', 'spring 5', 'Breakfast','Lunch','Dinner', 'Daily Sidebars'];
 		makeRattyVDubMenu(res,src,ignoreList);
 	});
 });

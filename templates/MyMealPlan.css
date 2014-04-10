@@ -166,11 +166,22 @@ body {
     text-align: center;
 }
 
-/* TODO remove later */
-#testing {
-    color : white;   
-}
-
 #new-account-form {
     color: white;
+}
+
+iframe {
+    width: 1000px;
+    display: block;
+    margin: 15px auto;
+}
+
+#track-credits-form {
+    color: white;
+}
+
+#tracking {
+    color: white;
+    width: 172px;
+    margin: 0 auto;
 }

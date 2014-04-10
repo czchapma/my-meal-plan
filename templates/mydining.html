@@ -5,7 +5,7 @@
     <link rel="icon" href="../imgs/avocado.png" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="templates/MyMealPlan.css" />
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="home.js"></script>
+    <script type="text/javascript" src="mydining.js"></script>
   </head>
   <body>
     <img id="logo" src="templates/imgs/logo.png"/>
@@ -17,6 +17,18 @@
 	<a id="login" href="#">Login</a>
       </div>
     </div>
-    <p id="testing"> Empty My Dining Page </p>
+  <iframe src="http://www.brown.edu/getportal"></iframe>
+  <div id="tracking">
+    Track your credit/points usage
+    <form id="track-credits-form">
+      Credits: <input name="credits" id="credits" type="text">
+      <span id="creditsErr">Credits should be a number</span><br/>
+      Points: <input name="points" id="points" type="text">
+      <span id="pointsErr">Points should be a number (with or without decimal point)</span><br/>
+      <input type="submit">
+    </form>
+    <span id="creditsLeft"></span><br/>
+    <span id="pointsLeft"></span>
+  </div>
 </body>
 </html>
