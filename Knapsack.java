@@ -9,6 +9,10 @@ public class Knapsack
 		int[] values = new int[numFoods];
 		int[] costs = new int[numFoods]; 
 		
+		
+		//to fill napsack as much as possible:
+		values = costs;
+		
 		int[][] dpTable = new int[numFoods+1][maxPrice+1];
 
 		for(int w = 0; w <= maxPrice; w ++)
@@ -41,7 +45,7 @@ public class Knapsack
 		int backw = maxPrice;
 		int backi = numFoods;
 		ArrayList<String> foodInclude = new ArrayList<String>();
-		while(backw != 0 || backi != 0)
+		while(backi != 0)
 		{
 			if(dpTable[backi][backw] == dpTable[backi-1][backw])
 			{
@@ -51,7 +55,7 @@ public class Knapsack
 			{
 				foodInclude.add(foods[backi-1]);
 				backi--;
-				backw-=costs[backi-1];
+				backw-=costs[backi];
 			}
 		}
 
