@@ -4,7 +4,7 @@ public class Knapsack
 	public static void main(String[] args)
 	{
 		String[] foods = new String[5]; //fill me in actually though
-		int numFoods = foods.size();
+		int numFoods = foods.length;
 		int maxPrice = 680;
 		int[] values = new int[numFoods];
 		int[] costs = new int[numFoods]; 

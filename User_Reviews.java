@@ -135,5 +135,14 @@ public class User_Reviews {
 	
 	public static enum Gender {
 		MALE, FEMALE, OTHER;
+		public static Gender fromString(String type){
+			if (type.equalsIgnoreCase("Male")){
+				return MALE;
+			} else if(type.equalsIgnoreCase("Female")){
+				return FEMALE;
+			} else{
+				return OTHER;
+			}
+		}
 	}
 }

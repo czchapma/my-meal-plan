@@ -1,6 +1,7 @@
 import java.util.*;
+import java.io.Serializable;
 
-public class ML_Client
+public class ML_Client implements Serializable
 {
 	private HashMap<Integer, User_Reviews> users; // N users pointed to by their userId
 	private HashMap<Integer, HashMap<Integer,Double>> dists; //distances hashmap. So the hashmap provides a hashmap of distances. as in user number 3 points to a map wherein each other user will then point to a double. essentially a matrix, but done this way in case id numbers arent sequential
