@@ -170,11 +170,25 @@ body {
     color: white;
 }
 
-iframe {
-    width: 1000px;
-    display: block;
+#myframe {
+    width:739px;
+    height:431px;
+    overflow:hidden;
     margin: 15px auto;
 }
+
+#myframe iframe {
+    width:977px;
+    height:718px;
+    margin-left:0px;
+    margin-top:-94px; /*-270px;*/
+
+/*    width: 1000px;
+    display: block;
+    margin: 15px auto;
+    height: 250px;
+    margin-top: ;
+*/}
 
 #track-credits-form {
     color: white;
