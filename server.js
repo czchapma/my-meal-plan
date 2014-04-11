@@ -44,32 +44,28 @@ app.post('/storeUser', function(req, res) {
 	//TODO: double check that there isn't an existing username
 	var queryString = 'INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6, $7)';
     conn.query(queryString, [null, name, email, password, month, day, gender], function(error, result){
-	    queryString = 'SELECT * from users WHERE username=$1';
-		conn.query(queryString, [email], function(error, result){
-			console.log('Look nothing is in the table!',result);
-		});
 		res.redirect('/login');
     });
 });
 
 app.post('/retrieveUser', function(req, res){
-	var username = req.body.username.trim();
+	var username = req.body.username;
 	var password = req.body.password;
-	var queryString = "SELECT * FROM users";
-    conn.query(queryString, function(error, results){
+	var queryString = "SELECT * FROM users WHERE username=$1";
+    conn.query(queryString, [username], function(error, results){
     	if(error){
     		console.log(error);
     	}
-    	if (results.length === 0 || results[0] === undefined){
+    	if (results === undefined || results.rows.length === 0){
     		console.log(results);
     		console.log('no such user', username,'found');
-    	} else if (results[0].password === password){
+    	} else if (results.rows[0].password === password){
     		console.log('password correct!');
     	} else {
-    		console.log('incorrect password, expected:',results[0].password, 'but got', password);
+    		console.log('incorrect password, expected:',results.rows[0].password, 'but got', password);
+    		res.end();
     	}
     });
-    res.end();
 });
 
 app.post('/trackCredits', function(req, res){
