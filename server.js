@@ -118,6 +118,18 @@ app.post('/guess',function(req,res){
 	});
 });
 
+app.get('/print',function(req,res){
+	console.log("IM HERE");
+		exec('java RunML PRINT', function (error, stdout, stderr) {
+			console.log('errors',error);
+			console.log('stderr',stderr);
+		
+			//returns the rating (ex: 1.0)
+			res.end(stdout);
+		});
+	
+});
+
 app.post('/suggest',function(req,res){
 	var username = req.body.username;
 	var item = req.body.item;

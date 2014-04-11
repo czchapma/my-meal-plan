@@ -133,7 +133,12 @@ public class RunML
 				double guess = client.getReviewGuess(args[3], arg4, arg2);
 				System.out.println(guess);
 			}
+
 		}
+		else if(args[0].equals("PRINT"))
+			{
+				System.out.println(client);
+			}
 		
 		//Finally, serialize client
 		saveClient(client);
