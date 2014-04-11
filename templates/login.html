@@ -18,9 +18,9 @@
       </div>
     </div>
     <button id="new-account">Create New Account</button>
-    <form method="post" action="/signIn">
-      <input id="username" name="username" type="text">
-      <input id="password" name="username" type="password">
+    <form id="login-form" method="post" action="/retrieveUser">
+      Username (Email): <input id="username" name="username" type="text">
+      Password:<input id="password" name="password" type="password">
       <input id="submit" name="submit" type="submit">      
     </form>
   </body>

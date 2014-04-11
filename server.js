@@ -1,15 +1,30 @@
-var express = require('express');
+	var express = require('express');
 var fs = require('fs');
 var engines = require('consolidate');
 var app = express();
 var request = require('request');
 var cheerio = require('cheerio');
 var moment = require('moment');
+var exec = require('child_process').exec;
 app.engine('html', engines.hogan); // tell Express to run .html files through Hogan
 app.set('views', __dirname + '/templates'); // tell Express where to find templates
 app.use(express.static(__dirname)); //allows css to work with rendered html
 
 app.use(express.bodyParser());
+
+//delete pre-existing databases
+exec("rm -f *.db");
+
+//Create DBs
+var anyDB = require('any-db');
+//TODO: Lol probably shouldn't store password directly in DB
+if (!fs.existsSync('users.db')) {
+	var conn = anyDB.createConnection('sqlite3://users.db');
+	conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, password TEXT, month TEXT,day TEXT, gender TEXT)');
+	console.log('table created!');
+} else {
+	var conn = anyDB.createConnection('sqlite3://users.db');
+}
 //Navigates to Brown's get portal to get credit/points info
 app.get('/login', function(req, res){
 	res.render('login.html');
@@ -25,12 +40,41 @@ app.post('/storeUser', function(req, res) {
 	var month = req.body.month;
 	var day = req.body.day;
 	var gender = req.body.gender;
+	var password = req.body.password
 	if (gender === 'other'){
 		//TODO: somehow otherType isn't going through
 		var otherType = req.body.otherType;
 	}
-	console.log('name',name,'email',email,'month',month,'day',day,'gender',gender,'other type',otherType);
-	res.end();
+	var id = generateId();
+	//TODO: double check that there isn't an existing username
+	var queryString = 'INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6, $7)';
+    conn.query(queryString, [id, name, email, password, month, day, gender], function(error, result){
+	    queryString = 'SELECT * from users WHERE username=$1';
+		conn.query(queryString, [email], function(error, result){
+			console.log('Look nothing is in the table!',result);
+		});
+		res.redirect('/login');
+    });
+});
+
+app.post('/retrieveUser', function(req, res){
+	var username = req.body.username.trim();
+	var password = req.body.password;
+	var queryString = "SELECT * FROM users";
+    conn.query(queryString, function(error, results){
+    	if(error){
+    		console.log(error);
+    	}
+    	if (results.length === 0 || results[0] === undefined){
+    		console.log(results);
+    		console.log('no such user', username,'found');
+    	} else if (results[0].password === password){
+    		console.log('password correct!');
+    	} else {
+    		console.log('incorrect password, expected:',results[0].password, 'but got', password);
+    	}
+    });
+    res.end();
 });
 
 app.post('/trackCredits', function(req, res){
@@ -518,4 +562,16 @@ function andrewsSpecials(res) {
 		res.end('Thai BBQ Chicken\nChicken & Veggie\nSteamed jasmine rice\n')
 	}
 
+}
+
+function generateId() {
+    // make a list of legal characters
+    // we're intentionally excluding 0, O, I, and 1 for readability
+    var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+
+    var result = '';
+    for (var i = 0; i < 6; i++)
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+
+    return String(result);
 }
