@@ -33,11 +33,9 @@ public class RunML
 		try {
 			//Load from file
 			client = loadClient();
-			System.out.println("loading client from file!");
 			
 		} catch(IOException e){
 			//if file not found (or corrupted), create new
-			System.out.println("no client serialization found, creating new");
 			//TODO: need to change this initial list
 			ArrayList<String> foods = new ArrayList<String>();
 			foods.add("Chobani");
@@ -49,7 +47,6 @@ public class RunML
 			client = new ML_Client(foods);
 		} catch (ClassNotFoundException e){
 			//if file not found (or corrupted), create new
-			System.out.println("Class ML_Client not found, creating new");
 			//TODO: need to change this initial list
 			ArrayList<String> foods = new ArrayList<String>();
 			foods.add("Chobani");
