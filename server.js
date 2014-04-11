@@ -52,12 +52,11 @@ app.post('/storeUser', function(req, res) {
 			var csvString = String(lookupRes.rows[0].id) +"," + name + "," + gender + "," + otherType + "," + day + "," + month;
 			console.log(csvString);
 			exec('java RunML ADD ' + csvString, function (error, stdout, stderr) {
-				if (stdout === 'Warning: users already contains this userId. Aborting.') {
+				if (stdout.indexOf('Warning: users already contains this userId. Aborting.') !== -1) {
 					console.log('user already exists!');
 				} else {
 					console.log('all good');
 				}
-				console.log(stdout);
 				res.redirect('/login');
 			});
 		});
@@ -83,6 +82,56 @@ app.post('/retrieveUser', function(req, res){
 			res.render('login.html',{login: 'failed'});
     	}
     });
+});
+
+app.post('/review', function(req, res){
+	var username = req.body.username;
+	var item = req.body.item;
+	var rating = req.body.rating;
+	var queryString = "SELECT id FROM users WHERE username=$1";
+	conn.query(queryString, [username], function(err, results){
+		var id = String(results.rows[0].id);
+		exec('java RunML MODIFY REVIEW ' + id + ' ' + item + ' ' + rating, function (error, stdout, stderr) {
+			console.log('errors',error);
+			console.log('stderr',stderr);
+			console.log('stdout',stdout);
+			//returns nothing
+			//TODO: maybe return error to client?
+			res.end();
+		});
+	});
+});
+
+app.post('/guess',function(req,res){
+	var username = req.body.username;
+	var item = req.body.item;
+	var rating = req.body.rating;
+	var queryString = "SELECT id FROM users WHERE username=$1";
+	conn.query(queryString, [username], function(err, results){
+		var id = String(results.rows[0].id);
+		exec('java RunML PING GUESS ' + id + ' ' + item + ' ' + rating, function (error, stdout, stderr) {
+			console.log('errors',error);
+			console.log('stderr',stderr);
+			//returns the rating (ex: 1.0)
+			res.end(stdout);
+		});
+	});
+});
+
+app.post('/suggest',function(req,res){
+	var username = req.body.username;
+	var item = req.body.item;
+	var rating = req.body.rating;
+	var queryString = "SELECT id FROM users WHERE username=$1";
+	conn.query(queryString, [username], function(err, results){
+		var id = String(results.rows[0].id);
+		exec('java RunML PING SUGGEST ' + id + ' ' + item + ' ' + rating, function (error, stdout, stderr) {
+			console.log('errors',error);
+			console.log('stderr',stderr);
+			//returns the suggestions comma separated
+			res.end(stdout);
+		});
+	});
 });
 
 app.post('/trackCredits', function(req, res){
