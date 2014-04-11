@@ -18,13 +18,8 @@ exec("rm -f *.db");
 //Create DBs
 var anyDB = require('any-db');
 //TODO: Lol probably shouldn't store password directly in DB
-if (!fs.existsSync('users.db')) {
-	var conn = anyDB.createConnection('sqlite3://users.db');
-	conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, password TEXT, month TEXT,day TEXT, gender TEXT)');
-	console.log('table created!');
-} else {
-	var conn = anyDB.createConnection('sqlite3://users.db');
-}
+var conn = anyDB.createConnection('sqlite3://users.db');
+conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, password TEXT, month TEXT,day TEXT, gender TEXT)');
 //Navigates to Brown's get portal to get credit/points info
 app.get('/login', function(req, res){
 	res.render('login.html');
