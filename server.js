@@ -60,7 +60,19 @@ app.post('/retrieveUser', function(req, res){
     		console.log('no such user', username,'found');
     	} else if (results.rows[0].password === password){
     		console.log('password correct!');
-			res.render('mydining.html', {login: 'true'});
+			//Add to ML Client
+			var curr = results.rows[0];
+			var gender = curr.gender;
+			var otherType = "";
+			if (gender !== "male" && gender !== "female"){
+				otherType = gender;
+				gender = "other";
+			}
+			var csvString = String(curr.id) +"," + curr.name + "," + gender + "," + otherType + "," + curr.year + "," + curr.month;
+			exec('java RunML ADD ' + csvString, function (error, stdout, stderr) {
+				console.log(stdout);
+				res.render('mydining.html', {login: 'true'});
+			});
     	} else {
     		console.log('incorrect password, expected:',results.rows[0].password, 'but got', password);
 			res.render('login.html',{login: 'failed'});
