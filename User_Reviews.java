@@ -28,7 +28,7 @@ public class User_Reviews implements Serializable {
 		String[] vals = myCSV.split(","); //stick the csv into a buffer
 		userId = Integer.parseInt(vals[0]);
 		userName = vals[1];
-		genderIdentity = Gender.valueOf(vals[2]);
+		genderIdentity = Gender.fromString(vals[2]);
 		other = vals[3];
 		birthYear = Integer.parseInt(vals[4]);
 		birthMonth = Integer.parseInt(vals[5]);

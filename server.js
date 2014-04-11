@@ -12,9 +12,11 @@ app.use(express.static(__dirname)); //allows css to work with rendered html
 
 app.use(express.bodyParser());
 
+var monthToNum = {'January' : 1, 'February' : 2, 'March' : 3, 'April' : 4, 'May': 5, 'June': 6, 'July' : 7, 'August' : 8, 'September' : 9, 'October' : 10, 'November' : 11, 'December' : 12};
+
 //delete pre-existing databases
 exec("rm -f *.db");
-
+exec("javac ML_Client.java User_Reviews.java RunML.java");
 //Create DBs
 var anyDB = require('any-db');
 //TODO: Lol probably shouldn't store password directly in DB
@@ -33,6 +35,7 @@ app.post('/storeUser', function(req, res) {
 	var name = req.body.name;
 	var email = req.body.email;
 	var month = req.body.month;
+	month = monthToNum[month];
 	var day = req.body.day;
 	var gender = req.body.gender;
 	var password = req.body.password;
@@ -43,8 +46,22 @@ app.post('/storeUser', function(req, res) {
 	//TODO: double check that there isn't an existing username
 	var queryString = 'INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6, $7)';
     conn.query(queryString, [null, name, email, password, month, day, gender], function(error, result){
-		res.redirect('/login');
-    });
+		var queryString = "SELECT id FROM users WHERE username=$1";
+		conn.query(queryString, [email], function(lookupErr, lookupRes){
+			//Add to ML Client
+			var csvString = String(lookupRes.rows[0].id) +"," + name + "," + gender + "," + otherType + "," + day + "," + month;
+			console.log(csvString);
+			exec('java RunML ADD ' + csvString, function (error, stdout, stderr) {
+				if (stdout === 'Warning: users already contains this userId. Aborting.') {
+					console.log('user already exists!');
+				} else {
+					console.log('all good');
+				}
+				console.log(stdout);
+				res.redirect('/login');
+			});
+		});
+	});
 });
 
 app.post('/retrieveUser', function(req, res){
@@ -60,19 +77,7 @@ app.post('/retrieveUser', function(req, res){
     		console.log('no such user', username,'found');
     	} else if (results.rows[0].password === password){
     		console.log('password correct!');
-			//Add to ML Client
-			var curr = results.rows[0];
-			var gender = curr.gender;
-			var otherType = "";
-			if (gender !== "male" && gender !== "female"){
-				otherType = gender;
-				gender = "other";
-			}
-			var csvString = String(curr.id) +"," + curr.name + "," + gender + "," + otherType + "," + curr.year + "," + curr.month;
-			exec('java RunML ADD ' + csvString, function (error, stdout, stderr) {
-				console.log(stdout);
-				res.render('mydining.html', {login: 'true'});
-			});
+			res.render('mydining.html', {login: 'true'});
     	} else {
     		console.log('incorrect password, expected:',results.rows[0].password, 'but got', password);
 			res.render('login.html',{login: 'failed'});
