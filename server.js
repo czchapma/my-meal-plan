@@ -22,7 +22,7 @@ var conn = anyDB.createConnection('sqlite3://users.db');
 conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, password TEXT, month TEXT,day TEXT, gender TEXT)');
 //Navigates to Brown's get portal to get credit/points info
 app.get('/login', function(req, res){
-	res.render('login.html');
+	res.render('login.html',{login: 'notyet'});
 });
 
 app.get('/newaccount', function(req, res){
@@ -40,7 +40,6 @@ app.post('/storeUser', function(req, res) {
 		//TODO: somehow otherType isn't going through
 		var otherType = req.body.otherType;
 	}
-	var id = generateId();
 	//TODO: double check that there isn't an existing username
 	var queryString = 'INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6, $7)';
     conn.query(queryString, [null, name, email, password, month, day, gender], function(error, result){
@@ -61,9 +60,10 @@ app.post('/retrieveUser', function(req, res){
     		console.log('no such user', username,'found');
     	} else if (results.rows[0].password === password){
     		console.log('password correct!');
+			res.render('mydining.html', {login: 'true'});
     	} else {
     		console.log('incorrect password, expected:',results.rows[0].password, 'but got', password);
-    		res.end();
+			res.render('login.html',{login: 'failed'});
     	}
     });
 });
@@ -93,7 +93,7 @@ app.get('/specials', function(req, res) {
 });
 
 app.get('/mydining', function(req, res) {
-	res.render('mydining.html');
+	res.render('mydining.html', {login: 'false'});
 });
 
 app.get('/menu/ratty', function(req, res) {
@@ -552,17 +552,4 @@ function andrewsSpecials(res) {
 		//Dinner Menu
 		res.end('Thai BBQ Chicken\nChicken & Veggie\nSteamed jasmine rice\n')
 	}
-
-}
-
-function generateId() {
-    // make a list of legal characters
-    // we're intentionally excluding 0, O, I, and 1 for readability
-    var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-
-    var result = '';
-    for (var i = 0; i < 6; i++)
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
-
-    return String(result);
 }

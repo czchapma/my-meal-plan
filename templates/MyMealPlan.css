@@ -211,3 +211,7 @@ body {
 #login-form {
     color: white;
 }
+
+#logged-in {
+    color: white;
+}

@@ -54,6 +54,15 @@ $(document).ready(function(){
 			});
 		}
 	});
+
+	var loginType = document.querySelector('meta[name=login-type]').content;
+	if (loginType === 'true'){
+		//logged in!
+		$('#logged-in').text('Congrats you are logged in!');
+		//TODO: Steven add in stuff here
+	} else {
+		//not logged in yet
+	}
 });
 
 //from: http://stackoverflow.com/questions/3885817/how-to-check-if-a-number-is-float-or-integer
