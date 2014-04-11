@@ -499,8 +499,8 @@ app.get('/specials/jos', function(req, res){
 			//Grilled cheese Sunday/Monday/Wednesday
 			res.write('Gormet Grilled Cheese, ');
 		} else {
-			//Quesedillas every other night
-			res.write('Quesedillas, ');
+			//Quesadillas every other night
+			res.write('Quesadillas, ');
 		}
 	}
 	res.end('Gnocchi');
