@@ -100,11 +100,9 @@ public class ML_Client implements Serializable
 		HashMap<Integer, Double> newDist = new HashMap<Integer,Double>();
 		for(User_Reviews user : users.values()) //now go through each user
 		{
-			System.out.println(user);
 			newDist.put(user.getUserId(), user.diff(existentUser)); //add their dist to newUser to the newDist
 			if(user.getUserId() != existentUser.getUserId())	
 				dists.get(user.getUserId()).put(existentUser.getUserId(),user.diff(existentUser)); //and add the dist to the other user's dists.
-			System.out.println(user);
 		}
 		dists.put(existentUser.getUserId(),newDist);//and add the newDist into dists.			
 
@@ -213,7 +211,6 @@ public class ML_Client implements Serializable
 		for(int otherId : neighbors.keySet())
 		{
 			Tupleish t = new Tupleish(otherId, neighbors.get(otherId));
-			System.out.println(users.get(otherId));
 			if(users.get(otherId).getReviews().keySet().contains(food)) //If the user reviewed item food. 
 				allNeighbors.add(t);
 		}
@@ -279,11 +276,6 @@ public class ML_Client implements Serializable
 		}
 		
 		Collections.sort(allFoods);	
-		System.out.println();
-		for(TupleFood t : allFoods)
-		{
-			System.out.println(t.getFood() + " " + t.getRating());
-		}
 		for(int i = 0; i < numWanted; i++)
 		{
 			if(i < allFoods.size())
