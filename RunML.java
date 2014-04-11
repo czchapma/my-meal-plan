@@ -28,8 +28,6 @@ public class RunML
 
 	public static void main(String[] args)
 	{
-		for(String arg: args)
-			System.out.println(arg);
 		//input should be COMMAND [optional specifier] USER INPUT
 		ML_Client client;
 		try {
@@ -68,7 +66,7 @@ public class RunML
 			//input of type ADD "[id#],[name],[GENDER],[desc],[year],[month],[food],[review],[food],[review]..."
 			User_Reviews person = new User_Reviews(args[1]);
 			client.addUser(person);
-			System.out.println(client);
+			
 		}
 		else if(args[0].equals("MODIFY"))
 		{
@@ -112,7 +110,7 @@ public class RunML
 				client.updateReview(arg2, args[3], arg4);
 				//input of type MODIFY NAME [id#] [newFood] [newReview]
 			}
-			System.out.println(client);
+			
 		}
 		else if(args[0].equals("PING"))
 		{
@@ -123,11 +121,11 @@ public class RunML
 				int arg3 = Integer.parseInt(args[3]);
 				int arg4 = Integer.parseInt(args[4]);
 				String[] recs = client.getRec(arg2,arg4,arg3);
-				for(String rec: recs)
+				for(int i = 0; i < recs.length - 1; i++)
 				{
-					System.out.print(rec + ",");
+					System.out.print(recs[i] + ",");
 				}
-				System.out.println();
+				System.out.println(recs[recs.length-1]);
 
 			}
 			else if(args[1].equals("GUESS"))
