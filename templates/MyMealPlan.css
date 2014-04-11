@@ -1,3 +1,7 @@
+p, h1{
+    color: white;
+}
+
 @font-face
 {
     font-family: Antonio;
@@ -59,6 +63,29 @@ body {
     color:lime;
     background-color:darkgreen;
 }
+
+/*
+  css for home page
+*/
+#home-content {
+    margin: 20px;
+    padding: 10px;
+}
+#home-content h1 {
+    text-align: center;
+}
+#home-content p {
+    font-size: 20px;
+}
+#home-content img {
+    float: left;
+    margin: 0 20px 20px 0;
+    width: 700px;
+}
+/*
+  end css for home page
+*/
+
 #dining_bar {
     height:20px;
     width:100%;
@@ -244,4 +271,30 @@ body {
 
 #logged-in {
     color: white;
+}
+
+/*
+  css for login page
+*/
+#login-content {
+    padding: 10px;
+    width: 400px;
+    margin-left: calc(50% - 200px);
+    margin-top: 100px;
+}
+#login-content label {
+    font-size: 20px;
+}
+
+#login-content p input{
+    float: right;
+    width: 250px;
+    height: 30px;
+}
+
+#login-content button {
+    float: right;
+    width: 100px;
+    height: 30px;
+    margin-left: 10px;
 }
