@@ -59,6 +59,36 @@ body {
     color:lime;
     background-color:darkgreen;
 }
+#dining_bar {
+    height:20px;
+    width:100%;
+    background-color:darkgreen;
+}
+
+#dining_buttons {
+
+    width:500px;
+    margin:auto;
+}
+
+#dining_buttons a{
+    display:inline-block;
+    height:20px;
+    padding:0 10px 0 10px;
+    color: lime;
+    font-size:12pt;
+    text-decoration:none;
+}
+
+#dining_buttons a:link{
+    color:lime;
+    vertical-align:center;
+}
+
+#dining_buttons a:hover{
+    color:darkgreen;
+    background-color:lime;
+}
 
 
 .content_box {

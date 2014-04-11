@@ -13,11 +13,13 @@ $(document).ready(function(){
 		});
 	});
 
-	var $form = $('#track-credits-form')
+	var $form = $('#track-credits-form');
 	var $credits = $('#credits');
 	var $points = $('#points');
 	var $creditsErr = $('#creditsErr');
 	var $pointsErr = $('#pointsErr');
+
+	var $choices = $('#dining_bar');
 
 	$creditsErr.hide();
 	$pointsErr.hide();
@@ -60,14 +62,16 @@ $(document).ready(function(){
 		//logged in!
 		$('#logged-in').text('Congrats you are logged in!');
 		//TODO: Steven add in stuff here
+		$choices.show();
 	} else {
+		$choices.hide();
 		//not logged in yet
 	}
 });
 
 //from: http://stackoverflow.com/questions/3885817/how-to-check-if-a-number-is-float-or-integer
 function isFloat(n) {
-	return !isNaN(n);
+	return !isNaN(n); //so derp wow.
 }
 
 function isInt(n) {
