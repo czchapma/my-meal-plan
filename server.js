@@ -96,6 +96,11 @@ app.get('/mydining', function(req, res) {
 	res.render('mydining.html', {login: 'false'});
 });
 
+app.get('/mydining/log', function(req,res) {
+	console.log("I'M HERE");
+	res.render('mydininglog.html');
+});
+
 app.get('/menu/ratty', function(req, res) {
 	makeRequest('http://www.brown.edu/Student_Services/Food_Services/eateries/refectory_menu.php',function(body){
 		$ = cheerio.load(body);
