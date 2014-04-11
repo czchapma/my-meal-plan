@@ -35,7 +35,7 @@ app.post('/storeUser', function(req, res) {
 	var month = req.body.month;
 	var day = req.body.day;
 	var gender = req.body.gender;
-	var password = req.body.password
+	var password = req.body.password;
 	if (gender === 'other'){
 		//TODO: somehow otherType isn't going through
 		var otherType = req.body.otherType;
@@ -43,7 +43,7 @@ app.post('/storeUser', function(req, res) {
 	var id = generateId();
 	//TODO: double check that there isn't an existing username
 	var queryString = 'INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6, $7)';
-    conn.query(queryString, [id, name, email, password, month, day, gender], function(error, result){
+    conn.query(queryString, [null, name, email, password, month, day, gender], function(error, result){
 	    queryString = 'SELECT * from users WHERE username=$1';
 		conn.query(queryString, [email], function(error, result){
 			console.log('Look nothing is in the table!',result);
