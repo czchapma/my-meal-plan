@@ -12,7 +12,7 @@ $(document).ready(function(){
 		});
 	});
 
-	$('#new-account').click(function(event){
+	$('#register').click(function(event){
 		event.preventDefault();		
 		$(location).attr('href', '/newaccount')
 	});
