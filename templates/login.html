@@ -18,12 +18,14 @@
 	<a id="login" href="#">Login</a>
       </div>
     </div>
-    <button id="new-account">Create New Account</button>
-    <form id="login-form" action="/retrieveUser" method="post">
-      Username (Email): <input id="username" name="username" type="text">
-      Password:<input id="password" name="password" type="password">
-      <input id="submit" name="submit" type="submit"><br/>
-      <span id="login-failed"></span>
-    </form>
+    <div id="login-content">
+      <form id="login-form" action="/retrieveUser" method="post">
+	<p><label>Username (Email):</label><input id="username" name="username" type="text"></p>
+	<p><label>Password:</label><input id="password" name="password" type="password"></p>
+	<button  id="submit" name="submit" type="submit">Login</button>
+	<button id="register" name="register" type="button">Register</button>
+	<span id="login-failed"></span>
+      </form>
+    </div>
   </body>
 </html>
