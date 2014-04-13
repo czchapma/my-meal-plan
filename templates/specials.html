@@ -3,7 +3,7 @@
   <head>
     <title>MyMealPlan</title>
     <meta name="user-name" content="{{user}}">
-    <link rel="icon" href="../imgs/avocado.png" type="image/x-icon">
+    <link rel="icon" href="templates/imgs/avocado.png" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="templates/MyMealPlan.css" />
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="specials.js"></script>
@@ -18,14 +18,18 @@
 	<a id="login" href="#">Login</a>
       </div>
     </div>
-  <ul id="specials-list">
-    <li id="ratty"></li>
-    <li id="vdub"></li>
-    <li id="ivyroom"></li>
-    <li id="jos"></li>
-    <li id="aco"></li>
-    <li id="blueroom"></li>
-  </ul>
-  <button id="suggest">Suggest A Random Item</button>
-</body>
+    <div id="specials-content">
+      <ul id="specials-list">
+	<li id="ratty"></li>
+	<li id="vdub"></li>
+	<li id="ivyroom"></li>
+	<li id="jos"></li>
+	<li id="aco"></li>
+	<li id="blueroom"></li>
+      </ul>
+    </div>
+    <div id="specials-suggest-wrapper">
+      <button id="suggest">Suggest A Random Item</button>
+    </div>
+  </body>
 </html>
