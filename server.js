@@ -119,25 +119,31 @@ app.post('/guess',function(req,res){
 });
 
 app.get('/print',function(req,res){
-	console.log("IM HERE");
 		exec('java RunML PRINT', function (error, stdout, stderr) {
 			console.log('errors',error);
 			console.log('stderr',stderr);
-		
+			console.log('stdout',stdout);
 			//returns the rating (ex: 1.0)
 			res.end(stdout);
 		});
 	
 });
 
+//adds a bunch of testing data to the database
+app.get('/populateTests', function(req,res){
+	res.render("testPop.html");
+});
+
 app.post('/suggest',function(req,res){
 	var username = req.body.username;
-	var item = req.body.item;
-	var rating = req.body.rating;
+	var numItems = req.body.numItems;
+	var k = 3;
+	console.log(username);
+	console.log(numItems);
 	var queryString = "SELECT id FROM users WHERE username=$1";
 	conn.query(queryString, [username], function(err, results){
 		var id = String(results.rows[0].id);
-		exec('java RunML PING SUGGEST ' + id + ' ' + item + ' ' + rating, function (error, stdout, stderr) {
+		exec('java RunML PING SUGGEST ' + id + ' ' + numItems + ' ' + k, function (error, stdout, stderr) {
 			console.log('errors',error);
 			console.log('stderr',stderr);
 			//returns the suggestions comma separated
