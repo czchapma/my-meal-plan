@@ -55,6 +55,7 @@ app.post('/storeUser', function(req, res) {
 					var csvString = String(lookupRes.rows[0].id) +"," + name + "," + gender + "," + otherType + "," + year + "," + month;
 					console.log(csvString);
 					exec('java RunML ADD ' + csvString, function (error, stdout, stderr) {
+						console.log(stdout);
 						if (stdout.indexOf('Warning: users already contains this userId. Aborting.') !== -1) {
 							console.log('user already exists!');
 						} else {
@@ -110,6 +111,8 @@ app.post('/review', function(req, res){
 	});
 });
 
+//TODO: fix security threat. By just concatenating the calls to RunML. someone could use some form of injection I think. 
+//My guess is that you could do something to turn the string into multiple lines, and then literally run anything serverside.
 app.post('/guess',function(req,res){
 	var username = req.body.username;
 	var item = req.body.item;
@@ -131,7 +134,7 @@ app.get('/print',function(req,res){
 			console.log('errors',error);
 			console.log('stderr',stderr);
 			console.log('stdout',stdout);
-			//returns the rating (ex: 1.0)
+			
 			res.end(stdout);
 		});
 	

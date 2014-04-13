@@ -58,11 +58,13 @@ public class RunML
 			client = new ML_Client(foods);
 		}
 		//for debugging purposes:
+		
 		if(args[0].equals("ADD"))
 		{
 			//input of type ADD "[id#],[name],[GENDER],[desc],[year],[month],[food],[review],[food],[review]..."
 			User_Reviews person = new User_Reviews(args[1]);
 			client.addUser(person);
+			System.out.println(client);
 			
 		}
 		else if(args[0].equals("MODIFY"))
@@ -137,6 +139,7 @@ public class RunML
 		}
 		else if(args[0].equals("PRINT"))
 			{
+				System.out.println("PRINTING:");
 				System.out.println(client);
 			}
 		

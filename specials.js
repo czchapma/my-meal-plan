@@ -15,6 +15,12 @@ $(document).ready(function(){
 		});
 	});
 
+	$('#suggest').click(function(){
+		$.post("/suggest",{username: "steven_mcgarty@brown.edu",numItems : 1},function(data,status){
+			console.log(data);
+		});
+	});
+
 	dininghalls.forEach(function(entry){
 		$.ajax({
 			url: "/specials/" + entry
