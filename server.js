@@ -184,7 +184,7 @@ app.get('/dininghalls', function(req, res) {
 });
 
 app.get('/specials', function(req, res) {
-	res.render('specials.html');
+    res.render('specials.html');
 });
 
 app.get('/mydining', function(req, res) {

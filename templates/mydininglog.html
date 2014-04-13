@@ -5,7 +5,7 @@
     <link rel="icon" href="templates/imgs/avocado.png" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="templates/MyMealPlan.css" />
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-   
+    <script type="text/javascript" src="mydininglog.js"></script>
   </head>
   <body>
     <img id="logo" src="templates/imgs/logo.png"/>
@@ -17,19 +17,25 @@
 	<a id="login" href="/login">Login</a>
       </div>
     </div>
-  <div id="dining_bar">
-    <div id="dining_buttons">
-      <a id="credits" href="#"> Credits and Points </a>
-      <a id="purchase" href="#"> Log Purchase </a>
-      <a id="allpurchase" href="#"> Previous Transactions </a>
-      <a id="browse" href="#"> Browse Items </a>
+    <div id="dining_bar">
+      <div id="dining_buttons">
+	<a id="credits" href="#">Credits and Points</a>
+	<a id="purchase" href="#">Log Purchase</a>
+	<a id="allpurchase" href="#">Previous Transactions</a>
+	<a id="browse" href="#">Browse Items</a>
+      </div>
     </div>
-  </div>
-
-  <div id="log_body">
+    
     <form id="log-form" action="/retrieveUser" method="post">
-      Search for an item: <input id="item" name="item" type="text">
+      <h1>Log a Purchase</h1>
+      <input id="item" name="item" type="text">
     </form>
-  </div>
-</body>
+    
+    <div id="prev-transactions">
+      <ul>
+	<li>Sample History 1</li>
+	<li>Sample History 2</li>
+      </ul>
+    </div>
+  </body>
 </html>

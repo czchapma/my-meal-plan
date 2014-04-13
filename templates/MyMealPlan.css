@@ -314,3 +314,28 @@ body {
 #specials-suggest-wrapper {
     text-align: center;
 }
+
+/*
+  css for my dining subpages
+*/
+#log-form {
+    margin-top: 50px;
+    margin-left: 40%;
+}
+
+#log-form input {
+    width: 200px;
+    height: 30px;
+}
+
+#prev-transactions {
+    display: none;
+    margin-top: 50px;
+    color: white;
+    text-align: center;
+}
+
+#prev-transactions li {
+    list-style: none;
+    font-size: 16pt;
+}
