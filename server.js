@@ -16,6 +16,7 @@ var monthToNum = {'January' : 1, 'February' : 2, 'March' : 3, 'April' : 4, 'May'
 
 //delete pre-existing databases
 exec("rm -f *.db");
+exec("rm -f *.ser");
 exec("javac ML_Client.java User_Reviews.java RunML.java");
 //Create DBs
 var anyDB = require('any-db');
@@ -36,30 +37,37 @@ app.post('/storeUser', function(req, res) {
 	var email = req.body.email;
 	var month = req.body.month;
 	month = monthToNum[month];
-	var day = req.body.day;
+	var year = req.body.year;
 	var gender = req.body.gender;
 	var password = req.body.password;
 	if (gender === 'other'){
-		//TODO: somehow otherType isn't going through
 		var otherType = req.body.otherType;
 	}
-	//TODO: double check that there isn't an existing username
-	var queryString = 'INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6, $7)';
-    conn.query(queryString, [null, name, email, password, month, day, gender], function(error, result){
-		var queryString = "SELECT id FROM users WHERE username=$1";
-		conn.query(queryString, [email], function(lookupErr, lookupRes){
-			//Add to ML Client
-			var csvString = String(lookupRes.rows[0].id) +"," + name + "," + gender + "," + otherType + "," + day + "," + month;
-			console.log(csvString);
-			exec('java RunML ADD ' + csvString, function (error, stdout, stderr) {
-				if (stdout.indexOf('Warning: users already contains this userId. Aborting.') !== -1) {
-					console.log('user already exists!');
-				} else {
-					console.log('all good');
-				}
-				res.redirect('/login');
+	//double check that there isn't an existing username
+	var queryString = 'SELECT id FROM users WHERE username=$1';
+    conn.query(queryString, [email], function(nameError, nameRes){
+		if (nameRes.rows.length === 0){
+			var queryString = 'INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6, $7)';
+		    conn.query(queryString, [null, name, email, password, month, year, gender], function(error, result){
+				var queryString = "SELECT id FROM users WHERE username=$1";
+				conn.query(queryString, [email], function(lookupErr, lookupRes){
+					//Add to ML Client
+					var csvString = String(lookupRes.rows[0].id) +"," + name + "," + gender + "," + otherType + "," + year + "," + month;
+					console.log(csvString);
+					exec('java RunML ADD ' + csvString, function (error, stdout, stderr) {
+						if (stdout.indexOf('Warning: users already contains this userId. Aborting.') !== -1) {
+							console.log('user already exists!');
+						} else {
+							console.log('all good');
+						}
+						res.redirect('/login');
+					});
+				});
 			});
-		});
+		} else {
+			console.log("User already registered!");
+			res.redirect('/login');
+		}
 	});
 });
 
@@ -210,7 +218,7 @@ app.get('/menu/vdub', function(req,res) {
 	makeRequest('http://www.brown.edu/Student_Services/Food_Services/eateries/verneywoolley_menu.php', function(body){
 		$ = cheerio.load(body);
 		var src = $('iframe').first().attr('src');
-		var ignoreList = ["",".","OPENS FOR LUNCH","Opens for lunch","Opens for Lunch",'spring 1', 'spring 2', 'spring 3', 'spring 4', 'spring 5', 'Breakfast','Lunch','Dinner', 'Daily Sidebars'];
+		var ignoreList = ["",".","OPENS FOR LUNCH","Opens for lunch","Opens for Lunch",'spring 1', 'spring 2', 'spring 3', 'spring 4', 'spring 5', 'spring 6', 'spring 7', 'Breakfast','Lunch','Dinner', 'Daily Sidebars'];
 
 		function callback(body){
 			var toReturn = ["","","",""];
