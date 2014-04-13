@@ -17,7 +17,9 @@ var monthToNum = {'January' : 1, 'February' : 2, 'March' : 3, 'April' : 4, 'May'
 //delete pre-existing databases
 exec("rm -f *.db");
 exec("rm -f *.ser");
-exec("javac ML_Client.java User_Reviews.java RunML.java");
+exec("javac ML_Client.java User_Reviews.java RunML.java", function(error, stdout, stderr){
+	console.log(error, stdout, stderr);
+});
 //Create DBs
 var anyDB = require('any-db');
 //TODO: Lol probably shouldn't store password directly in DB
@@ -54,8 +56,8 @@ app.post('/storeUser', function(req, res) {
 					//Add to ML Client
 					var csvString = String(lookupRes.rows[0].id) +"," + name + "," + gender + "," + otherType + "," + year + "," + month;
 					console.log(csvString);
-					exec('java RunML ADD ' + csvString, function (error, stdout, stderr) {
-						console.log(stdout);
+					exec('java RunML ADD "' + csvString + '"', function (error, stdout, stderr) {
+						console.log(stdout,stderr, error);
 						if (stdout.indexOf('Warning: users already contains this userId. Aborting.') !== -1) {
 							console.log('user already exists!');
 						} else {
@@ -99,15 +101,20 @@ app.post('/review', function(req, res){
 	var rating = req.body.rating;
 	var queryString = "SELECT id FROM users WHERE username=$1";
 	conn.query(queryString, [username], function(err, results){
-		var id = String(results.rows[0].id);
-		exec('java RunML MODIFY REVIEW ' + id + ' ' + item + ' ' + rating, function (error, stdout, stderr) {
-			console.log('errors',error);
-			console.log('stderr',stderr);
-			console.log('stdout',stdout);
-			//returns nothing
-			//TODO: maybe return error to client?
+		if (results.rows.length > 0) {
+			var id = String(results.rows[0].id);
+			exec('java RunML MODIFY REVIEW ' + id + ' ' + item + ' ' + rating, function (error, stdout, stderr) {
+				console.log('errors',error);
+				console.log('stderr',stderr);
+				console.log('stdout',stdout);
+				//returns nothing
+				//TODO: maybe return error to client?
+				res.end();
+			});
+		} else {
+			console.log('username',username,'not in db');
 			res.end();
-		});
+		}
 	});
 });
 
