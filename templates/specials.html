@@ -3,7 +3,7 @@
   <head>
     <title>MyMealPlan</title>
     <meta name="user-name" content="{{user}}">
-    <link rel="icon" href="../imgs/avocado.png" type="image/x-icon">
+    <link rel="icon" href="templates/imgs/avocado.png" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="templates/MyMealPlan.css" />
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="specials.js"></script>
@@ -12,20 +12,24 @@
     <img id="logo" src="templates/imgs/logo.png"/><a href="/"></a></img>
     <div id="nav_bar">
       <div id="nav_buttons">
-	<a id="dininghalls" href="#">Dining Halls</a>
-	<a id="mydining" href="templates/mydining.html">My Dining</a>
-	<a id="specials" href="templates/">Specials at a Glance</a>
-	<a id="login" href="#">Login</a>
+	<a id="dininghalls" href="/dininghalls">Dining Halls</a>
+	<a id="mydining" href="/mydining">My Dining</a>
+	<a id="specials" href="/specials">Specials at a Glance</a>
+	<a id="login" href="/login">Login</a>
       </div>
     </div>
-  <ul id="specials-list">
-    <li id="ratty"></li>
-    <li id="vdub"></li>
-    <li id="ivyroom"></li>
-    <li id="jos"></li>
-    <li id="aco"></li>
-    <li id="blueroom"></li>
-  </ul>
-  <button id="suggest">Suggest A Random Item</button>
-</body>
+    <div id="specials-content">
+      <ul id="specials-list">
+	<li id="ratty"></li>
+	<li id="vdub"></li>
+	<li id="ivyroom"></li>
+	<li id="jos"></li>
+	<li id="aco"></li>
+	<li id="blueroom"></li>
+      </ul>
+    </div>
+    <div id="specials-suggest-wrapper">
+      <button id="suggest">Suggest A Random Item</button>
+    </div>
+  </body>
 </html>

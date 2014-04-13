@@ -2,34 +2,40 @@
 <html>
   <head>
     <title>MyMealPlan</title>
-    <link rel="icon" href="../imgs/avocado.png" type="image/x-icon">
+    <link rel="icon" href="templates/imgs/avocado.png" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="templates/MyMealPlan.css" />
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-   
+    <script type="text/javascript" src="mydininglog.js"></script>
   </head>
   <body>
     <img id="logo" src="templates/imgs/logo.png"/>
     <div id="nav_bar">
       <div id="nav_buttons">
-	<a id="dininghalls" href="#">Dining Halls</a>
-	<a id="mydining" href="templates/mydining.html">My Dining</a>
-	<a id="specials" href="templates/">Specials at a Glance</a>
-	<a id="login" href="#">Login</a>
+	<a id="dininghalls" href="/dininghalls">Dining Halls</a>
+	<a id="mydining" href="/mydining">My Dining</a>
+	<a id="specials" href="/specials">Specials at a Glance</a>
+	<a id="login" href="/login">Login</a>
       </div>
     </div>
-  <div id="dining_bar">
-    <div id="dining_buttons">
-      <a id="credits" href="#"> Credits and Points </a>
-      <a id="purchase" href="#"> Log Purchase </a>
-      <a id="allpurchase" href="#"> Previous Transactions </a>
-      <a id="browse" href="#"> Browse Items </a>
+    <div id="dining_bar">
+      <div id="dining_buttons">
+	<a id="credits" href="#">Credits and Points</a>
+	<a id="purchase" href="#">Log Purchase</a>
+	<a id="allpurchase" href="#">Previous Transactions</a>
+	<a id="browse" href="#">Browse Items</a>
+      </div>
     </div>
-  </div>
-
-  <div id="log_body">
+    
     <form id="log-form" action="/retrieveUser" method="post">
-      Search for an item: <input id="item" name="item" type="text">
+      <h1>Log a Purchase</h1>
+      <input id="item" name="item" type="text">
     </form>
-  </div>
-</body>
+    
+    <div id="prev-transactions">
+      <ul>
+	<li>Sample History 1</li>
+	<li>Sample History 2</li>
+      </ul>
+    </div>
+  </body>
 </html>
