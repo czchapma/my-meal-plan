@@ -470,7 +470,7 @@ app.get('/status/ivyroom', function(req, res) {
 app.get('/status/aco', function(req,res) {
 	var hour = new Date().getHours();
 	var toReturn = {};
-	if ((hour >= 0 && hour < 2) || hour > 11){
+	if ((hour >= 0 && hour < 2) || hour >= 11){
 		toReturn['open'] = 'true';
 		toReturn['message'] = 'Open until 2AM!';
 	} else {
