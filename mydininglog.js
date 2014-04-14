@@ -36,8 +36,23 @@ $(document).ready(function(){
             if (lineSplit[i].indexOf(',') > -1){
                 var priceItemSplit = lineSplit[i].split(',');
                 var li = $(document.createElement('li'));
-                li.html('<div class="food-item">' + priceItemSplit[0] + "</div><div class='food-price'>" + priceItemSplit[1] + "</div>");
+
+                li.html('<input id="' + priceItemSplit[0] + '" name="check-'+ priceItemSplit[0] + '" type="checkbox"> <div class="food-item">' + priceItemSplit[0] + "</div><div class='food-price'>" + priceItemSplit[1] + "</div>");
                 ul.append(li);
+            }
+        }
+        for (var i=0; i<lineSplit.length; i++){
+            if (lineSplit[i].indexOf(',') > -1){
+                var priceItemSplit = lineSplit[i].split(',');
+                var check = 'input#' + priceItemSplit[0];
+                var test = $(check);
+                //todo: get check listener to work.
+                test.change(function(){
+                    if(test.checked)
+                        console.log("checked " + check);
+                });
+                console.log(test);
+                
             }
         }
     });
