@@ -6,7 +6,6 @@ public class RunML
 	//Saves a MLClient instance via Java Serialization for use later
 	public static void saveClient(ML_Client client) throws IOException
 	{
-		unlockFile();
 		try {
 			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("savedClient.ser"));
 			out.writeObject(client);
@@ -20,14 +19,6 @@ public class RunML
 	//Loads the MLClient via Java Serialization
 	public static ML_Client loadClient() throws IOException, ClassNotFoundException
 	{
-		if(isLocked()) {
-			System.out.println("started waiting for lock");
-		}
-		while (isLocked()){
-			//Wait until Client is unlocked
-		}
-		System.out.println("acquired lock!");
-		lockFile();
 		ML_Client client;
         ObjectInputStream in = new ObjectInputStream(new FileInputStream("savedClient.ser"));
         client = (ML_Client) in.readObject();
@@ -35,10 +26,14 @@ public class RunML
         return client;
 	}
 
-	public static void lockFile() throws IOException{
+	public static void lockFile(){
 		System.out.println("Locking file!");
-		File f = new File("locked.txt");
-		f.createNewFile();
+		try {
+			File f = new File("locked.txt");
+			f.createNewFile();
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void unlockFile() throws IOException{
@@ -57,9 +52,18 @@ public class RunML
 		//input should be COMMAND [optional specifier] USER INPUT
 		ML_Client client;
 		try {
+			//LOCK!
+			if(isLocked()) {
+				System.out.println("started waiting for lock");
+			}
+			while (isLocked()){
+				//Wait until Client is unlocked
+			}
+			System.out.println("acquired lock!");
+			lockFile();			
+
 			//Load from file
 			client = loadClient();
-			
 		} catch(IOException e){
 			//if file not found (or corrupted), create new
 			//TODO: need to change this initial list
@@ -173,12 +177,12 @@ public class RunML
 			//Finally, serialize client
 			saveClient(client);
 		} catch(Exception e){
-			try {
-				unlockFile();
-			} catch(IOException ex) {
-				System.out.println("Everything died. Give up now.");
-			}
 			e.printStackTrace();
+		}
+		try {
+			unlockFile();
+		} catch(IOException ex) {
+				System.out.println("Everything died. Give up now.");
 		}
 	}
 }

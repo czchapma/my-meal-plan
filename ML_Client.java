@@ -201,6 +201,7 @@ public class ML_Client implements Serializable
 		users.remove(curId);
 		users.put(curId,theUser);
 		updateDists(theUser);
+		System.out.println("updated id:" + curId + " food: " + food + " successfully!");
 	}
 
 	//TODO: Get the k nearest neighbors to user indicated by curId that have reviewed item food, then average or majority rule (we can decide this later) their reviews, and return this number. Return -1 if there are not enough neighbors who have reviewed item food. 

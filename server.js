@@ -206,15 +206,18 @@ app.get('/mydining/log', function(req,res) {
 app.get('/menu/ratty', function(req, res) {
 	makeRequest('http://www.brown.edu/Student_Services/Food_Services/eateries/refectory_menu.php',function(body){
 		$ = cheerio.load(body);
+		var day = moment().day();
 		var bSrc = $('#Breakfast').attr('src');
 		var lSrc = $('#Lunch').attr('src');
 		var dSrc = $('#Dinner').attr('src');
 		var ignoreList = ["",".","OPENS FOR LUNCH", "Opens for lunch","Opens for Lunch", "Roots & Shoots","Grill","Bistro","Chef\'s Corner"];
 		var time = new Date().getHours();
-		if (time < 11 || time > 18){
+		//TODO if time > 18 need THE NEXT DAYS breakfast
+		if (day !== 0 && (time < 11 || time > 18)){
+			console.log('day is', day);
 			//Breakfast
 			makeRattyIvyMenu(res,bSrc,ignoreList, false);
-		} else if (time < 15){
+		} else if (time < 15 || (day === 0 && time > 18)) {
 			//Lunch
 			makeRattyIvyMenu(res,lSrc,ignoreList, false);
 		} else {
