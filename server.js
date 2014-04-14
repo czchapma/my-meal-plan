@@ -23,6 +23,8 @@ exec("javac ML_Client.java User_Reviews.java RunML.java", function(error, stdout
 //Create DBs
 var anyDB = require('any-db');
 //TODO: Lol probably shouldn't store password directly in DB
+var connFood = anyDB.createConnection('sqlite3://food.db');
+fillDB();
 var conn = anyDB.createConnection('sqlite3://users.db');
 conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, password TEXT, month TEXT,day TEXT, gender TEXT)');
 //Navigates to Brown's get portal to get credit/points info
@@ -198,8 +200,7 @@ app.get('/mydining', function(req, res) {
 	res.render('mydining.html', {login: 'false'});
 });
 
-app.get('/mydining/log', function(req,res) {
-	console.log("I'M HERE");
+app.get('/mydininglog', function(req,res) {
 	res.render('mydininglog.html');
 });
 
@@ -611,6 +612,20 @@ app.get('/specials/aco', function(req, res){
 	andrewsSpecials(res);
 });
 
+app.get('/itemlist', function(req, res){
+	console.log('item list');
+	connFood
+	var myQuery = connFood.query('SELECT * from food');
+	myQuery.on('row', function(row){
+		if (row !== undefined){
+			res.write(row.item + "," + row.price + '\n');
+		}
+	});
+	myQuery.on('end', function(){
+		res.end();
+	});
+});
+
 app.get('/', function(req, res){
 	res.render('home.html');
 });
@@ -662,4 +677,25 @@ function andrewsSpecials(res) {
 		//Dinner Menu
 		res.end('Thai BBQ Chicken\nChicken & Veggie\nSteamed jasmine rice\n')
 	}
+}
+
+function fillDB() {
+	//money will be in cents
+	connFood.query('CREATE TABLE food (item TEXT PRIMARY KEY,price INT)');
+	var queryString = 'INSERT INTO food VALUES ($1, $2)';
+    connFood.query(queryString, ['Chobani', 360], function(err1, res1){
+    	connFood.query(queryString, ['Sandwich', 560], function(err2, res2){
+    		connFood.query(queryString, ['Falafel', 445], function(err3, res3){
+    			connFood.query(queryString, ['Milk', 120], function(err4, res4){
+    				connFood.query(queryString, ['Tuna', 220], function(err5, res5){
+    						connFood.query('SELECT * from food', function(err, result){
+								console.log(result);
+							});
+
+    				});
+    			});
+    		});
+    	});
+    });
+
 }
