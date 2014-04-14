@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.Serializable;
-
+import java.lang.*;
 public class ML_Client implements Serializable
 {
 	private HashMap<Integer, User_Reviews> users; // N users pointed to by their userId
@@ -245,7 +245,10 @@ public class ML_Client implements Serializable
 		}
 
 		if(allNeighbors.size() < k)
+		{
+			System.out.println("Not enough reviews");
 			return suggestions; //not enough neighbors reviewed it yet. 
+		}
 		Collections.sort(allNeighbors);
 		
  		
@@ -277,11 +280,17 @@ public class ML_Client implements Serializable
 		}
 		
 		Collections.sort(allFoods);	
+		if(allFoods.size() < numWanted)
+			System.out.println("Not enough data for this request!");
 		for(int i = 0; i < numWanted; i++)
 		{
 			if(i < allFoods.size())
 			{
 				suggestions[i] = allFoods.get(i).getFood();
+			}
+			else
+			{
+				suggestions[i] = foods.get((int)Math.floor(Math.random() * foods.size()));
 			}
 		}
 		return suggestions;

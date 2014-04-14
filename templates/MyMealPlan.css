@@ -25,6 +25,17 @@ body {
     color: white;
 }
 
+#suggestion {
+
+	display:inline-block;
+	margin-left:calc(50% - 50px);;
+}
+
+#suggestion *{
+	display:inline-block;
+	margin: 0 auto;
+}
+
 #logo {
     display:block;
     width:300px;

@@ -170,6 +170,7 @@ app.post('/suggest',function(req,res){
 		exec('java RunML PING SUGGEST ' + id + ' ' + numItems + ' ' + k, function (error, stdout, stderr) {
 			console.log('errors',error);
 			console.log('stderr',stderr);
+			console.log('stdout',stdout);
 			//returns the suggestions comma separated
 			res.end(stdout);
 		});

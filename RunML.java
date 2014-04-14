@@ -27,7 +27,7 @@ public class RunML
 	}
 
 	public static void lockFile(){
-		System.out.println("Locking file!");
+		//System.out.println("Locking file!");
 		try {
 			File f = new File("locked.txt");
 			f.createNewFile();
@@ -37,7 +37,7 @@ public class RunML
 	}
 
 	public static void unlockFile() throws IOException{
-		System.out.println("Unlocking File!");
+		//System.out.println("Unlocking File!");
 		File f = new File("locked.txt");
 		f.delete();
 	}
@@ -54,12 +54,12 @@ public class RunML
 		try {
 			//LOCK!
 			if(isLocked()) {
-				System.out.println("started waiting for lock");
+				//System.out.println("started waiting for lock");
 			}
 			while (isLocked()){
 				//Wait until Client is unlocked
 			}
-			System.out.println("acquired lock!");
+			//System.out.println("acquired lock!");
 			lockFile();			
 
 			//Load from file
@@ -151,8 +151,10 @@ public class RunML
 					int arg3 = Integer.parseInt(args[3]);
 					int arg4 = Integer.parseInt(args[4]);
 					String[] recs = client.getRec(arg2,arg4,arg3);
+					System.out.print("Foods Suggested:");
 					for(int i = 0; i < recs.length - 1; i++)
 					{
+						
 						System.out.print(recs[i] + ",");
 					}
 					System.out.println(recs[recs.length-1]);	
