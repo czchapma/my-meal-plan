@@ -15,3 +15,6 @@ java RunML PING GUESS 234 Falafel 1
 
 echo "Some recommendations for user 234 are: "
 java RunML PING SUGGEST 234 2 1
+
+echo "Printing client"
+java RunML PRINT

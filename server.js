@@ -17,7 +17,9 @@ var monthToNum = {'January' : 1, 'February' : 2, 'March' : 3, 'April' : 4, 'May'
 //delete pre-existing databases
 exec("rm -f *.db");
 exec("rm -f *.ser");
-exec("javac ML_Client.java User_Reviews.java RunML.java");
+exec("javac ML_Client.java User_Reviews.java RunML.java", function(error, stdout, stderr){
+	console.log(error, stdout, stderr);
+});
 //Create DBs
 var anyDB = require('any-db');
 //TODO: Lol probably shouldn't store password directly in DB
@@ -46,21 +48,27 @@ app.post('/storeUser', function(req, res) {
     //double check that there isn't an existing username
     var queryString = 'SELECT id FROM users WHERE username=$1';
     conn.query(queryString, [email], function(nameError, nameRes){
-	if (nameRes.rows.length === 0){
-	    var queryString = 'INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6, $7)';
-	    conn.query(queryString, [null, name, email, password, month, year, gender], function(error, result){
-		var queryString = "SELECT id FROM users WHERE username=$1";
-		conn.query(queryString, [email], function(lookupErr, lookupRes){
-		    //Add to ML Client
-		    var csvString = String(lookupRes.rows[0].id) +"," + name + "," + gender + "," + otherType + "," + year + "," + month;
-		    console.log(csvString);
-		    exec('java RunML ADD ' + csvString, function (error, stdout, stderr) {
-			console.log(stdout);
-			if (stdout.indexOf('Warning: users already contains this userId. Aborting.') !== -1) {
-			    console.log('user already exists!');
-			} else {
-			    console.log('all good');
-			}
+		if (nameRes.rows.length === 0){
+			var queryString = 'INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6, $7)';
+		    conn.query(queryString, [null, name, email, password, month, year, gender], function(error, result){
+				var queryString = "SELECT id FROM users WHERE username=$1";
+				conn.query(queryString, [email], function(lookupErr, lookupRes){
+					//Add to ML Client
+					var csvString = String(lookupRes.rows[0].id) +"," + name + "," + gender + "," + otherType + "," + year + "," + month;
+					console.log(csvString);
+					exec('java RunML ADD "' + csvString + '"', function (error, stdout, stderr) {
+						console.log(stdout,stderr, error);
+						if (stdout.indexOf('Warning: users already contains this userId. Aborting.') !== -1) {
+							console.log('user already exists!');
+						} else {
+							console.log('all good');
+						}
+						res.redirect('/login');
+					});
+				});
+			});
+		} else {
+			console.log("User already registered!");
 			res.redirect('/login');
 		    });
 		});
@@ -94,19 +102,26 @@ app.post('/retrieveUser', function(req, res){
 });
 
 app.post('/review', function(req, res){
-    var username = req.body.username;
-    var item = req.body.item;
-    var rating = req.body.rating;
-    var queryString = "SELECT id FROM users WHERE username=$1";
-    conn.query(queryString, [username], function(err, results){
-	var id = String(results.rows[0].id);
-	exec('java RunML MODIFY REVIEW ' + id + ' ' + item + ' ' + rating, function (error, stdout, stderr) {
-	    console.log('errors',error);
-	    console.log('stderr',stderr);
-	    console.log('stdout',stdout);
-	    //returns nothing
-	    //TODO: maybe return error to client?
-	    res.end();
+	var username = req.body.username;
+	var item = req.body.item;
+	var rating = req.body.rating;
+	var queryString = "SELECT id FROM users WHERE username=$1";
+	conn.query(queryString, [username], function(err, results){
+		if (results.rows.length > 0) {
+			var id = String(results.rows[0].id);
+			exec('java RunML MODIFY REVIEW ' + id + ' ' + item + ' ' + rating, function (error, stdout, stderr) {
+				console.log('errors',error);
+				console.log('stderr',stderr);
+				console.log('stdout',stdout);
+				//returns nothing
+				//TODO: maybe return error to client?
+				res.end();
+			});
+		} else {
+			console.log('username',username,'not in db');
+			res.end();
+		}
+>>>>>>> 1152108e016204b24f99ab22d0e568547775b17c
 	});
     });
 });
@@ -184,7 +199,7 @@ app.get('/dininghalls', function(req, res) {
 });
 
 app.get('/specials', function(req, res) {
-    res.render('mydininglog.html');
+    res.render('specials.html');
 });
 
 app.get('/mydining', function(req, res) {
@@ -197,24 +212,27 @@ app.get('/mydining/log', function(req,res) {
 });
 
 app.get('/menu/ratty', function(req, res) {
-    makeRequest('http://www.brown.edu/Student_Services/Food_Services/eateries/refectory_menu.php',function(body){
-	$ = cheerio.load(body);
-	var bSrc = $('#Breakfast').attr('src');
-	var lSrc = $('#Lunch').attr('src');
-	var dSrc = $('#Dinner').attr('src');
-	var ignoreList = ["",".","OPENS FOR LUNCH", "Opens for lunch","Opens for Lunch", "Roots & Shoots","Grill","Bistro","Chef\'s Corner"];
-	var time = new Date().getHours();
-	if (time < 11 || time > 18){
-	    //Breakfast
-	    makeRattyIvyMenu(res,bSrc,ignoreList, false);
-	} else if (time < 15){
-	    //Lunch
-	    makeRattyIvyMenu(res,lSrc,ignoreList, false);
-	} else {
-	    //Dinner
-	    makeRattyIvyMenu(res, dSrc, ignoreList, false);
-	}
-    });
+	makeRequest('http://www.brown.edu/Student_Services/Food_Services/eateries/refectory_menu.php',function(body){
+		$ = cheerio.load(body);
+		var day = moment().day();
+		var bSrc = $('#Breakfast').attr('src');
+		var lSrc = $('#Lunch').attr('src');
+		var dSrc = $('#Dinner').attr('src');
+		var ignoreList = ["",".","OPENS FOR LUNCH", "Opens for lunch","Opens for Lunch", "Roots & Shoots","Grill","Bistro","Chef\'s Corner"];
+		var time = new Date().getHours();
+		//TODO if time > 18 need THE NEXT DAYS breakfast
+		if (day !== 0 && (time < 11 || time > 18)){
+			console.log('day is', day);
+			//Breakfast
+			makeRattyIvyMenu(res,bSrc,ignoreList, false);
+		} else if (time < 15 || (day === 0 && time > 18)) {
+			//Lunch
+			makeRattyIvyMenu(res,lSrc,ignoreList, false);
+		} else {
+			//Dinner
+			makeRattyIvyMenu(res, dSrc, ignoreList, false);
+		}
+	});
 });
 
 app.get('/menu/vdub', function(req,res) {
