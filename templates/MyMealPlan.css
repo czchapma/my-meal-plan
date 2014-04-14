@@ -311,19 +311,47 @@ body {
     margin-top: 50px;
 }
 
+#specials-content li {
+    list-style: none;
+}
 #specials-suggest-wrapper {
+    margin-top: 50px;
     text-align: center;
 }
+.SuggestButton {
+	background-color:#f24537;
+	-moz-border-radius:2px;
+	-webkit-border-radius:2px;
+	border-radius:2px;
+	border:1px solid #d02718;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #a81b10;
+}
+.SuggestButton:hover {
+	background-color:#c62d1f;
+}
+.SuggestButton:active {
+	position:relative;
+	top:1px;
+}
+
 
 /*
   css for my dining subpages
 */
-#log-form {
+#log-form, #browse-form {
     margin-top: 50px;
     margin-left: 40%;
 }
 
-#log-form input {
+#log-form input, #browse-form input {
     width: 200px;
     height: 30px;
 }
@@ -337,5 +365,18 @@ body {
 
 #prev-transactions li {
     list-style: none;
+    font-size: 16pt;
+}
+
+#browse-items {
+    display: none;
+}
+#browse-results {
+    width: 500px;
+    margin-left: 40%;
+}
+#browse-items li {
+    color: white;
+    list-style: decimal;
     font-size: 16pt;
 }
