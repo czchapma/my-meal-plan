@@ -19,7 +19,7 @@ public class Knapsack
 			costs[i] = Integer.parseInt(arr[idx + 1]);
 		}
 		
-		//to fill napsack as much as possible:
+		//to fill knapsack as much as possible:
 		values = costs;
 		
 		int[][] dpTable = new int[numFoods+1][maxPrice+1];

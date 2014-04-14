@@ -17,16 +17,20 @@ var monthToNum = {'January' : 1, 'February' : 2, 'March' : 3, 'April' : 4, 'May'
 //delete pre-existing databases
 exec("rm -f *.db");
 exec("rm -f *.ser");
+exec("rm -f locked.txt");
 exec("javac ML_Client.java User_Reviews.java RunML.java", function(error, stdout, stderr){
-	console.log(error, stdout, stderr);
+	if(error !== null) {
+		console.log(stderr);
+	}
 });
 //Create DBs
 var anyDB = require('any-db');
 //TODO: Lol probably shouldn't store password directly in DB
 var connFood = anyDB.createConnection('sqlite3://food.db');
-fillDB();
+fillFoodDB();
 var conn = anyDB.createConnection('sqlite3://users.db');
-conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, password TEXT, month TEXT,day TEXT, gender TEXT)');
+fillUsersDB();
+//conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, password TEXT, month TEXT,day TEXT, gender TEXT)');
 //Navigates to Brown's get portal to get credit/points info
 app.get('/login', function(req, res){
 	res.render('login.html',{login: 'notyet'});
@@ -679,7 +683,7 @@ function andrewsSpecials(res) {
 	}
 }
 
-function fillDB() {
+function fillFoodDB() {
 	//money will be in cents
 	connFood.query('CREATE TABLE food (item TEXT PRIMARY KEY,price INT)');
 	var queryString = 'INSERT INTO food VALUES ($1, $2)';
@@ -689,7 +693,6 @@ function fillDB() {
     			connFood.query(queryString, ['Milk', 120], function(err4, res4){
     				connFood.query(queryString, ['Tuna', 220], function(err5, res5){
     						connFood.query('SELECT * from food', function(err, result){
-								console.log(result);
 							});
 
     				});
@@ -697,5 +700,29 @@ function fillDB() {
     		});
     	});
     });
+}
 
+function fillUsersDB() {
+	var queryString = 'INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6, $7)';
+	conn.query(queryString, [null,'Steven McGarty','steven_mcgarty@brown.edu','****','March','1992','Male'], function(err1, res1){
+		conn.query(queryString, [null,'Christine','christine_chapman@brown.edu','****','August','1992','Male'], function(err1, res1){
+			conn.query(queryString, [null,'Zach','zolstein@brown.edu','****','March','1992','Male'], function(err1, res1){
+				conn.query(queryString, [null,'Raymond','raymond_zeng@brown.edu','****','March','1992','Male'], function(err1, res1){
+				});	
+			});
+		});
+	});
+
+	var csvString = "1,Steven McGarty,Male,,1992,3,Chobani,4,Sandwich,5";
+	exec('java RunML ADD "' + csvString + '"', function (error, stdout, stderr) {
+		csvString = "2,Christine,Female,,1992,8,Sandwich,1,Chobani,3";
+		exec('java RunML ADD "' + csvString + '"', function (error, stdout, stderr) {
+			csvString = "3,Zach,Male,,1992,3,Falafel,5,Tuna,3";
+			exec('java RunML ADD "' + csvString + '"', function (error, stdout, stderr) {
+				csvString = "4,Raymond,Male,,1992,3,Chobani,5,Tuna,1";
+				exec('java RunML ADD "' + csvString + '"', function (error, stdout, stderr) {
+				});
+			});
+		});
+	});
 }
