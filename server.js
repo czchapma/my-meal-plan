@@ -617,8 +617,6 @@ app.get('/specials/aco', function(req, res){
 });
 
 app.get('/itemlist', function(req, res){
-	console.log('item list');
-	connFood
 	var myQuery = connFood.query('SELECT * from food');
 	myQuery.on('row', function(row){
 		if (row !== undefined){

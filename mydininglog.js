@@ -31,23 +31,51 @@ $(document).ready(function(){
         url: "/itemlist"
      }).done(function(result) {
         var ul = $('#log-form-list');
-        console.log(result);
         var lineSplit = result.split('\n');
         for (var i=0; i<lineSplit.length; i++){
             if (lineSplit[i].indexOf(',') > -1){
                 var priceItemSplit = lineSplit[i].split(',');
                 var li = $(document.createElement('li'));
-                console.log('<div class="food-item">' + priceItemSplit[0] + "</div><div class='food-price'>" + priceItemSplit[1] + "</div>");
                 li.html('<div class="food-item">' + priceItemSplit[0] + "</div><div class='food-price'>" + priceItemSplit[1] + "</div>");
                 ul.append(li);
             }
         }
     });
 
+    $.ajax({
+        url: "/itemlist"
+     }).done(function(result) {
+        var ul = $('#browse-results').children('ul');
+        var lineSplit = result.split('\n');
+        for (var i=0; i<lineSplit.length; i++){
+            if (lineSplit[i].indexOf(',') > -1){
+                var priceItemSplit = lineSplit[i].split(',');
+                var li = $(document.createElement('li'));
+                li.html('<div class="food-item">' + priceItemSplit[0] + "</div><div class='food-price'>" + priceItemSplit[1] + "</div>");
+                ul.append(li);
+            }
+        }
+    });
+
+
      $('#log-input').keyup(function(){
         $('#log-form-list').children('li').each(function(){
             var item = $(this).children('.food-item').text().toLowerCase();
             var currText = $('#log-input').val().toLowerCase();
+            //if item does not start with currText, hide the li
+            console.log('item',item,'currText',currText);
+            if (item.lastIndexOf(currText, 0) === 0) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+     });
+
+     $('#browse-input').keyup(function(){
+        $('#browse-results').children('ul').children('li').each(function(){
+            var item = $(this).children('.food-item').text().toLowerCase();
+            var currText = $('#browse-input').val().toLowerCase();
             //if item does not start with currText, hide the li
             console.log('item',item,'currText',currText);
             if (item.lastIndexOf(currText, 0) === 0) {
