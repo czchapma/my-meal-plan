@@ -29,8 +29,8 @@ var anyDB = require('any-db');
 var connFood = anyDB.createConnection('sqlite3://food.db');
 fillFoodDB();
 var conn = anyDB.createConnection('sqlite3://users.db');
+conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, password TEXT, month TEXT,day TEXT, gender TEXT)');
 fillUsersDB();
-//conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, password TEXT, month TEXT,day TEXT, gender TEXT)');
 //Navigates to Brown's get portal to get credit/points info
 app.get('/login', function(req, res){
 	res.render('login.html',{login: 'notyet'});
@@ -704,11 +704,11 @@ function fillFoodDB() {
 
 function fillUsersDB() {
 	var queryString = 'INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6, $7)';
-	conn.query(queryString, [null,'Steven McGarty','steven_mcgarty@brown.edu','****','March','1992','Male'], function(err1, res1){
-		conn.query(queryString, [null,'Christine','christine_chapman@brown.edu','****','August','1992','Male'], function(err1, res1){
-			conn.query(queryString, [null,'Zach','zolstein@brown.edu','****','March','1992','Male'], function(err1, res1){
-				conn.query(queryString, [null,'Raymond','raymond_zeng@brown.edu','****','March','1992','Male'], function(err1, res1){
-				});	
+	conn.query(queryString, [null,'Steven','steven_mcgarty@brown.edu','****','March','1992','Male'], function(err1, res1){
+		conn.query(queryString, [null,'Christine','christine_chapman@brown.edu','****','August','1992','Male'], function(err2, res2){
+			conn.query(queryString, [null,'Zach','zolstein@brown.edu','****','March','1992','Male'], function(err3, res3){
+				conn.query(queryString, [null,'Raymond','raymond_zeng@brown.edu','****','March','1992','Male'], function(err4, res4){
+				});
 			});
 		});
 	});

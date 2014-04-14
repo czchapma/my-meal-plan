@@ -43,4 +43,18 @@ $(document).ready(function(){
             }
         }
     });
+
+     $('#log-input').keyup(function(){
+        $('#log-form-list').children('li').each(function(){
+            var item = $(this).children('.food-item').text().toLowerCase();
+            var currText = $('#log-input').val().toLowerCase();
+            //if item does not start with currText, hide the li
+            console.log('item',item,'currText',currText);
+            if (item.lastIndexOf(currText, 0) === 0) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+     });
 });
