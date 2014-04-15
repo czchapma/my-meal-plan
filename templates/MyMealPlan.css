@@ -36,41 +36,51 @@ body {
 	margin: 0 auto;
 }
 
+
 #logo {
-    display:block;
+    display:inline-block;
     width:300px;
-    height:100px;
+    height:100%;
     margin:0 auto;
-    background-color:white;
+    font-family: Antonio, sans-serif;
+    letter-spacing: 0px;
+    padding-left:30px;
+    font-size:24pt;
+    color:white;
 }
 
 #nav_bar {
+    display:inline-block;
+    height:45px;
     width:100%;
-    background-color:lime;
+    color:white;
+    background-color:#4A068F;
 }
 
 #nav_buttons {
-    width:468px;
-    margin:auto;
+    display:inline-block;
+    height:100%;
+    width:580px;
+    
 }
 
 #nav_buttons a {
     display:inline-block;
-    height:30px;
-    padding:0 10px 0 10px;
-    color: black;
+    height:100%;
+    padding:0 15px 0 15px;
+    color:white;
     font-size:16pt;
     text-decoration:none;
 }
 
 #nav_buttons a:link {
-    color:darkgreen;
+    color:white;
     vertical-align:center;
 }
 
 #nav_buttons a:hover {
-    color:lime;
-    background-color:darkgreen;
+    color:white;
+    background-color:#7309AA;
 }
 
 /*
