@@ -21,7 +21,7 @@ p, h1 {
 
 body {
     width:100%;
-    background-color:white;
+    background-color:#C6B5C9;
     margin:auto;
     font-family: Antonio;
     color: black;
@@ -33,7 +33,7 @@ body {
     height:100%;
     margin:0 auto;
     font-family: Antonio, sans-serif;
-    letter-spacing: 0px;
+    letter-spacing: -5px;
     padding-left:30px;
     font-size:24pt;
     color:white;
@@ -79,6 +79,8 @@ body {
 #home-content {
     margin: 20px;
     padding: 10px;
+    padding-bottom: 290px;
+    background-color:#E8E8E8;
 
 }
 #home-content h1 {
