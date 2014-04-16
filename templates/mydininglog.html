@@ -3,9 +3,10 @@
   <head>
     <title>MyMealPlan</title>
     <link rel="icon" href="templates/imgs/avocado.png" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="templates/MyMealPlan.css" />
+    <link rel="stylesheet" type="text/css" href="templates/mydininglog.css" />
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="mydininglog.js"></script>
+     <link href='http://fonts.googleapis.com/css?family=Vollkorn:400,400italic,700' rel='stylesheet' type='text/css'>
   </head>
   <body>
     <div id="nav_bar">
@@ -25,33 +26,34 @@
       	<a id="browse" href="#">Browse Items</a>
       </div>
     </div>
-    
-    <form id="log-form" action="/retrieveUser" method="post">
-      <h1>Log a Purchase</h1>
-      <input id="log-input" name="item" type="text">
-      <ul id="log-form-list">
-      </ul>
+    <div id = "content">
+      <form id="log-form" action="/retrieveUser" method="post">
+        <h1>Log a Purchase</h1>
+        <input id="log-input" name="item" type="text">
+        <ul id="log-form-list">
+        </ul>
 
-      <input type="submit">
-    </form>
-    
-    <div id="knapsack-stuff"> Your total so far is <div id="total"> 0 </div> </div>
-    <div id="prev-transactions">
-      <ul>
-      	<li>Sample History 1</li>
-      	<li>Sample History 2</li>
-      </ul>
-    </div>
-    
-    <div id="browse-items">
-      <form id="browse-form" action="/retrieveUser" method="post">
-      	<h1>Search</h1>
-      	<input id="browse-input" name="browse-input" type="text">
+        <input type="submit">
       </form>
-      <div id="browse-results">
-      	<ul>
-       </ul>
+      
+      <div id="knapsack-stuff"> Your total so far is <div id="total"> 0 </div> </div>
+      <div id="prev-transactions">
+        <ul>
+        	<li>Sample History 1</li>
+        	<li>Sample History 2</li>
+        </ul>
+      </div>
+      
+      <div id="browse-items">
+        <form id="browse-form" action="/retrieveUser" method="post">
+        	<h1>Search</h1>
+        	<input id="browse-input" name="browse-input" type="text">
+        </form>
+        <div id="browse-results">
+        	<ul>
+         </ul>
+        </div>
       </div>
     </div>
-  </body>
+    </body>
 </html>

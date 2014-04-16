@@ -25,18 +25,6 @@ body {
     color: black;
 }
 
-#suggestion {
-
-	display:inline-block;
-	margin-left:calc(50% - 50px);;
-}
-
-#suggestion *{
-	display:inline-block;
-	margin: 0 auto;
-}
-
-
 #logo {
     display:inline-block;
     width:300px;
@@ -182,7 +170,7 @@ body {
 }
 
 .open {
-    color: lime;
+    color: black;
     text-align: center;
 }
 
@@ -191,169 +179,11 @@ body {
     text-align: center;
 }
 
-#new-account-form {
-    color: white;
-}
-
-#myframe {
-    width:739px;
-    height:431px;
-    overflow:hidden;
-    margin: 15px auto;
-}
-
-#myframe iframe {
-    width:977px;
-    height:718px;
-    margin-left:0px;
-    margin-top:-94px; /*-270px;*/
-
-/*    width: 1000px;
-    display: block;
-    margin: 15px auto;
-    height: 250px;
-    margin-top: ;
-*/}
-
-#track-credits-form {
-    color: white;
-}
-
-#tracking {
-    color: white;
-    width: 172px;
-    margin: 0 auto;
-}
 
 #logo {
     cursor: pointer;
 }
 
-#specials-list li{
-    color: white;
-}
-
-#login-form {
-    color: white;
-}
-
-#logged-in {
-    color: white;
-}
-
-/*
-  css for login page and newaccount page
-*/
-#login-content, #newaccount-content {
-    padding: 10px;
-    width: 400px;
-    margin-left: calc(50% - 200px);
-    margin-top: 100px;
-}
-
-#newaccount-content {
-    margin-top: 50px;
-}
-
-#login-content label, #newaccount-content label {
-    font-size: 20px;
-}
-
-#login-content p input, #newaccount-content p input {
-    float: right;
-    width: 250px;
-    height: 30px;
-}
-
-
-#login-content button {
-    float: right;
-    width: 100px;
-    height: 30px;
-    margin-left: 10px;
-}
-
-/*
-  css for specials page 
-*/
-#specials-content {
-    width: 600px;
-    margin-left: calc(50% - 300px);
-    margin-top: 50px;
-}
-
-#specials-content li {
-    list-style: none;
-}
-#specials-suggest-wrapper {
-    margin-top: 50px;
-    text-align: center;
-}
-.SuggestButton {
-	background-color:#f24537;
-	-moz-border-radius:2px;
-	-webkit-border-radius:2px;
-	border-radius:2px;
-	border:1px solid #d02718;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
-	font-size:15px;
-	font-weight:bold;
-	padding:6px 24px;
-	text-decoration:none;
-	text-shadow:0px 1px 0px #a81b10;
-}
-.SuggestButton:hover {
-	background-color:#c62d1f;
-}
-.SuggestButton:active {
-	position:relative;
-	top:1px;
-}
-
-
-/*
-  css for my dining subpages
-*/
-#log-form, #browse-form {
-    margin-top: 50px;
-    margin-left: 40%;
-}
-
-#log-form input, #browse-form input {
-    width: 200px;
-    height: 30px;
-}
-
-#prev-transactions {
-    display: none;
-    margin-top: 50px;
-    color: white;
-    text-align: center;
-}
-
-#prev-transactions li {
-    list-style: none;
-    font-size: 16pt;
-}
-
-#browse-items {
-    display: none;
-}
-#browse-results {
-    width: 500px;
-    margin-left: 40%;
-}
-#browse-items li {
-    color: white;
-    list-style: decimal;
-    font-size: 16pt;
-}
-
-
-.tab-content img {
-    width: 100%;
-    margin-bottom: 10px;
+#content {
+	margin-top:-70px;
 }

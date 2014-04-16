@@ -4,7 +4,7 @@
     <title>MyMealPlan</title>
     <meta name="login-type" content="{{login}}">
     <link rel="icon" href="templates/imgs/avocado.png" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="templates/MyMealPlan.css" />
+    <link rel="stylesheet" type="text/css" href="templates/mydining.css" />
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="mydining.js"></script>
   </head>
@@ -26,22 +26,23 @@
       <a id="browse" href="#"> Browse Items </a>
     </div>
   </div>
-
-  <div id="myframe">
-    <iframe src="http://www.brown.edu/getportal" scrolling="no"></iframe>
-  </div>
-  <div id="tracking">
-    Track your credit/points usage
-    <form id="track-credits-form">
-      Credits: <input name="credits" id="credits" type="text">
-      <span id="creditsErr">Credits should be a number</span><br/>
-      Points: <input name="points" id="points" type="text">
-      <span id="pointsErr">Points should be a number (with or without decimal point)</span><br/>
-      <input type="submit">
-    </form>
-    <span id="creditsLeft"></span><br/>
-    <span id="pointsLeft"></span>
-    <span id="logged-in"></span>
-  </div>
+  <div id="content">
+    <div id="myframe">
+      <iframe src="http://www.brown.edu/getportal" scrolling="no"></iframe>
+    </div>
+    <div id="tracking">
+      Track your credit/points usage
+      <form id="track-credits-form">
+        Credits: <input name="credits" id="credits" type="text">
+        <span id="creditsErr">Credits should be a number</span><br/>
+        Points: <input name="points" id="points" type="text">
+        <span id="pointsErr">Points should be a number (with or without decimal point)</span><br/>
+        <input type="submit">
+      </form>
+      <span id="creditsLeft"></span><br/>
+      <span id="pointsLeft"></span>
+      <span id="logged-in"></span>
+    </div>
+    </div>
 </body>
 </html>
