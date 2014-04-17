@@ -684,21 +684,20 @@ function andrewsSpecials(res) {
 
 function fillFoodDB() {
 	//money will be in cents
-	connFood.query('CREATE TABLE food (item TEXT PRIMARY KEY,price INT)');
-	var queryString = 'INSERT INTO food VALUES ($1, $2)';
-    connFood.query(queryString, ['Chobani', 360], function(err1, res1){
-    	connFood.query(queryString, ['Sandwich', 560], function(err2, res2){
-    		connFood.query(queryString, ['Falafel', 445], function(err3, res3){
-    			connFood.query(queryString, ['Milk', 120], function(err4, res4){
-    				connFood.query(queryString, ['Tuna', 220], function(err5, res5){
-    						connFood.query('SELECT * from food', function(err, result){
-							});
-
-    				});
-    			});
-    		});
-    	});
-    });
+	connFood.query('CREATE TABLE food (item TEXT PRIMARY KEY,price INT, location TEXT)');
+	var queryString = 'INSERT INTO food VALUES ($1, $2, $3)';
+	fs.readFile('data/jos.csv', 'utf8', function(err, data){
+		var lines = data.split('\n');
+		for (var i=0; i<lines.length; i++){
+			var split = lines[i].split(',');
+			if (split.length === 2){
+				var item = split[0].trim();
+				var price = split[1].trim();
+				price.replace('$','');
+				connFood.query(queryString, [item, price,'jos']);
+			}
+		}
+	});
 }
 
 function fillUsersDB() {
