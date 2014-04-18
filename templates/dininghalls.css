@@ -39,7 +39,7 @@ body {
 
 #nav_bar {
     display:inline-block;
-    height:45px;
+    height:50px;
     width:100%;
     color:white;
     background-color:#4A068F;
@@ -54,7 +54,6 @@ body {
 
 #nav_buttons a {
     display:inline-block;
-    height:100%;
     margin:0 auto;
     padding:0 15px 0 15px;
     color:white;
