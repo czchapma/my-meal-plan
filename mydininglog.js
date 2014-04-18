@@ -124,7 +124,9 @@ $(document).ready(function(){
                 var avocados = '<img class="avocado-1" src="templates/imgs/avocado.png"/><img class="avocado-2" src="templates/imgs/avocado.png"/><img class="avocado-3" src="templates/imgs/avocado.png"/><img class="avocado-4" src="templates/imgs/avocado.png"/><img class="avocado-5" src="templates/imgs/avocado.png"/>'
                 $('.avocado-1').click(function(){
                     for(var i=2; i<=5; i++){
-                        $(this).siblings('.avocado-' + i).hide();
+                        $(this).siblings('.avocado-' + i).css({'opacity':.5});
+                        $(this).siblings('.avocado-' + i).on('mouseenter');
+                        $(this).siblings('.avocado-' + i).on('mouseleave');                        
                     }
                     $(this).css({'opacity':1});
                     $(this).off('mouseenter');
@@ -141,7 +143,9 @@ $(document).ready(function(){
 
                 $('.avocado-2').click(function(){
                     for (var i=3; i<=5; i++){
-                        $(this).siblings('.avocado-' + i).hide();
+                        $(this).siblings('.avocado-' + i).css({'opacity':.5});
+                        $(this).siblings('.avocado-' + i).on('mouseenter');
+                        $(this).siblings('.avocado-' + i).on('mouseleave');                        
                     }
                     $(this).css({'opacity':1});
                     $(this).off('mouseenter');
@@ -162,7 +166,9 @@ $(document).ready(function(){
 
                 $('.avocado-3').click(function(){
                     for (var i=4; i<=5; i++){
-                        $(this).siblings('.avocado-' + i).hide();
+                        $(this).siblings('.avocado-' + i).css({'opacity':.5});
+                        $(this).siblings('.avocado-' + i).on('mouseenter');
+                        $(this).siblings('.avocado-' + i).on('mouseleave');                        
                     }
                     $(this).css({'opacity':1});
                     $(this).off('mouseenter');
@@ -187,7 +193,9 @@ $(document).ready(function(){
                 });
 
                 $('.avocado-4').click(function(){
-                    $(this).siblings('.avocado-5').hide();
+                    $(this).siblings('.avocado-' + 5).css({'opacity':.5});
+                    $(this).siblings('.avocado-' + 5).on('mouseenter');
+                    $(this).siblings('.avocado-' + 5).on('mouseleave');                        
                     $(this).css({'opacity':1});
                     $(this).off('mouseenter');
                     $(this).off('mouseleave');
