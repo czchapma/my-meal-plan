@@ -93,6 +93,10 @@ body {
     padding: 0;
     margin: 75px auto;
 }
+
+.tabs label {
+    border-bottom: 4px solid green;
+}
 .tabs li{
     float: left;
 }
@@ -174,12 +178,12 @@ body {
 }
 
 .open {
-    color: black;
+    color: green;
     text-align: center;
 }
 
 .closed {
-    color: black;
+    color: red;
     text-align: center;
 }
 
