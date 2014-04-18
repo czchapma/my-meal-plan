@@ -127,6 +127,15 @@ body {
     height: 30px;
 }
 
+#log-form-list {
+    overflow-y: auto;
+    height: 300px;
+}
+
+#log-form-list li {
+    display: block;
+}
+
 #prev-transactions {
     font-family:"Vollkorn", sans-serif;
     display: none;

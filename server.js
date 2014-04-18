@@ -683,21 +683,24 @@ function andrewsSpecials(res) {
 }
 
 function fillFoodDB() {
-	//money will be in cents
+	var foodList = ['jos','aco', 'ivyroom', 'blueroom'];
 	connFood.query('CREATE TABLE food (item TEXT PRIMARY KEY,price INT, location TEXT)');
-	var queryString = 'INSERT INTO food VALUES ($1, $2, $3)';
-	fs.readFile('data/jos.csv', 'utf8', function(err, data){
-		var lines = data.split('\n');
-		for (var i=0; i<lines.length; i++){
-			var split = lines[i].split(',');
-			if (split.length === 2){
-				var item = split[0].trim();
-				var price = split[1].trim();
-				price.replace('$','');
-				connFood.query(queryString, [item, price,'jos']);
+	for (var locIndex=0; locIndex < foodList.length; locIndex ++){
+		var queryString = 'INSERT INTO food VALUES ($1, $2, $3)';
+		fs.readFile('data/' + foodList[locIndex] + '.csv', 'utf8', function(err, data){
+			var lines = data.split('\n');
+			for (var i=0; i<lines.length; i++){
+				var split = lines[i].split(',');
+				if (split.length === 2){
+					var item = split[0].trim();
+					var price = split[1].trim();
+					price = price.replace('$','');
+					price = Math.ceil(100 * parseFloat(price));
+					connFood.query(queryString, [item, price,'jos']);
+				}
 			}
-		}
-	});
+		});
+	}
 }
 
 function fillUsersDB() {
