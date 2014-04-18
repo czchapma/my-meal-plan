@@ -29,7 +29,7 @@ $(document).ready(function(){
     });
     var total = document.getElementById('total');
     var knapsack = document.getElementById('knapsack');
-
+    var knapsack2 = document.getElementById('knapsack2');
     console.log(knapsack);
     knapsack.addEventListener('click', function() {
         console.log("CLicked");
@@ -50,6 +50,23 @@ $(document).ready(function(){
     });
     console.log(knapsack);
 
+    knapsack2.addEventListener('click', function() {
+        console.log("CLicked");
+        var cart = $('#cart');
+        var money = (680 + 680 - Number(total.innerHTML));
+        $.post( "/knapsack", {maxMoney:money }, function(data,status){
+        //TODO: make it so people can buy more than 1 of the same item. 
+            var arr = data.split('\n');
+            for (var i =0; i < arr.length - 1; i ++)
+            {
+                var check = document.getElementById(arr[i]);
+                check.checked = true;
+                var myitem = document.getElementById(arr[i] + 'li');
+                cart.append(myitem);
+                total.innerHTML = Number(check.getAttribute('price')) + Number(total.innerHTML);
+            }
+        });
+    });
 
 
     $.ajax({
