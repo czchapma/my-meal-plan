@@ -6,8 +6,11 @@ $(document).ready(function(){
 
     //Logo redirects to home
     $('#logo').click(function(){
-		$(location).attr('href','/');
+	$(location).attr('href','/');
     });
+
+    if ($("#status-ivyroom").hasClass('closed'))
+	$("#ivy-room-tab").css("border-bottom", "4px solid red");
 });
 
 function generateStatues(){
@@ -19,14 +22,16 @@ function generateStatues(){
 	    if (parsed['open'] === 'true') {
 		//open
 		$('#status-' + entry).attr('class','open');
-		$('#status-' + entry).text(parsed['message']);
+		$('#status-' + entry).text(parsed['message']);	
+		$('#'+ entry + '-tab').css('border-bottom', '4px solid green');
+
 	    } else{
 		//closed
 		$('#status-' + entry).attr('class','closed');
 		$('#status-' + entry).text(parsed['message']);
+		$('#'+ entry + '-tab').css('border-bottom', '4px solid red');
 	    }
 	});
-
     });
 }
 
