@@ -18,7 +18,7 @@ var monthToNum = {'January' : 1, 'February' : 2, 'March' : 3, 'April' : 4, 'May'
 exec("rm -f *.db");
 exec("rm -f *.ser");
 exec("rm -f locked.txt");
-exec("javac ML_Client.java User_Reviews.java RunML.java", function(error, stdout, stderr){
+exec("javac *.java", function(error, stdout, stderr){
 	if(error !== null) {
 		console.log(stderr);
 	}

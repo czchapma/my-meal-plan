@@ -165,6 +165,17 @@ body {
     list-style: decimal;
     font-size: 16pt;
 }
+
+#browse-results img {
+    width: 35px;
+    opacity: .5;
+}
+
+#browse-results img:hover {
+    cursor: pointer;
+}
+
 #knapsack-stuff {
     font-family:"Vollkorn", sans-serif;
 }
+

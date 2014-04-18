@@ -84,7 +84,8 @@ $(document).ready(function(){
             if (lineSplit[i].indexOf(',') > -1){
                 var priceItemSplit = lineSplit[i].split(',');
                 var li = $(document.createElement('li'));
-                li.html('<div class="food-item">' + priceItemSplit[0] + "</div><div class='food-price'>" + prettyPrint(priceItemSplit[1]) + "</div>");
+                var avocados = '<img class="avocado-1" src="templates/imgs/avocado.png"/><img class="avocaco-2" src="templates/imgs/avocado.png"/><img class="avocado-3" src="templates/imgs/avocado.png"/><img class="avocado-4" src="templates/imgs/avocado.png"/><img class="avocado-5" src="templates/imgs/avocado.png"/>'
+                li.html('<div class="food-item">' + priceItemSplit[0] + "</div><div class='food-price'>" + prettyPrint(priceItemSplit[1]) + "</div>" + avocados);
                 ul.append(li);
             }
         }
@@ -117,6 +118,10 @@ $(document).ready(function(){
             }
         });
      });
+
+    $('.avocado-1').click(function(){
+        console.log('hello');
+    });
 });
 
 //Converts 650 -> $6.50
