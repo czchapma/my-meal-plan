@@ -27,15 +27,17 @@
       </div>
     </div>
     <div id = "content">
-      <div id="knapsack-stuff"> Your total so far is <div id="total"> 0 </div> </div>      
+      <div id="knapsack-stuff"> Your total so far is <div id="total"> 0 </div> </div>    
+      <ul id="log-form-list">
+        </ul> 
       <form id="log-form" action="/retrieveUser" method="post">
         <h1>Log a Purchase</h1>
         <input id="log-input" name="item" type="text">
-        <ul id="log-form-list">
+        <ul id="cart">
         </ul>
-
         <input type="submit">
       </form>
+      
       <button id="knapsack"> Fill my credit! </button>
       <div id="prev-transactions">
         <ul>

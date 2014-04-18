@@ -128,11 +128,13 @@ body {
 }
 
 #log-form-list {
+    float: left;
     overflow-y: auto;
     height: 300px;
 }
 
 #log-form-list li {
+
     display: block;
 }
 

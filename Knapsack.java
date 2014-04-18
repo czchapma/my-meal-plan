@@ -5,7 +5,9 @@ public class Knapsack
 	{
 		//get in in args[0] food1, price1,food2,price2....
 		
+
 		String[] arr = args[0].split(",");
+
 		int numFoods = arr.length/2;
 		String[] foods = new String[numFoods];
 		int[] costs = new int[numFoods];
@@ -15,10 +17,14 @@ public class Knapsack
 		for (int i = 0; i < numFoods; i++)
 		{
 			int idx = i * 2; 
-			foods[i] = arr[idx];
-			costs[i] = Integer.parseInt(arr[idx + 1]);
+			if(!(arr[idx].equals("") || arr[idx + 1] == null))
+			{
+				foods[i] = arr[idx];
+				costs[i] = Integer.parseInt(arr[idx + 1]);
+			}
 		}
 		
+	
 		//to fill knapsack as much as possible:
 		values = costs;
 		
