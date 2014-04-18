@@ -56,7 +56,7 @@ $(document).ready(function(){
                 };
                 
                 
-                li.html(' <div class="food-item">' + priceItemSplit[0] + "</div><div class='food-price'>" + priceItemSplit[1] + "</div>");
+                li.html(' <div class="food-item">' + priceItemSplit[0] + "</div><div class='food-price'>" + prettyPrint(priceItemSplit[1]) + "</div>");
                 li.append(check);
                 ul.append(li);
             }
@@ -73,7 +73,7 @@ $(document).ready(function(){
             if (lineSplit[i].indexOf(',') > -1){
                 var priceItemSplit = lineSplit[i].split(',');
                 var li = $(document.createElement('li'));
-                li.html('<div class="food-item">' + priceItemSplit[0] + "</div><div class='food-price'>" + priceItemSplit[1] + "</div>");
+                li.html('<div class="food-item">' + priceItemSplit[0] + "</div><div class='food-price'>" + prettyPrint(priceItemSplit[1]) + "</div>");
                 ul.append(li);
             }
         }
@@ -107,3 +107,13 @@ $(document).ready(function(){
         });
      });
 });
+
+//Converts 650 -> $6.50
+function prettyPrint(price){
+    var toReturn = '$';
+    var dollar = Math.floor(price / 100);
+    toReturn += dollar;
+    toReturn += '.';
+    toReturn +=  price - (dollar * 100);
+    return toReturn;
+}

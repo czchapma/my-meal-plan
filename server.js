@@ -220,7 +220,6 @@ app.get('/menu/ratty', function(req, res) {
 		var time = new Date().getHours();
 		//TODO if time > 18 need THE NEXT DAYS breakfast
 		if (day !== 0 && (time < 11 || time > 18)){
-			console.log('day is', day);
 			//Breakfast
 			makeRattyIvyMenu(res,bSrc,ignoreList, false);
 		} else if (time < 15 || (day === 0 && time > 18)) {
