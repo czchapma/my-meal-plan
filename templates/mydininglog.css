@@ -126,9 +126,13 @@ body {
     width: 200px;
     height: 30px;
 }
+#left-panel{
+    margin-left:50px;
+    background-color:#E8E8E8;;
+    float:left;
+}
 
 #log-form-list {
-    float: left;
     overflow-y: auto;
     height: 300px;
 }
