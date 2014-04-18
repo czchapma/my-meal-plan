@@ -33,10 +33,19 @@ $(document).ready(function(){
     console.log(knapsack);
     knapsack.addEventListener('click', function() {
         console.log("CLicked");
+        var cart = $('#cart');
         var money = (680 - Number(total.innerHTML));
         $.post( "/knapsack", {maxMoney:money }, function(data,status){
         //TODO: make it so people can buy more than 1 of the same item. 
-            console.log(data);
+            var arr = data.split('\n');
+            for (var i =0; i < arr.length - 1; i ++)
+            {
+                var check = document.getElementById(arr[i]);
+                check.checked = true;
+                var myitem = document.getElementById(arr[i] + 'li');
+                cart.append(myitem);
+                total.innerHTML = Number(check.getAttribute('price')) + Number(total.innerHTML);
+            }
         });
     });
     console.log(knapsack);

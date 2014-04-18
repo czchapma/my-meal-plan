@@ -13,14 +13,25 @@ public class Knapsack
 		int[] costs = new int[numFoods];
 		int maxPrice = Integer.parseInt(args[1]);
 		int[] values = new int[numFoods];
-		
+		int[] inds = new int[numFoods];
+		for (int i = 0; i < numFoods; i++)
+			inds[i] = i;
+
+		//fisher-yates shuffle : source wikipedia
+		for(int i = numFoods - 1; i > 0; i--)
+		{
+			int j = (int) Math.floor(Math.random() * (i+1));
+			int temp = inds[i];
+			inds[i] = inds[j];
+			inds[j] = temp;
+		}
 		for (int i = 0; i < numFoods; i++)
 		{
 			int idx = i * 2; 
 			if(!(arr[idx].equals("") || arr[idx + 1] == null))
 			{
-				foods[i] = arr[idx];
-				costs[i] = Integer.parseInt(arr[idx + 1]);
+				foods[inds[i]] = arr[idx];
+				costs[inds[i]] = Integer.parseInt(arr[idx + 1]);
 			}
 		}
 		
