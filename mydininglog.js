@@ -27,7 +27,18 @@ $(document).ready(function(){
     $('#credits_and_points').click(function(){
     	$(location).attr('href', '/mydining');
     });
+    var total = document.getElementById('total');
+    var knapsack = document.getElementById('knapsack');
 
+    console.log(knapsack);
+    knapsack.addEventListener('click', function() {
+        console.log("CLicked");
+        var money = (680 - Number(total.innerHTML));
+        $.post( "/knapsack", {maxMoney:money }, function(data,status){
+        //TODO: make it so people can buy more than 1 of the same item. 
+        });
+    });
+    console.log(knapsack);
 
 
 
@@ -46,7 +57,7 @@ $(document).ready(function(){
                 check.setAttribute('type','checkbox');
                 check.setAttribute('price',priceItemSplit[1]);
                 check.onchange = function somethingChanged(){
-                    var total = document.getElementById('total');
+                    
                     if(this.checked)
                         total.innerHTML = Number(this.getAttribute('price')) + Number(total.innerHTML);
                     else

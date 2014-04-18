@@ -80,6 +80,27 @@ app.post('/storeUser', function(req, res) {
 	});
 });
 
+app.post('/knapsack', function(req, res){
+	console.log("KNAPSACKING");
+	var myQuery = connFood.query('SELECT * from food');
+	var foodList = '';
+	myQuery.on('row', function(row){
+		if (row !== undefined){
+			foodList += row.item + "," + row.price + ',';
+		}
+	});
+	myQuery.on('end', function(){
+		foodList = foodList.substring(0, foodList.length -1);
+		//TODO: GIANT INJECTION PROBLEM HERE. COULD MAKE MONEY SOMETHING LIKE "680; DO ALL MY OTHER THINGS" and it would be TERRIBLE
+		console.log('java Knapsack "' + foodList + '" '+ req.body.maxMoney);
+		exec('java Knapsack "' + foodList + '" '+ req.body.maxMoney, function (error, stdout, stderr) {
+			console.log(stdout);
+			console.log(stderr);
+			console.log(error);
+		});
+
+	});
+});
 app.post('/retrieveUser', function(req, res){
 	var username = req.body.username;
 	var password = req.body.password;
@@ -627,6 +648,8 @@ app.get('/itemlist', function(req, res){
 		res.end();
 	});
 });
+
+
 
 app.get('/', function(req, res){
 	res.render('home.html');
