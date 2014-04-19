@@ -6,6 +6,7 @@ var request = require('request');
 var cheerio = require('cheerio');
 var moment = require('moment');
 var exec = require('child_process').exec;
+var spawn = require('child_process').spawn;
 app.engine('html', engines.hogan); // tell Express to run .html files through Hogan
 app.set('views', __dirname + '/templates'); // tell Express where to find templates
 app.use(express.static(__dirname)); //allows css to work with rendered html
@@ -62,7 +63,7 @@ app.post('/storeUser', function(req, res) {
 					//Add to ML Client
 					var csvString = String(lookupRes.rows[0].id) +"," + name + "," + gender + "," + otherType + "," + year + "," + month;
 					console.log(csvString);
-					exec('java RunML ADD "' + csvString + '"', function (error, stdout, stderr) {
+					spawn('java', ["RunML", "ADD",csvString], function (error, stdout, stderr) {
 						console.log(stdout,stderr, error);
 						if (stdout.indexOf('Warning: users already contains this userId. Aborting.') !== -1) {
 							console.log('user already exists!');
@@ -91,11 +92,20 @@ app.post('/knapsack', function(req, res){
 	myQuery.on('end', function(){
 		foodList = foodList.substring(0, foodList.length -1);
 		//TODO: GIANT INJECTION PROBLEM HERE. COULD MAKE MONEY SOMETHING LIKE "680; DO ALL MY OTHER THINGS" and it would be TERRIBLE
-		exec('java Knapsack "' + foodList + '" '+ req.body.maxMoney, function (error, stdout, stderr) {
-			console.log(stdout);
-			res.end(stdout);
-			console.log(stderr);
-			console.log(error);
+		foodList = foodList.substring(0, foodList.length -1);
+		//TODO: GIANT INJECTION PROBLEM HERE. COULD MAKE MONEY SOMETHING LIKE "680; DO ALL MY OTHER THINGS" and it would be TERRIBLE
+		var ls = spawn('java',["Knapsack",foodList,req.body.maxMoney]);
+		var output = "";
+		ls.stdout.on('data', function (data) {
+		  output += data;
+		});
+
+		ls.stderr.on('data', function (data) {
+		  console.log('stderr: ' + data);
+		});
+
+		ls.on('exit', function (code) {
+		  res.end(output);
 		});
 
 	});
@@ -129,14 +139,20 @@ app.post('/review', function(req, res){
 	conn.query(queryString, [username], function(err, results){
 		if (results.rows.length > 0) {
 			var id = String(results.rows[0].id);
-			exec('java RunML MODIFY REVIEW ' + id + ' ' + item + ' ' + rating, function (error, stdout, stderr) {
-				console.log('errors',error);
-				console.log('stderr',stderr);
-				console.log('stdout',stdout);
-				//returns nothing
-				//TODO: maybe return error to client?
-				res.end();
+			var ls = spawn('java', [RunML, "MODIFY REVIEW",id,item,rating]);
+			var output = "";
+			ls.stdout.on('data', function (data) {
+		  		output += data;
 			});
+
+			ls.stderr.on('data', function (data) {
+		  		console.log('stderr: ' + data);
+			});
+
+			ls.on('exit', function (code) {
+		  	res.end(output);
+			});
+
 		} else {
 			console.log('username',username,'not in db');
 			res.end();
@@ -153,11 +169,18 @@ app.post('/guess',function(req,res){
 	var queryString = "SELECT id FROM users WHERE username=$1";
 	conn.query(queryString, [username], function(err, results){
 		var id = String(results.rows[0].id);
-		exec('java RunML PING GUESS ' + id + ' ' + item + ' ' + rating, function (error, stdout, stderr) {
-			console.log('errors',error);
-			console.log('stderr',stderr);
-			//returns the rating (ex: 1.0)
-			res.end(stdout);
+		var ls = spawn('java', ["RunML", "PING GUESS",id,item,rating]);
+		var output = "";
+		ls.stdout.on('data', function (data) {
+		  output += data;
+		});
+
+		ls.stderr.on('data', function (data) {
+		  console.log('stderr: ' + data);
+		});
+
+		ls.on('exit', function (code) {
+		  res.end(output);
 		});
 	});
 });
@@ -187,12 +210,18 @@ app.post('/suggest',function(req,res){
 	var queryString = "SELECT id FROM users WHERE username=$1";
 	conn.query(queryString, [username], function(err, results){
 		var id = String(results.rows[0].id);
-		exec('java RunML PING SUGGEST ' + id + ' ' + numItems + ' ' + k, function (error, stdout, stderr) {
-			console.log('errors',error);
-			console.log('stderr',stderr);
-			console.log('stdout',stdout);
-			//returns the suggestions comma separated
-			res.end(stdout);
+		var ls = spawn('java', ["RunML", "PING SUGGEST",id, numItems, k]);
+		var output = "";
+		ls.stdout.on('data', function (data) {
+		  output += data;
+		});
+
+		ls.stderr.on('data', function (data) {
+		  console.log('stderr: ' + data);
+		});
+
+		ls.on('exit', function (code) {
+		  res.end(output);
 		});
 	});
 });
