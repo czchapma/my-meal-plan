@@ -134,7 +134,7 @@ $(document).ready(function(){
                     $(this).css({'opacity':1});
                     $(this).off('mouseenter');
                     $(this).off('mouseleave');
-                    shutdownHover($(this));
+                    shutdownHoverAndRate($(this));
     
                 });
                 li.find('.avocado-1').on('mouseenter', function(){
@@ -153,7 +153,7 @@ $(document).ready(function(){
                     $(this).siblings('.avocado-1').off('mouseenter');
                     $(this).siblings('.avocado-1').off('mouseleave');
                     $(this).siblings('.avocado-1').css({'opacity':1});
-                    shutdownHover($(this));
+                    shutdownHoverAndRate($(this));
                 });
                 li.find('.avocado-2').on('mouseenter', function(){
                     //Hover in
@@ -176,7 +176,7 @@ $(document).ready(function(){
                     $(this).siblings('.avocado-1').off('mouseenter');
                     $(this).siblings('.avocado-1').off('mouseleave');
                     $(this).siblings('.avocado-1').css({'opacity':1});
-                    shutdownHover($(this));
+                    shutdownHoverAndRate($(this));
                 });
                 li.find('.avocado-3').on('mouseenter', function(){
                     //Hover in
@@ -194,7 +194,7 @@ $(document).ready(function(){
                     $(this).siblings('.avocado-3').css({'opacity':1});
                     $(this).siblings('.avocado-2').css({'opacity':1});
                     $(this).siblings('.avocado-1').css({'opacity':1});    
-                    shutdownHover($(this));                
+                    shutdownHoverAndRate($(this));                
                 });
                 li.find('.avocado-4').on('mouseenter', function(){
                     //Hover in
@@ -215,7 +215,7 @@ $(document).ready(function(){
                     $(this).siblings('.avocado-3').css({'opacity':1});
                     $(this).siblings('.avocado-2').css({'opacity':1});
                     $(this).siblings('.avocado-1').css({'opacity':1});
-                    shutdownHover($(this));                  
+                    shutdownHoverAndRate($(this));                  
                 });                 li.find('.avocado-5').on('mouseenter', function(){
                     //Hover in
                     $(this).css({'opacity':1});
@@ -281,7 +281,7 @@ function prettyPrint(price){
 }
 //curr is a jquery object of the current image
 //once you click, hover effect should stop
-function shutdownHover(curr) {
+function shutdownHoverAndRate(curr) {
     for(var i=1; i<=5; i++){
         curr.siblings('.avocado-' + i).off('mouseenter');
         curr.siblings('.avocado-' + i).off('mouseleave');
