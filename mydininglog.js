@@ -42,6 +42,7 @@ $(document).ready(function(){
                 var check = document.getElementById(arr[i]);
                 check.checked = true;
                 var myitem = document.getElementById(arr[i] + 'li');
+                myitem.setAttribute('style','');
                 cart.append(myitem);
                 total.innerHTML = Number(check.getAttribute('price')) + Number(total.innerHTML);
             }
