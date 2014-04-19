@@ -369,14 +369,14 @@ app.get('/menu/jos', function(req, res){
 	var day = moment().day();
 	var time = new Date().getHours();
 
-	//Midnight - 2AM there is no Quesedillas/Grilled Cheese
+	//Midnight - 2AM there is no Quesadillas/Grilled Cheese
 	if (time < 23 && time > 3){
 		if (day === 1 || day === 3 || day === 7) {
 			//Grilled cheese Sunday/Monday/Wednesday
-			res.write('Gormet Grilled Cheese\n');
+			res.write('Gourmet Grilled Cheese\n');
 		} else {
-			//Quesedillas every other night
-			res.write('Quesedillas\n');
+			//Quesadillas every other night
+			res.write('Quesadillas\n');
 		}
 	}
 	res.end('Gnocchi\nCustom Salad\nSpicy With\nBeef Carb\nTurkey Carb\nChicken Carb\nMozerella Sticks\nFries\nOnion Rings');
@@ -648,11 +648,11 @@ app.get('/specials/jos', function(req, res){
 	var day = moment().day();
 	var time = new Date().getHours();
 
-	//Midnight - 2AM there is no Quesedillas/Grilled Cheese
+	//Midnight - 2AM there is no Quesadillas/Grilled Cheese
 	if (time < 23 && time > 3){
 		if (day === 1 || day === 3 || day === 7) {
 			//Grilled cheese Sunday/Monday/Wednesday
-			res.write('Gormet Grilled Cheese, ');
+			res.write('Gourmet Grilled Cheese, ');
 		} else {
 			//Quesadillas every other night
 			res.write('Quesadillas, ');
