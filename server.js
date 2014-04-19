@@ -139,7 +139,7 @@ app.post('/review', function(req, res){
 	conn.query(queryString, [username], function(err, results){
 		if (results.rows.length > 0) {
 			var id = String(results.rows[0].id);
-			var ls = spawn('java', [RunML, "MODIFY REVIEW",id,item,rating]);
+			var ls = spawn('java', ['RunML', "MODIFY", "REVIEW",id,item,rating]);
 			var output = "";
 			ls.stdout.on('data', function (data) {
 		  		output += data;
