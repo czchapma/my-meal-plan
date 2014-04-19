@@ -26,6 +26,7 @@ $(document).ready(function(){
     $('#credits_and_points').click(function(){
     	$(location).attr('href', '/mydining');
     });
+
     var total = document.getElementById('total');
     var knapsack = document.getElementById('knapsack');
     var knapsack2 = document.getElementById('knapsack2');
@@ -122,14 +123,13 @@ $(document).ready(function(){
             if (lineSplit[i].indexOf(',') > -1){
                 var priceItemSplit = lineSplit[i].split(',');
                 var li = $(document.createElement('li'));
-                var avocados = '<img class="avocado-1" src="templates/imgs/avocado.png"/><img class="avocado-2" src="templates/imgs/avocado.png"/><img class="avocado-3" src="templates/imgs/avocado.png"/><img class="avocado-4" src="templates/imgs/avocado.png"/><img class="avocado-5" src="templates/imgs/avocado.png"/>'
-                $('.avocado-1').click(function(){
+                var avocados = '<img class="avocado-1" src="templates/imgs/avocado.png"/><img class="avocado-2" src="templates/imgs/avocado.png"/><img class="avocado-3" src="templates/imgs/avocado.png"/><img class="avocado-4" src="templates/imgs/avocado.png"/><img class="avocado-5" src="templates/imgs/avocado.png"/>';
+                li.html('<div class="food-item">' + priceItemSplit[0] + "</div><div class='food-price'>" + prettyPrint(priceItemSplit[1]) + "</div>" + avocados);
+                li.find('.avocado-1').click(function(){
                     for(var i=2; i<=5; i++){
                         $(this).siblings('.avocado-' + i).css({'opacity':.5});
                         $(this).siblings('.avocado-' + i).off('mouseenter');
-                        $(this).siblings('.avocado-' + i).off('mouseleave');
-
-
+                        $(this).siblings('.avocado-' + i).off('mouseleave');    
                     }
                     $(this).css({'opacity':1});
                     $(this).off('mouseenter');
@@ -137,15 +137,13 @@ $(document).ready(function(){
                     shutdownHover($(this));
     
                 });
-                $('.avocado-1').on('mouseenter', function(){
+                li.find('.avocado-1').on('mouseenter', function(){
                     //Hover in
                     $(this).css({'opacity':1});              
                 }).on('mouseleave', function(){
                     //Hover out
                     $(this).css({'opacity':.5});
-                });
-
-                $('.avocado-2').click(function(){
+                });                 li.find('.avocado-2').click(function(){
                     for (var i=3; i<=5; i++){
                         $(this).siblings('.avocado-' + i).css({'opacity':.5});
                     }
@@ -157,7 +155,7 @@ $(document).ready(function(){
                     $(this).siblings('.avocado-1').css({'opacity':1});
                     shutdownHover($(this));
                 });
-                $('.avocado-2').on('mouseenter', function(){
+                li.find('.avocado-2').on('mouseenter', function(){
                     //Hover in
                     $(this).css({'opacity':1});
                     $(this).siblings('.avocado-1').css({'opacity': 1});              
@@ -165,9 +163,7 @@ $(document).ready(function(){
                     //Hover out
                     $(this).css({'opacity':.5});
                     $(this).siblings('.avocado-1').css({'opacity': .5});                                  
-                });
-
-                $('.avocado-3').click(function(){
+                });                 li.find('.avocado-3').click(function(){
                     for (var i=4; i<=5; i++){
                         $(this).siblings('.avocado-' + i).css({'opacity':.5});
                     }
@@ -182,7 +178,7 @@ $(document).ready(function(){
                     $(this).siblings('.avocado-1').css({'opacity':1});
                     shutdownHover($(this));
                 });
-                $('.avocado-3').on('mouseenter', function(){
+                li.find('.avocado-3').on('mouseenter', function(){
                     //Hover in
                     $(this).css({'opacity':1});
                     $(this).siblings('.avocado-1').css({'opacity': 1});
@@ -192,9 +188,7 @@ $(document).ready(function(){
                     $(this).css({'opacity':.5});
                     $(this).siblings('.avocado-1').css({'opacity': .5});
                     $(this).siblings('.avocado-2').css({'opacity': .5});
-                });
-
-                $('.avocado-4').click(function(){
+                });                 li.find('.avocado-4').click(function(){
                     $(this).siblings('.avocado-' + 5).css({'opacity':.5});
                     $(this).css({'opacity':1});
                     $(this).siblings('.avocado-3').css({'opacity':1});
@@ -202,7 +196,7 @@ $(document).ready(function(){
                     $(this).siblings('.avocado-1').css({'opacity':1});    
                     shutdownHover($(this));                
                 });
-                $('.avocado-4').on('mouseenter', function(){
+                li.find('.avocado-4').on('mouseenter', function(){
                     //Hover in
                     $(this).css({'opacity':1});
                     $(this).siblings('.avocado-1').css({'opacity': 1});
@@ -215,16 +209,14 @@ $(document).ready(function(){
                     $(this).siblings('.avocado-2').css({'opacity': .5});
                     $(this).siblings('.avocado-3').css({'opacity': .5});
                 });
-                $('.avocado-5').click(function(){
+                li.find('.avocado-5').click(function(){
                     $(this).css({'opacity':1});
                     $(this).siblings('.avocado-4').css({'opacity':1});
                     $(this).siblings('.avocado-3').css({'opacity':1});
                     $(this).siblings('.avocado-2').css({'opacity':1});
                     $(this).siblings('.avocado-1').css({'opacity':1});
                     shutdownHover($(this));                  
-                });
-
-                $('.avocado-5').on('mouseenter', function(){
+                });                 li.find('.avocado-5').on('mouseenter', function(){
                     //Hover in
                     $(this).css({'opacity':1});
                     $(this).siblings('.avocado-1').css({'opacity': 1});
@@ -240,7 +232,6 @@ $(document).ready(function(){
                     $(this).siblings('.avocado-3').css({'opacity': .5});
                     $(this).siblings('.avocado-4').css({'opacity': .5});
                 }); 
-                li.html('<div class="food-item">' + priceItemSplit[0] + "</div><div class='food-price'>" + prettyPrint(priceItemSplit[1]) + "</div>" + avocados);
                 ul.append(li);
             }
         }
