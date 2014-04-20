@@ -256,7 +256,6 @@ $(document).ready(function(){
             var item = $(this).children('.food-item').text().toLowerCase();
             var currText = $('#browse-input').val().toLowerCase();
             //if item does not start with currText, hide the li
-            console.log('item',item,'currText',currText);
             if (item.lastIndexOf(currText, 0) === 0) {
                 $(this).show();
             } else {
@@ -264,10 +263,6 @@ $(document).ready(function(){
             }
         });
      });
-
-    $('.avocado-1').click(function(){
-        console.log('hello');
-    });
 });
 
 //Converts 650 -> $6.50
