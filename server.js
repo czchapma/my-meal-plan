@@ -1,4 +1,4 @@
-	var express = require('express');
+var express = require('express');
 var fs = require('fs');
 var engines = require('consolidate');
 var app = express();
@@ -665,6 +665,54 @@ app.get('/specials/aco', function(req, res){
 	andrewsSpecials(res);
 });
 
+app.get('/itemlistjos', function(req, res){
+	var myQuery = connFood.query('SELECT * from food WHERE location="jos" ');
+	myQuery.on('row', function(row){
+		if (row !== undefined){
+			res.write(row.item + "," + row.price + '\n');
+		}
+	});
+	myQuery.on('end', function(){
+		res.end();
+	});
+});
+
+app.get('/itemlistaco', function(req, res){
+	var myQuery = connFood.query('SELECT * from food WHERE location="aco"');
+	myQuery.on('row', function(row){
+		if (row !== undefined){
+			res.write(row.item + "," + row.price + '\n');
+		}
+	});
+	myQuery.on('end', function(){
+		res.end();
+	});
+});
+
+app.get('/itemlistblueroom', function(req, res){
+	var myQuery = connFood.query('SELECT * from food WHERE location="ivyroom"');
+	myQuery.on('row', function(row){
+		if (row !== undefined){
+			res.write(row.item + "," + row.price + '\n');
+		}
+	});
+	myQuery.on('end', function(){
+		res.end();
+	});
+});
+
+app.get('/itemlistivy', function(req, res){
+	var myQuery = connFood.query('SELECT * from food WHERE location="blueroom"');
+	myQuery.on('row', function(row){
+		if (row !== undefined){
+			res.write(row.item + "," + row.price + '\n');
+		}
+	});
+	myQuery.on('end', function(){
+		res.end();
+	});
+});
+
 app.get('/itemlist', function(req, res){
 	var myQuery = connFood.query('SELECT * from food');
 	myQuery.on('row', function(row){
@@ -735,19 +783,19 @@ function fillFoodDB() {
 	connFood.query('CREATE TABLE food (item TEXT PRIMARY KEY,price INT, location TEXT)');
 	for (var locIndex=0; locIndex < foodList.length; locIndex ++){
 		var queryString = 'INSERT INTO food VALUES ($1, $2, $3)';
-		fs.readFile('data/' + foodList[locIndex] + '.csv', 'utf8', function(err, data){
-			var lines = data.split('\n');
-			for (var i=0; i<lines.length; i++){
-				var split = lines[i].split(',');
-				if (split.length === 2){
-					var item = split[0].trim();
-					var price = split[1].trim();
-					price = price.replace('$','');
-					price = Math.ceil(100 * parseFloat(price));
-					connFood.query(queryString, [item, price,'jos']);
-				}
+		var curr = foodList[locIndex];
+		var data = fs.readFileSync('data/' + foodList[locIndex] + '.csv', 'utf8');
+		var lines = data.split('\n');
+		for (var i=0; i<lines.length; i++){
+			var split = lines[i].split(',');
+			if (split.length === 2){
+				var item = split[0].trim();
+				var price = split[1].trim();
+				price = price.replace('$','');
+				price = Math.ceil(100 * parseFloat(price));
+				connFood.query(queryString, [item, price,curr]);
 			}
-		});
+		}
 	}
 }
 
