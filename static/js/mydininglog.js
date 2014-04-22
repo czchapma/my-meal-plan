@@ -7,17 +7,20 @@ $(document).ready(function(){
     
     $('#allpurchase').click(function() {
 		$('#prev-transactions').show();
+	$('#left-panel').hide();
 		$('#log-form').hide();
 		$('#browse-items').hide();
     });
     
     $('#purchase').click(function() {
 		$('#log-form').show();
+	$('#left-panel').show();
 		$('#prev-transactions').hide();
 		$('#browse-items').hide();
     });
     
     $('#browse').click(function() {
+	$('#left-panel').hide();
 		$('#browse-items').show();
 		$('#log-form').hide();
 		$('#prev-transactions').hide();

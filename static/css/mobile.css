@@ -1,0 +1,141 @@
+#nav_bar {
+    width: 100%;
+}
+
+html,body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+#nav_buttons {
+    width: 100%;
+    background-color:#4A068F;
+    height: auto;
+}
+
+/* home page stuff */
+#home-content img {
+    width: 100%;
+}
+
+#home-content {
+    margin-top: 75px;
+    padding-bottom: 10px;
+}
+
+#home-content p {
+    text-align: center;
+}
+
+/* specials */
+#specials-content {
+    width: 100%;
+    margin: 0;
+    margin-top: 75px;
+}
+
+/* login and new account*/
+#login-content, #newaccount-content {
+    width: 100%;
+    margin: 0;
+    margin-top: 75px;
+}
+
+#newaccount-content p {
+    width: 100%;
+}
+
+#login-content p input, #newaccount-content p input {
+    float: none;
+    width: 95%;
+}
+
+#login-content button {
+    float: none;
+    width: 40%;
+}
+
+#newaccount-content {
+    width: 100%;
+}
+
+/* my dining brown auth page*/
+#content {
+    width: 100%;
+    margin-top: 75px;
+}
+
+#myframe {
+    width: 100%;
+    margin: 0px 0 10px 0;
+    height: auto;
+}
+
+#myframe iframe {
+    width: 100%;
+    margin: 0;
+    height: 300px;
+    margin-left: -10px;
+}
+
+/* my dining log */
+#left-panel, #browse-form {
+    margin: 5px;
+    padding: 5px;
+    text-align: center;
+}
+
+#log-input, #browse-form-input {
+    width: 100%;
+    height: 30px;
+}
+
+#left-panel button {
+    width: 40%;
+}
+
+#log-form {
+    margin: 0;
+}
+
+#log-form h1 {
+    text-align: center;
+}
+
+#log-form input {
+    width: 95%;
+    margin: 5px;
+}
+
+#log-form-list li, #cart li {
+    text-align: center;
+}
+
+#browse-items {
+    text-align: center;
+}
+#browse-results {
+    margin: 5px;
+    width: 100%;
+}
+
+/* dining halls */
+.tabs {
+    width: 100%;
+    height: auto;
+}
+
+.tabs > li {
+    width: 50%;
+}
+
+.tab-content {
+    margin-top: 110px;
+    font-size: 16pt;
+    margin-bottom: 0;
+}
+
+[id^=tab]:checked + label, .tabs label:hover {
+    top: 3px;
+}

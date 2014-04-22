@@ -2,20 +2,24 @@
 <html>
   <head>
     <title>MyMealPlan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
     <link rel="icon" href="templates/imgs/avocado.png" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="templates/mydininglog.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/mydininglog.css" />
+    <link href="http://fonts.googleapis.com/css?family=Vollkorn:400,400italic,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="static/css/mobile.css" type="text/css" media="only screen and (max-width: 760px)"/>
+    
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="mydininglog.js"></script>
-     <link href='http://fonts.googleapis.com/css?family=Vollkorn:400,400italic,700' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="static/js/mydininglog.js"></script>
   </head>
   <body>
     <div id="nav_bar">
       <a id="logo" ><strong>My Meal Plan</strong></a>
       <div id="nav_buttons">
-      <a id="dininghalls" href="/dininghalls">Dining Halls</a>
-      <a id="mydining" href="/mydining">My Dining</a>
-      <a id="specials" href="/specials">Specials at a Glance</a>
-      <a id="login" href="/login">Login</a>
+	<a id="dininghalls" href="/dininghalls">Dining Halls</a>
+	<a id="mydining" href="/mydining">My Dining</a>
+	<a id="specials" href="/specials">Specials at a Glance</a>
+	<a id="login" href="/login">Login</a>
       </div>
     </div>
     <div id="dining_bar">
@@ -26,7 +30,7 @@
       	<a id="browse" href="#">Browse Items</a>
       </div>
     </div>
-    <div id = "content">
+    <div id="content">
       <div id="left-panel">
         <div id="knapsack-stuff"> Your total so far is <div id="total"> 0 </div> </div>    
         <input id="log-input" name="item" type="text">
@@ -43,11 +47,10 @@
         <input type="submit">
       </form>
       
-      
       <div id="prev-transactions">
         <ul>
-        	<li>Sample History 1</li>
-        	<li>Sample History 2</li>
+          <li>Sample History 1</li>
+          <li>Sample History 2</li>
         </ul>
       </div>
       

@@ -2,15 +2,19 @@
 <html>
   <head>
     <title>MyMealPlan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
     <meta name="user-name" content="{{user}}">
     <link rel="icon" href="templates/imgs/avocado.png" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="templates/specials.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/specials.css" />
+    <link rel="stylesheet" href="static/css/mobile.css" type="text/css" media="only screen and (max-width: 760px)"/>
+    
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="specials.js"></script>
+    <script type="text/javascript" src="static/js/specials.js"></script>
   </head>
   <body>
     <div id="nav_bar">
-      <a id="logo" ><strong>My Meal Plan</strong></a>
+      <a id="logo"><strong>My Meal Plan</strong></a>
       <div id="nav_buttons">
       <a id="dininghalls" href="/dininghalls">Dining Halls</a>
       <a id="mydining" href="/mydining">My Dining</a>
@@ -28,12 +32,13 @@
       	<li id="blueroom"></li>
       </ul>
     </div>
+    
     <div id="specials-suggest-wrapper">
       <button id="suggest" class="SuggestButton">Surprise Me!</button>
     </div>
 
     <div id="suggestion">
-        Why not <div id="foodPicked"> </div> ?
+      Why not <div id="foodPicked"> </div> ?
     </div>
   </body>
 </html>

@@ -1,0 +1,59 @@
+#content {
+    width:80%;
+    margin: auto;
+    padding: 10px;
+}
+
+#dining_bar {
+    height:20px;
+    width:100%;
+    background-color:#7309AA;
+}
+
+#dining_buttons {
+    width:500px;
+    margin:auto;
+}
+
+#dining_buttons a{
+    display:inline-block;
+    height:20px;
+    padding:0 10px 0 10px;
+    color: white;
+    font-size:12pt;
+    text-decoration:none;
+}
+
+#dining_buttons a:link{
+    color:white;
+    vertical-align:center;
+}
+
+#dining_buttons a:hover{
+    color:#7309AA;
+    background-color:white;
+}
+
+#myframe {
+    width:739px;
+    height:431px;
+    overflow:hidden;
+    margin: 15px auto;
+}
+
+#myframe iframe {
+    width:977px;
+    height:718px;
+    margin-left:0px;
+    margin-top:-94px;
+}
+
+#track-credits-form {
+    color: black;
+}
+
+#tracking {
+    color: black;
+    width: 172px;
+    margin: 0 auto;
+}

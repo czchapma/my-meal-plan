@@ -1,0 +1,71 @@
+p, h1 {
+    color: black;
+}
+
+@font-face {
+    font-family: Antonio;
+    src: url(antonio/Antonio-Regular.ttf);
+}
+
+@font-face {
+    font-family: Antonio-Light;
+    src: url(antonio/Antonio-Light.ttf);
+}
+
+@font-face {
+    font-family: Antonio-Bold;
+    src: url(antonio/Antonio-Bold);
+}
+
+body {
+    width:100%;
+    background-color:#C6B5C9;
+    margin:auto;
+    font-family: Antonio;
+    color: black;
+}
+
+#logo {
+    display:inline-block;
+    width:300px;
+    height:100%;
+    margin:0 auto;
+    font-family: Antonio, sans-serif;
+    letter-spacing: -5px;
+    padding-left:30px;
+    font-size:24pt;
+    color:white;
+}
+
+#logo:hover {
+    cursor: pointer;
+}
+
+#nav_bar {
+    display:inline-block;
+    height:50px;
+    width:100%;
+    color:white;
+    background-color:#4A068F;
+}
+
+#nav_buttons {
+    display:inline-block;
+}
+
+#nav_buttons a {
+    padding:0 15px 0 15px;
+    color:white;
+    font-size:16pt;
+    text-decoration:none;
+}
+
+#nav_buttons a:link {
+    color:white;
+    vertical-align:center;
+}
+
+#nav_buttons a:hover {
+    color:white;
+    background-color:#7309AA;
+}

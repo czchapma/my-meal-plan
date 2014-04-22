@@ -2,11 +2,15 @@
 <html>
   <head>
     <title>MyMealPlan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
     <meta name="login-type" content="{{login}}">
     <link rel="icon" href="templates/imgs/avocado.png" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="templates/mydining.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/mydining.css" />
+    <link rel="stylesheet" href="static/css/mobile.css" type="text/css" media="only screen and (max-width: 760px)"/>
+    
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="mydining.js"></script>
+    <script type="text/javascript" src="static/js/mydining.js"></script>
   </head>
   <body>
     <div id="nav_bar">
@@ -26,6 +30,7 @@
       <a id="browse" href="#"> Browse Items </a>
     </div>
   </div>
+
   <div id="content">
     <div id="myframe">
       <iframe src="http://www.brown.edu/getportal" scrolling="no"></iframe>

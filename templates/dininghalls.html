@@ -2,11 +2,15 @@
 <html>
   <head>
     <title>MyMealPlan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
     <link rel="icon" href="templates/imgs/avocado.png" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="templates/dininghalls.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/dininghalls.css" />
+    <link href="http://fonts.googleapis.com/css?family=Vollkorn:400,400italic,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="static/css/mobile.css" type="text/css" media="only screen and (max-width: 760px)"/>
+
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="dininghalls.js"></script>
-    <link href='http://fonts.googleapis.com/css?family=Vollkorn:400,400italic,700' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="static/js/dininghalls.js"></script>
   </head>
   <body>
     <div id="nav_bar">
@@ -65,7 +69,7 @@
         </li>
         <li>
           <input type="radio" name="tabs" id="tab5">
-          <label id="aco-tab" for="tab5">Andrew's Commons</label>
+          <label id="aco-tab" for="tab5">Commons</label>
           <div id="tab-content5" class="tab-content animated fadeIn">
             <div id="status-aco" class="open"></div>
             <ul class="times"></ul>

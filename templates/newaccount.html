@@ -2,10 +2,14 @@
 <html>
   <head>
     <title>MyMealPlan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
     <link rel="icon" href="templates/imgs/avocado.png" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="templates/MyMealPlan.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/login.css" />
+    <link rel="stylesheet" href="static/css/mobile.css" type="text/css" media="only screen and (max-width: 760px)"/>
+
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="newaccount.js"></script>
+    <script type="text/javascript" src="static/js/newaccount.js"></script>
   </head>
   <body>
     
@@ -24,10 +28,10 @@
 	<p><label>Email:</label><input id="email" name="email" type="email"></p>
 	<p><label>Password:</label><input id="password" name="password" type="password"></p>
 	<p><label>Gender Identity:</label></p>
-	<p><input id="female" class="rdio" name="gender" value="female" type="radio">Female</p>
-	<p><input id="male" class="rdio" name="gender" value="male" type="radio">Male</p>
-	<p>
-	  <input id="other" class="rdio" name="gender" value="other" type="radio">Other
+	<p>Female <input id="female" class="rdio" name="gender" value="female" type="radio"></p>
+	<p>Male <input id="male" class="rdio" name="gender" value="male" type="radio"></p>
+	<p>Other 
+	  <input id="other" class="rdio" name="gender" value="other" type="radio">
 	  <input id="otherType" name="otherType" type="text">
 	</p>
 	<p><label>Birthday:</label>

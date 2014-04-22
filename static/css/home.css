@@ -1,0 +1,23 @@
+#home-content {
+    margin: 20px;
+    padding: 10px;
+    background-color:#E8E8E8;
+    clear: both;
+    padding-bottom: 310px;
+}
+
+#home-content h1 {
+    text-align: center;
+    font-family: 'Vollkorn', sans-serif;
+}
+#home-content p {
+    font-size: 20px;
+    font-family: 'Vollkorn', sans-serif;
+}
+
+#home-content img {
+    float: left;
+    margin: 0 20px 20px 0;
+    width: 700px;
+}
+
