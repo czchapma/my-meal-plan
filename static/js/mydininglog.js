@@ -256,7 +256,7 @@ $.ajax({
             if (lineSplit[i].indexOf(',') > -1){
                 var priceItemSplit = lineSplit[i].split(',');
                 var li = $(document.createElement('li'));
-                var avocados = '<img class="avocado-1" src="templates/imgs/avocado.png"/><img class="avocado-2" src="templates/imgs/avocado.png"/><img class="avocado-3" src="templates/imgs/avocado.png"/><img class="avocado-4" src="templates/imgs/avocado.png"/><img class="avocado-5" src="templates/imgs/avocado.png"/>';
+                var avocados = '<img class="avocado-1" src="static/imgs/avocado.png"/><img class="avocado-2" src="static/imgs/avocado.png"/><img class="avocado-3" src="static/imgs/avocado.png"/><img class="avocado-4" src="static/imgs/avocado.png"/><img class="avocado-5" src="static/imgs/avocado.png"/>';
                 li.html('<div class="food-item">' + priceItemSplit[0] + "</div><div class='food-price'>" + prettyPrint(priceItemSplit[1]) + "</div>" + avocados);
                 li.find('.avocado-1').click(function(){
                     for(var i=2; i<=5; i++){
