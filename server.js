@@ -666,7 +666,6 @@ app.get('/specials/aco', function(req, res){
 });
 
 app.get('/itemlistjos', function(req, res){
-	console.log("What");
 	var myQuery = connFood.query('SELECT * from food WHERE location="jos" ');
 	myQuery.on('row', function(row){
 		if (row !== undefined){
