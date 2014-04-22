@@ -30,6 +30,7 @@ $(document).ready(function(){
     var total = document.getElementById('total');
     var knapsack = document.getElementById('knapsack');
     var knapsack2 = document.getElementById('knapsack2');
+
     console.log(knapsack);
     knapsack.addEventListener('click', function() {
         console.log("CLicked");
@@ -71,9 +72,138 @@ $(document).ready(function(){
 
 
     $.ajax({
-        url: "/itemlist"
+        url: "/itemlistjos"
      }).done(function(result) {
-        var ul = $('#log-form-list');
+        var ul= $('#log-form-list-jos');
+        var cart = $('#cart');
+        var lineSplit = result.split('\n');
+        for (var i=0; i<lineSplit.length; i++){
+            if (lineSplit[i].indexOf(',') > -1){
+                var priceItemSplit = lineSplit[i].split(',');
+                var li = $(document.createElement('li'));
+                var check = document.createElement('input');
+                li.attr('id',priceItemSplit[0] + 'li');
+                check.setAttribute('class',priceItemSplit[0])
+                check.setAttribute('name','check-'+ priceItemSplit[0] );
+                check.setAttribute('id', priceItemSplit[0]);
+                check.setAttribute('type','checkbox');
+                check.setAttribute('price',priceItemSplit[1]);
+                check.onchange = function somethingChanged(){
+                    
+                    if(this.checked)
+                    {
+                        var myitem = document.getElementById(this.getAttribute('id') + 'li');
+                        cart.append(myitem);
+                        total.innerHTML = Number(this.getAttribute('price')) + Number(total.innerHTML);
+                    }
+                    else
+                    { 
+                        var myitem = document.getElementById(this.getAttribute('id') + 'li');
+                        ul.append(myitem);
+                        total.innerHTML = 0 - Number(this.getAttribute('price')) + Number(total.innerHTML);
+                    }
+
+                    //TODO: add knapsack calls in here? or provide a button maybe
+                };
+                
+                
+                li.html(' <div class="food-item">' + priceItemSplit[0] + "</div><div class='food-price'>" + prettyPrint(priceItemSplit[1]) + "</div>");
+                li.append(check);
+                ul.append(li);
+            }
+        }
+    });
+
+$.ajax({
+        url: "/itemlistivy"
+     }).done(function(result) {
+        var ul= $('#log-form-list-ivy');
+        var cart = $('#cart');
+        var lineSplit = result.split('\n');
+        for (var i=0; i<lineSplit.length; i++){
+            if (lineSplit[i].indexOf(',') > -1){
+                var priceItemSplit = lineSplit[i].split(',');
+                var li = $(document.createElement('li'));
+                var check = document.createElement('input');
+                li.attr('id',priceItemSplit[0] + 'li');
+                check.setAttribute('class',priceItemSplit[0])
+                check.setAttribute('name','check-'+ priceItemSplit[0] );
+                check.setAttribute('id', priceItemSplit[0]);
+                check.setAttribute('type','checkbox');
+                check.setAttribute('price',priceItemSplit[1]);
+                check.onchange = function somethingChanged(){
+                    
+                    if(this.checked)
+                    {
+                        var myitem = document.getElementById(this.getAttribute('id') + 'li');
+                        cart.append(myitem);
+                        total.innerHTML = Number(this.getAttribute('price')) + Number(total.innerHTML);
+                    }
+                    else
+                    { 
+                        var myitem = document.getElementById(this.getAttribute('id') + 'li');
+                        ul.append(myitem);
+                        total.innerHTML = 0 - Number(this.getAttribute('price')) + Number(total.innerHTML);
+                    }
+
+                    //TODO: add knapsack calls in here? or provide a button maybe
+                };
+                
+                
+                li.html(' <div class="food-item">' + priceItemSplit[0] + "</div><div class='food-price'>" + prettyPrint(priceItemSplit[1]) + "</div>");
+                li.append(check);
+                ul.append(li);
+            }
+        }
+    });
+
+$.ajax({
+        url: "/itemlistaco"
+     }).done(function(result) {
+        var ul= $('#log-form-list-aco');
+        var cart = $('#cart');
+        var lineSplit = result.split('\n');
+        for (var i=0; i<lineSplit.length; i++){
+            if (lineSplit[i].indexOf(',') > -1){
+                var priceItemSplit = lineSplit[i].split(',');
+                var li = $(document.createElement('li'));
+                var check = document.createElement('input');
+                li.attr('id',priceItemSplit[0] + 'li');
+                check.setAttribute('class',priceItemSplit[0])
+                check.setAttribute('name','check-'+ priceItemSplit[0] );
+                check.setAttribute('id', priceItemSplit[0]);
+                check.setAttribute('type','checkbox');
+                check.setAttribute('price',priceItemSplit[1]);
+                check.onchange = function somethingChanged(){
+                    
+                    if(this.checked)
+                    {
+                        var myitem = document.getElementById(this.getAttribute('id') + 'li');
+                        cart.append(myitem);
+                        total.innerHTML = Number(this.getAttribute('price')) + Number(total.innerHTML);
+                    }
+                    else
+                    { 
+                        var myitem = document.getElementById(this.getAttribute('id') + 'li');
+                        ul.append(myitem);
+                        total.innerHTML = 0 - Number(this.getAttribute('price')) + Number(total.innerHTML);
+                    }
+
+                    //TODO: add knapsack calls in here? or provide a button maybe
+                };
+                
+                
+                li.html(' <div class="food-item">' + priceItemSplit[0] + "</div><div class='food-price'>" + prettyPrint(priceItemSplit[1]) + "</div>");
+                li.append(check);
+                ul.append(li);
+            }
+        }
+    });
+
+$.ajax({
+        url: "/itemlistblueroom"
+     }).done(function(result) {
+        var ul= $('#log-form-list-blueroom');
         var cart = $('#cart');
         var lineSplit = result.split('\n');
         for (var i=0; i<lineSplit.length; i++){

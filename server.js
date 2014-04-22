@@ -665,6 +665,55 @@ app.get('/specials/aco', function(req, res){
 	andrewsSpecials(res);
 });
 
+app.get('/itemlistjos', function(req, res){
+	console.log("What");
+	var myQuery = connFood.query('SELECT * from food WHERE location="jos" ');
+	myQuery.on('row', function(row){
+		if (row !== undefined){
+			res.write(row.item + "," + row.price + '\n');
+		}
+	});
+	myQuery.on('end', function(){
+		res.end();
+	});
+});
+
+app.get('/itemlistaco', function(req, res){
+	var myQuery = connFood.query('SELECT * from food WHERE location="aco"');
+	myQuery.on('row', function(row){
+		if (row !== undefined){
+			res.write(row.item + "," + row.price + '\n');
+		}
+	});
+	myQuery.on('end', function(){
+		res.end();
+	});
+});
+
+app.get('/itemlistblueroom', function(req, res){
+	var myQuery = connFood.query('SELECT * from food WHERE location="ivyroom"');
+	myQuery.on('row', function(row){
+		if (row !== undefined){
+			res.write(row.item + "," + row.price + '\n');
+		}
+	});
+	myQuery.on('end', function(){
+		res.end();
+	});
+});
+
+app.get('/itemlistivy', function(req, res){
+	var myQuery = connFood.query('SELECT * from food WHERE location="blueroom"');
+	myQuery.on('row', function(row){
+		if (row !== undefined){
+			res.write(row.item + "," + row.price + '\n');
+		}
+	});
+	myQuery.on('end', function(){
+		res.end();
+	});
+});
+
 app.get('/itemlist', function(req, res){
 	var myQuery = connFood.query('SELECT * from food');
 	myQuery.on('row', function(row){
@@ -676,7 +725,6 @@ app.get('/itemlist', function(req, res){
 		res.end();
 	});
 });
-
 
 
 app.get('/', function(req, res){
