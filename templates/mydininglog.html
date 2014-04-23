@@ -51,40 +51,40 @@
         <button id="knapsack2"> Fill two credits! </button>
         <input id="log-input" name="item" type="text" placeholder="Search for an item">
 	
-        <ul class="tabs">
-          <li>
-            <input type="radio" name="tabs" id="tab3">
-            <label id="blueroom-tab" for="tab3">Blue Room</label>
-            <div id="tab-content3" class="tab-content animated fadeIn">
+        <div class="accordion">
+          <div>
+	    <input type="radio" checked name="tabs" id="tab3">
+            <label id="blueroom-tab" for="tab3" class="tab">Blue Room</label>
+            <div id="tab-content3" class="content">
               <ul id="log-form-list-blueroom">
               </ul> 
             </div>
-          </li>
-          <li>
-            <input type="radio" name="tabs" id="tab4">
+	  </div>
+          <div>
+	    <input type="radio" name="tabs" id="tab4">
             <label id="ivyroom-tab" for="tab4">Ivy Room</label>
-            <div id="tab-content4" class="tab-content animated fadeIn">
+            <div id="tab-content4" class="content">
               <ul id="log-form-list-ivy">
               </ul> 
             </div>
-          </li>
-          <li>
-            <input type="radio" name="tabs" id="tab5">
+          </div>
+          <div>
+	    <input type="radio" name="tabs" id="tab5">
             <label id="aco-tab" for="tab5">Andrew's Commons</label>
-            <div id="tab-content5" class="tab-content animated fadeIn">
+            <div id="tab-content5" class="content">
               <ul id="log-form-list-aco">
               </ul> 
             </div>
-          </li>
-          <li>
-            <input type="radio" name="tabs" id="tab6">
+          </div>
+          <div>
+	    <input type="radio" name="tabs" id="tab6">
             <label id="jos-tab" for="tab6">Jo's</label>
-            <div id="tab-content6" class="tab-content animated fadeIn">
+            <div id="tab-content6" class="content">
               <ul id="log-form-list-jos">
               </ul> 
             </div>
-          </li>
-	</ul>
+          </div>
+	</div>
       </div>
       
       <div id="prev-transactions">

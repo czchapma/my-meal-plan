@@ -1,45 +1,4 @@
-.tabs input[type=radio] {
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
-}
-.tabs {
-    width: 450px;
-    height:300px;
-    float: none;
-    list-style: none;
-    position: relative;
-    padding: 0;
-}
-
-.tabs label {
-    border-bottom: 4px solid green;
-}
-.tabs li{
-    float: left;
-}
-.tabs label {
-    display: block;
-    padding: 10px 20px;
-    border-radius: 2px 2px 0 0;
-    color: #4A068F;
-    font-size: 12px;
-    font-weight: normal;
-    font-family: 'Lily Script One', helveti;
-    background: rgba(255,255,255,0.2);
-    cursor: pointer;
-    position: relative;
-    top: 3px;
-    -webkit-transition: all 0.2s ease-in-out;
-    -moz-transition: all 0.2s ease-in-out;
-    -o-transition: all 0.2s ease-in-out;
-    transition: all 0.2s ease-in-out;
-}
-.tabs label:hover {
-    background: rgba(255,255,255,0.5);
-    top: 0;
-}
-
+/*
 [id^=tab]:checked + label {
     background: #4A068F;
     color: white;
@@ -49,27 +8,7 @@
 [id^=tab]:checked ~ [id^=tab-content] {
     display: block;
 }
-
-.tab-content{
-    z-index: 2;
-    display: none;
-    text-align: left;
-    width: 100%;
-    font-family:'Vollkorn',sans-serif;
-    font-size: 14px;
-    line-height: 140%;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    color: black;
-    position: absolute;
-    top: 53px;
-    left: 0;
-    box-sizing: border-box;
-    -webkit-animation-duration: 0.5s;
-    -o-animation-duration: 0.5s;
-    -moz-animation-duration: 0.5s;
-    animation-duration: 0.5s;
-}
+*/
 
 #dining_bar {
     width:100%;
@@ -122,6 +61,8 @@
     margin: 50px;
     float:right;
     text-align: center;
+    background-color:#E8E8E8;
+    width: 40%;
 }
 
 #left-panel button {
@@ -131,6 +72,7 @@
 #log-input {
     width: 100%;
     margin-top: 10px;
+    margin-bottom: 20px;
     height: 30px;
     float: left;
 }
@@ -216,3 +158,56 @@
     font-family:"Vollkorn", sans-serif;
 }
 
+/* Accordion Layout Styles */
+.accordion {
+    clear: both;
+    padding: 1px 5px 5px 5px;
+}
+
+.accordion label {
+    display: block;
+    padding: 5px;
+    text-decoration: none;
+    color: white;
+    background-color:#7309AA;
+    
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+}
+
+.accordion label:hover, [id^=tab]:checked + label {
+    background-color: #4A068F;
+}
+
+.accordion div .content {
+    display: none;
+}
+
+.accordion div:target .content {
+    display: block;
+}
+
+[id^=tab]:checked ~ [id^=tab-content] {
+    display: block;
+}
+
+input[type=radio] {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+
+.accordion > div {
+    overflow: hidden;
+    -webkit-transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+    -ms-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
+}
+
+.accordion > div:target {
+    height: 360px;
+}
