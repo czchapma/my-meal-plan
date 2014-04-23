@@ -1,5 +1,9 @@
+#logo {
+    display: none;
+}
 #nav_bar {
     width: 100%;
+    height: auto;
 }
 
 html,body {
@@ -14,6 +18,9 @@ html,body {
     height: auto;
 }
 
+#nav_buttons a {
+    height: auto;
+}
 /* home page stuff */
 #home-content img {
     width: 100%;
