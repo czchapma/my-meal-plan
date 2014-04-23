@@ -402,7 +402,7 @@ $.ajax({
 
 
      $('#log-input').keyup(function(){
-        $('#log-form-list').children('li').each(function(){
+        $('#log-form-list-jos').children('li').each(function(){
             var item = $(this).children('.food-item').text().toLowerCase();
             var currText = $('#log-input').val().toLowerCase();
             //only show items with words that start with currText
@@ -412,6 +412,37 @@ $.ajax({
                 $(this).hide();
             }
         });
+        $('#log-form-list-aco').children('li').each(function(){
+            var item = $(this).children('.food-item').text().toLowerCase();
+            var currText = $('#log-input').val().toLowerCase();
+            //only show items with words that start with currText
+            if ((item.lastIndexOf(currText, 0) === 0) || item.indexOf(' ' + currText) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+        $('#log-form-list-blueroom').children('li').each(function(){
+            var item = $(this).children('.food-item').text().toLowerCase();
+            var currText = $('#log-input').val().toLowerCase();
+            //only show items with words that start with currText
+            if ((item.lastIndexOf(currText, 0) === 0) || item.indexOf(' ' + currText) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+        $('#log-form-list-ivy').children('li').each(function(){
+            var item = $(this).children('.food-item').text().toLowerCase();
+            var currText = $('#log-input').val().toLowerCase();
+            //only show items with words that start with currText
+            if ((item.lastIndexOf(currText, 0) === 0) || item.indexOf(' ' + currText) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+
      });
 
      $('#browse-input').keyup(function(){
