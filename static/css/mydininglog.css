@@ -1,46 +1,10 @@
 /*
-[id^=tab]:checked + label {
-    background: #4A068F;
-    color: white;
-    top: 0;
-}
-
-[id^=tab]:checked ~ [id^=tab-content] {
-    display: block;
-}
-*/
-
-#dining_bar {
-    width:100%;
-    background-color:#7309AA;
-}
-
-#dining_buttons {
-    margin-left: 175px;
-}
-
-#dining_buttons a {
-    display:inline-block;
-    height:20px;
-    padding:0 10px 0 10px;
-    color: white;
-    font-size:12pt;
-    text-decoration:none;
-}
-
-#dining_buttons a:link {
-    color:white;
-    vertical-align:center;
-}
-
-#dining_buttons a:hover {
-    color:#7309AA;
-    background-color:white;
-}
-
-/*
   css for my dining subpages
 */
+.food-price {
+    color: green;
+}
+
 #browse-form {
     font-family:"Vollkorn", sans-serif;
     margin-left: 40%;
@@ -77,41 +41,21 @@
     float: left;
 }
 
-#log-form-list-jos {
+[id^=log-form-list-] {
     overflow-y: auto;
     height: 300px;
 }
 
-#log-form-list-aco {
-    overflow-y: auto;
-    height: 300px;
+[id^=log-form-list-] li, #cart li {
+    display:block;
+    width:100%;
+    cursor: pointer;
+    list-style: none;
+    margin: 5px;
 }
 
-#log-form-list-ivy {
-    overflow-y: auto;
-    height: 300px;
-}
-
-#log-form-list-blueroom {
-    overflow-y: auto;
-    height: 300px;
-}
-
-#log-form-list-blueroom  li{
-    display:block;
-    width:100%;
-}
-#log-form-list-jos  li{
-    display:block;
-    width:100%;
-}
-#log-form-list-aco  li{
-    display:block;
-    width:100%;
-}
-#log-form-list-ivy  li{
-    display:block;
-    width:100%;
+[id^=log-form-list-] li:hover, #cart li:hover {
+    background: tan;
 }
 
 #prev-transactions {
@@ -158,7 +102,7 @@
     font-family:"Vollkorn", sans-serif;
 }
 
-/* Accordion Layout Styles */
+/* Accordion stuff */
 .accordion {
     clear: both;
     padding: 1px 5px 5px 5px;
@@ -167,14 +111,9 @@
 .accordion label {
     display: block;
     padding: 5px;
-    text-decoration: none;
     color: white;
     background-color:#7309AA;
-    
-    -webkit-transition: all 0.2s ease-in-out;
-    -moz-transition: all 0.2s ease-in-out;
-    -o-transition: all 0.2s ease-in-out;
-    transition: all 0.2s ease-in-out;
+    cursor: pointer;
 }
 
 .accordion label:hover, [id^=tab]:checked + label {

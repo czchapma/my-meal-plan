@@ -1,6 +1,6 @@
 #login-content, #newaccount-content {
     padding: 10px;
-    width: 400px;
+    width: 450px;
     margin-left: calc(50% - 200px);
     margin-top: 100px;
 }
@@ -15,8 +15,7 @@
 
 #login-content p input, #newaccount-content p input {
     float: right;
-    width: 250px;
-    height: 30px;
+    width: 300px;
 }
 
 #login-content button {
