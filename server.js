@@ -82,7 +82,8 @@ app.post('/storeUser', function(req, res) {
 });
 
 app.post('/knapsack', function(req, res){
-	var myQuery = connFood.query('SELECT * from food');
+	console.log(req.body.hall);
+	var myQuery = connFood.query('SELECT * from food WHERE location=$1',[req.body.hall]);
 	var foodList = '';
 	myQuery.on('row', function(row){
 		if (row !== undefined){

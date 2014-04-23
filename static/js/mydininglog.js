@@ -39,7 +39,22 @@ $(document).ready(function(){
         console.log("CLicked");
         var cart = $('#cart');
         var money = (680 - Number(total.innerHTML));
-        $.post( "/knapsack", {maxMoney:money }, function(data,status){
+        var tab3 = document.getElementById('tab3');
+        var tab4 = document.getElementById('tab4');
+        var tab5 = document.getElementById('tab5');
+        var tab6 = document.getElementById('tab6');
+        var myhall = "";
+        if(tab3.checked)
+            myhall= "blueroom"
+        if(tab4.checked)
+            myhall = "ivy"
+        if(tab5.checked)
+            myhall = "aco"
+        if(tab6.checked)
+            myhall = "jos"
+        
+        console.log(myhall);
+        $.post( "/knapsack", {maxMoney:money, hall:myhall}, function(data,status){
         //TODO: make it so people can buy more than 1 of the same item. 
             var arr = data.split('\n');
             for (var i =0; i < arr.length - 1; i ++)
@@ -59,7 +74,22 @@ $(document).ready(function(){
         console.log("CLicked");
         var cart = $('#cart');
         var money = (680 + 680 - Number(total.innerHTML));
-        $.post( "/knapsack", {maxMoney:money }, function(data,status){
+        var tab3 = document.getElementById('tab3');
+        var tab4 = document.getElementById('tab4');
+        var tab5 = document.getElementById('tab5');
+        var tab6 = document.getElementById('tab6');
+        var myhall = "";
+        if(tab3.checked)
+            myhall= "blueroom"
+        if(tab4.checked)
+            myhall = "ivy"
+        if(tab5.checked)
+            myhall = "aco"
+        if(tab6.checked)
+            myhall = "jos"
+        
+        console.log(myhall);
+        $.post( "/knapsack", {maxMoney:money, hall:myhall}, function(data,status){
         //TODO: make it so people can buy more than 1 of the same item. 
             var arr = data.split('\n');
             for (var i =0; i < arr.length - 1; i ++)
