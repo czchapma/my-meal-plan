@@ -16,38 +16,38 @@
     <div id="nav_bar">
       <a id="logo" ><strong>My Meal Plan</strong></a>
       <div id="nav_buttons">
-      <a id="dininghalls" href="/dininghalls">Dining Halls</a>
-      <a id="mydining" href="/mydining">My Dining</a>
-      <a id="specials" href="/specials">Specials at a Glance</a>
-      <a id="login" href="/login">Login</a>
+	<a id="dininghalls" href="/dininghalls">Dining Halls</a>
+	<a id="mydining" href="/mydining">My Dining</a>
+	<a id="specials" href="/specials">Specials at a Glance</a>
+	<a id="login" href="/login">Login</a>
       </div>
     </div>
-  <div id="dining_bar">
-    <div id="dining_buttons">
-      <a id="credits_and_points" href="#"> Credits and Points </a>
-      <a id="purchase" href="#"> Log Purchase </a>
-      <a id="allpurchase" href="#"> Previous Transactions </a>
-      <a id="browse" href="#"> Browse Items </a>
+    <div id="dining_bar">
+      <div id="dining_buttons">
+	<a id="credits_and_points" href="#"> Credits and Points </a>
+	<a id="purchase" href="#"> Log Purchase </a>
+	<a id="allpurchase" href="#"> Previous Transactions </a>
+	<a id="browse" href="#"> Browse Items </a>
+      </div>
     </div>
-  </div>
 
-  <div id="content">
-    <div id="myframe">
-      <iframe src="http://www.brown.edu/getportal" scrolling="no"></iframe>
+    <div id="content">
+      <div id="myframe">
+	<iframe src="http://www.brown.edu/getportal" scrolling="no"></iframe>
+      </div>
+      <div id="tracking">
+	Track your credit/points usage
+	<form id="track-credits-form">
+          Credits: <input name="credits" id="credits" type="text">
+          <span id="creditsErr">Credits should be a number</span><br/>
+          Points: <input name="points" id="points" type="text">
+          <span id="pointsErr">Points should be a number (with or without decimal point)</span></br>
+          <button type="submit">Submit</button>
+	</form>
+	<span id="creditsLeft"></span><br/>
+	<span id="pointsLeft"></span>
+	<span id="logged-in"></span>
+      </div>
     </div>
-    <div id="tracking">
-      Track your credit/points usage
-      <form id="track-credits-form">
-        Credits: <input name="credits" id="credits" type="text">
-        <span id="creditsErr">Credits should be a number</span><br/>
-        Points: <input name="points" id="points" type="text">
-        <span id="pointsErr">Points should be a number (with or without decimal point)</span><br/>
-        <input type="submit">
-      </form>
-      <span id="creditsLeft"></span><br/>
-      <span id="pointsLeft"></span>
-      <span id="logged-in"></span>
-    </div>
-    </div>
-</body>
+  </body>
 </html>

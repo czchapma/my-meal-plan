@@ -2,28 +2,28 @@
 $(document).ready(function(){
     //Logo redirects to home
     $('#logo').click(function(){
-		$(location).attr('href','/');
+	$(location).attr('href','/');
     });
     
     $('#allpurchase').click(function() {
-		$('#prev-transactions').show();
+	$('#prev-transactions').show();
 	$('#left-panel').hide();
-		$('#log-form').hide();
-		$('#browse-items').hide();
+	$('#log-form').hide();
+	$('#browse-items').hide();
     });
     
     $('#purchase').click(function() {
-		$('#log-form').show();
+	$('#log-form').show();
 	$('#left-panel').show();
-		$('#prev-transactions').hide();
-		$('#browse-items').hide();
+	$('#prev-transactions').hide();
+	$('#browse-items').hide();
     });
     
     $('#browse').click(function() {
 	$('#left-panel').hide();
-		$('#browse-items').show();
-		$('#log-form').hide();
-		$('#prev-transactions').hide();
+	$('#browse-items').show();
+	$('#log-form').hide();
+	$('#prev-transactions').hide();
     });
 
     $('#credits_and_points').click(function(){
@@ -55,7 +55,7 @@ $(document).ready(function(){
         
         console.log(myhall);
         $.post( "/knapsack", {maxMoney:money, hall:myhall}, function(data,status){
-        //TODO: make it so people can buy more than 1 of the same item. 
+            //TODO: make it so people can buy more than 1 of the same item. 
             var arr = data.split('\n');
             for (var i =0; i < arr.length - 1; i ++)
             {
@@ -90,7 +90,7 @@ $(document).ready(function(){
         
         console.log(myhall);
         $.post( "/knapsack", {maxMoney:money, hall:myhall}, function(data,status){
-        //TODO: make it so people can buy more than 1 of the same item. 
+            //TODO: make it so people can buy more than 1 of the same item. 
             var arr = data.split('\n');
             for (var i =0; i < arr.length - 1; i ++)
             {
@@ -106,7 +106,7 @@ $(document).ready(function(){
 
     $.ajax({
         url: "/itemlistjos"
-     }).done(function(result) {
+    }).done(function(result) {
         var ul= $('#log-form-list-jos');
         var cart = $('#cart');
         var lineSplit = result.split('\n');
@@ -147,9 +147,9 @@ $(document).ready(function(){
         }
     });
 
-$.ajax({
+    $.ajax({
         url: "/itemlistivy"
-     }).done(function(result) {
+    }).done(function(result) {
         var ul= $('#log-form-list-ivy');
         var cart = $('#cart');
         var lineSplit = result.split('\n');
@@ -190,9 +190,9 @@ $.ajax({
         }
     });
 
-$.ajax({
+    $.ajax({
         url: "/itemlistaco"
-     }).done(function(result) {
+    }).done(function(result) {
         var ul= $('#log-form-list-aco');
         var cart = $('#cart');
         var lineSplit = result.split('\n');
@@ -233,9 +233,9 @@ $.ajax({
         }
     });
 
-$.ajax({
+    $.ajax({
         url: "/itemlistblueroom"
-     }).done(function(result) {
+    }).done(function(result) {
         var ul= $('#log-form-list-blueroom');
         var cart = $('#cart');
         var lineSplit = result.split('\n');
@@ -278,7 +278,7 @@ $.ajax({
 
     $.ajax({
         url: "/itemlist"
-     }).done(function(result) {
+    }).done(function(result) {
         //TODO: make it so people can buy more than 1 of the same item. 
         var ul = $('#browse-results').children('ul');
         var lineSplit = result.split('\n');
@@ -298,7 +298,7 @@ $.ajax({
                     $(this).off('mouseenter');
                     $(this).off('mouseleave');
                     shutdownHoverAndRate($(this));
-    
+		    
                 });
                 li.find('.avocado-1').on('mouseenter', function(){
                     //Hover in
@@ -401,7 +401,7 @@ $.ajax({
     });
 
 
-     $('#log-input').keyup(function(){
+    $('#log-input').keyup(function(){
         $('#log-form-list-jos').children('li').each(function(){
             var item = $(this).children('.food-item').text().toLowerCase();
             var currText = $('#log-input').val().toLowerCase();
@@ -443,9 +443,9 @@ $.ajax({
             }
         });
 
-     });
+    });
 
-     $('#browse-input').keyup(function(){
+    $('#browse-input').keyup(function(){
         $('#browse-results').children('ul').children('li').each(function(){
             var item = $(this).children('.food-item').text().toLowerCase();
             var currText = $('#browse-input').val().toLowerCase();
@@ -456,7 +456,7 @@ $.ajax({
                 $(this).hide();
             }
         });
-     });
+    });
 });
 
 //Converts 650 -> $6.50

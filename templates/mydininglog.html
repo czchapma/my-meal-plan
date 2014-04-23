@@ -30,55 +30,62 @@
       	<a id="browse" href="#">Browse Items</a>
       </div>
     </div>
-    <div id="content">
-      <div id="left-panel">
-        <ul class="tabs">
-        <li>
-          <input type="radio" name="tabs" id="tab3">
-          <label id="blueroom-tab" for="tab3">Blue Room</label>
-          <div id="tab-content3" class="tab-content animated fadeIn">
-            <ul id="log-form-list-blueroom">
-            </ul> 
-          </div>
-        </li>
-        <li>
-          <input type="radio" name="tabs" id="tab4">
-          <label id="ivyroom-tab" for="tab4">Ivy Room</label>
-          <div id="tab-content4" class="tab-content animated fadeIn">
-            <ul id="log-form-list-ivy">
-            </ul> 
-          </div>
-        </li>
-        <li>
-          <input type="radio" name="tabs" id="tab5">
-          <label id="aco-tab" for="tab5">Andrew's Commons</label>
-          <div id="tab-content5" class="tab-content animated fadeIn">
-            <ul id="log-form-list-aco">
-            </ul> 
-          </div>
-        </li>
-        <li>
-          <input type="radio" name="tabs" id="tab6">
-          <label id="jos-tab" for="tab6">Jo's</label>
-          <div id="tab-content6" class="tab-content animated fadeIn">
-            <ul id="log-form-list-jos">
-          </ul> 
-          </div>
-        </li>
-      </ul>
-        <div id="knapsack-stuff"> Your total so far is <div id="total"> 0 </div> </div>    
-        <input id="log-input" name="item" type="text">
-        <button id="knapsack"> Fill my credit! </button>
-        <button id="knapsack2"> Fill two credits! </button>
 
-      </div>
+    <div id="content">
       <form id="log-form" action="/retrieveUser" method="post">
         <h1>Log a Purchase</h1>
         
         <ul id="cart">
         </ul>
-        <input type="submit">
+        <button type="submit">Submit</button>
       </form>
+      
+      
+      <div id="left-panel">
+        <div id="knapsack-stuff"> 
+	  Your total so far is 
+	  <div id="total">0</div> 
+	</div>    
+	
+        <button id="knapsack"> Fill my credit! </button>
+        <button id="knapsack2"> Fill two credits! </button>
+        <input id="log-input" name="item" type="text" placeholder="Search for an item">
+	
+        <ul class="tabs">
+          <li>
+            <input type="radio" name="tabs" id="tab3">
+            <label id="blueroom-tab" for="tab3">Blue Room</label>
+            <div id="tab-content3" class="tab-content animated fadeIn">
+              <ul id="log-form-list-blueroom">
+              </ul> 
+            </div>
+          </li>
+          <li>
+            <input type="radio" name="tabs" id="tab4">
+            <label id="ivyroom-tab" for="tab4">Ivy Room</label>
+            <div id="tab-content4" class="tab-content animated fadeIn">
+              <ul id="log-form-list-ivy">
+              </ul> 
+            </div>
+          </li>
+          <li>
+            <input type="radio" name="tabs" id="tab5">
+            <label id="aco-tab" for="tab5">Andrew's Commons</label>
+            <div id="tab-content5" class="tab-content animated fadeIn">
+              <ul id="log-form-list-aco">
+              </ul> 
+            </div>
+          </li>
+          <li>
+            <input type="radio" name="tabs" id="tab6">
+            <label id="jos-tab" for="tab6">Jo's</label>
+            <div id="tab-content6" class="tab-content animated fadeIn">
+              <ul id="log-form-list-jos">
+              </ul> 
+            </div>
+          </li>
+	</ul>
+      </div>
       
       <div id="prev-transactions">
         <ul>

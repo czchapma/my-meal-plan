@@ -58,6 +58,7 @@ body {
     font-size:16pt;
     text-decoration:none;
     height: auto;
+    white-space: nowrap;
 }
 
 #nav_buttons a:link {
@@ -69,3 +70,8 @@ body {
     color:white;
     background-color:#7309AA;
 }
+
+button {
+    height: 30px;
+}
+
