@@ -49,11 +49,8 @@ $(document).ready(function(){
 			console.log('not submitting');
 		}
     });
+    //TODO incorporate oauth into it
 	$choices.show();
-    } else {
-	$choices.hide();
-	//not logged in yet
-    }
 });
 
 //from: http://stackoverflow.com/questions/3885817/how-to-check-if-a-number-is-float-or-integer
