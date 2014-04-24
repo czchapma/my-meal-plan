@@ -49,12 +49,6 @@ $(document).ready(function(){
 			console.log('not submitting');
 		}
     });
-
-    var loginType = document.querySelector('meta[name=login-type]').content;
-    if (loginType === 'true'){
-	//logged in!
-	$('#logged-in').text('Congrats you are logged in!');
-	//TODO: Steven add in stuff here
 	$choices.show();
     } else {
 	$choices.hide();

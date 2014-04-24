@@ -3,6 +3,9 @@
   <head>
     <title>MyMealPlan</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <meta name="name" content="{{name}}">
+    <meta name="email" content="{{email}}">
+    <meta name="gender" content="{{gender}}">
     <link rel="icon" href="static/imgs/avocado.png" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="static/css/base.css" />
     <link rel="stylesheet" type="text/css" href="static/css/login.css" />
@@ -25,8 +28,7 @@
     <div id="newaccount-content">
       <form id="new-account-form" method="post" action="/storeUser">
 	<p><label>Name:</label><input id="name" name="name" type="text"></p>
-	<p><label>Email:</label><input id="email" name="email" type="email"></p>
-	<p><label>Password:</label><input id="password" name="password" type="password"></p>
+	<p><label>Email:</label><input id="email" name="email" type="email" readonly="readonly"></p>
 	<p><label>Gender Identity:</label></p>
 	<p>Female <input id="female" class="rdio" name="gender" value="female" type="radio"></p>
 	<p>Male <input id="male" class="rdio" name="gender" value="male" type="radio"></p>

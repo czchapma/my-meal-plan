@@ -83,7 +83,7 @@ var anyDB = require('any-db');
 var connFood = anyDB.createConnection('sqlite3://food.db');
 fillFoodDB();
 var conn = anyDB.createConnection('sqlite3://users.db');
-conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, password TEXT, month TEXT,day TEXT, gender TEXT)');
+conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, month TEXT,day TEXT, gender TEXT)');
 fillUsersDB();
 
 //Authenticates with google
@@ -95,9 +95,20 @@ app.get('/login',
 app.get('/logincallback', 
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
-  	//TODO add to database?
-    res.redirect('/mydininglog');
-  });
+  	//check if in the db
+  	var email = req.user.emails[0].value;
+  	console.log(email);
+  	var queryString = 'SELECT id FROM users WHERE username=$1';
+    conn.query(queryString, [email], function(nameError, nameRes){
+		if (nameRes.rows.length === 0){
+			//Not in DB
+			res.redirect('/newaccount');
+		} else{
+			//already in DB
+			res.redirect('/mydininglog');
+		}
+	});
+});
 
 //TODO: incorporate into clientside
 app.get('/logout', function(req, res){
@@ -105,8 +116,8 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-app.get('/newaccount', function(req, res){
-	res.render('newaccount.html');
+app.get('/newaccount', ensureAuthenticated, function(req, res){
+	res.render('newaccount.html', {name: req.user.displayName, email: req.user.emails[0].value});
 });
 
 app.post('/storeUser', function(req, res) {
@@ -124,27 +135,27 @@ app.post('/storeUser', function(req, res) {
 	var queryString = 'SELECT id FROM users WHERE username=$1';
     conn.query(queryString, [email], function(nameError, nameRes){
 		if (nameRes.rows.length === 0){
-			var queryString = 'INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6, $7)';
-		    conn.query(queryString, [null, name, email, password, month, year, gender], function(error, result){
+			var queryString = 'INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6)';
+		    conn.query(queryString, [null, name, email, month, year, gender], function(error, result){
 				var queryString = "SELECT id FROM users WHERE username=$1";
 				conn.query(queryString, [email], function(lookupErr, lookupRes){
 					//Add to ML Client
 					var csvString = String(lookupRes.rows[0].id) +"," + name + "," + gender + "," + otherType + "," + year + "," + month;
 					console.log(csvString);
-					spawn('java', ["RunML", "ADD",csvString], function (error, stdout, stderr) {
-						console.log(stdout,stderr, error);
-						if (stdout.indexOf('Warning: users already contains this userId. Aborting.') !== -1) {
-							console.log('user already exists!');
-						} else {
-							console.log('all good');
-						}
-						res.redirect('/login');
+					var addToML = spawn('java', ["RunML", "ADD",csvString]);
+					addToML.stdout.on('data', function(data) {
+						//console.log('stdout: ',data);
 					});
+					addToML.stderr.on('data',function(data){
+						console.log('stderr:',data);
+					});
+					addToML.on('exit', function(code){
+						res.redirect('/mydininglog');
+					});		
 				});
 			});
 		} else {
-			console.log("User already registered!");
-			res.redirect('/login');
+			res.redirect('/mydininglog');
 		}
 	});
 });
@@ -855,8 +866,8 @@ function fillFoodDB() {
 
 function fillUsersDB() {
 	var queryString = 'INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6, $7)';
-	conn.query(queryString, [null,'Steven','steven_mcgarty@brown.edu','****','March','1992','Male'], function(err1, res1){
-		conn.query(queryString, [null,'Christine','christine_chapman@brown.edu','****','August','1992','Male'], function(err2, res2){
+	conn.query(queryString, [null,'Steven','smcgarty@cs.brown.edu','****','March','1992','Male'], function(err1, res1){
+		conn.query(queryString, [null,'Christine','czchapma@cs.brown.edu','****','August','1992','Male'], function(err2, res2){
 			conn.query(queryString, [null,'Zach','zolstein@brown.edu','****','March','1992','Male'], function(err3, res3){
 				conn.query(queryString, [null,'Raymond','raymond_zeng@brown.edu','****','March','1992','Male'], function(err4, res4){
 				});
@@ -879,7 +890,6 @@ function fillUsersDB() {
 }
 
 function ensureAuthenticated(req, res, next) {
-	console.log('ensure authenticated');
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login');
 }

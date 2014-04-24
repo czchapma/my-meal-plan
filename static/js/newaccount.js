@@ -21,4 +21,9 @@ $(document).ready(function(){
 	    $('#otherType').hide();
 	}
     });
+
+    var name = document.querySelector('meta[name=name]').content;
+    $('#name').val(name);
+    var email = document.querySelector('meta[name=email]').content;
+    $('#email').val(email);
 });
