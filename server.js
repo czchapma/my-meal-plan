@@ -11,7 +11,60 @@ app.engine('html', engines.hogan); // tell Express to run .html files through Ho
 app.set('views', __dirname + '/templates'); // tell Express where to find templates
 app.use(express.static(__dirname)); //allows css to work with rendered html
 
-app.use(express.bodyParser());
+var passport = require('passport')
+  , util = require('util')
+  , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+
+
+// API Access link for creating client ID and secret:
+// https://code.google.com/apis/console/
+var GOOGLE_CLIENT_ID = "332163333251.apps.googleusercontent.com";
+var GOOGLE_CLIENT_SECRET = "2DF_1WSIP_7jW7z9Gp_Rs0ok";
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+
+// Use the GoogleStrategy within Passport.
+//   Strategies in Passport require a `verify` function, which accept
+//   credentials (in this case, an accessToken, refreshToken, and Google
+//   profile), and invoke a callback with a user object.
+passport.use(new GoogleStrategy({
+    clientID: GOOGLE_CLIENT_ID,
+    clientSecret: GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:8080/logincallback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+    // asynchronous verification, for effect...
+    process.nextTick(function () {
+      
+      // To keep the example simple, the user's Google profile is returned to
+      // represent the logged-in user.  In a typical application, you would want
+      // to associate the Google account with a user record in your database,
+      // and return that user instead.
+      return done(null, profile);
+    });
+  }
+));
+
+// configure Express for Passport
+app.configure(function() {
+  app.set('views', __dirname + '/templates'); // tell Express where to find templates
+  app.set('view engine', 'ejs');
+  app.use(express.cookieParser());
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(express.session({ secret: 'keyboard cat' }));
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.use(app.router);
+  app.use(express.static(__dirname)); //allows css to work with rendered html
+});
 
 var monthToNum = {'January' : 1, 'February' : 2, 'March' : 3, 'April' : 4, 'May': 5, 'June': 6, 'July' : 7, 'August' : 8, 'September' : 9, 'October' : 10, 'November' : 11, 'December' : 12};
 
@@ -32,9 +85,24 @@ fillFoodDB();
 var conn = anyDB.createConnection('sqlite3://users.db');
 conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, password TEXT, month TEXT,day TEXT, gender TEXT)');
 fillUsersDB();
-//Navigates to Brown's get portal to get credit/points info
-app.get('/login', function(req, res){
-	res.render('login.html',{login: 'notyet'});
+
+//Authenticates with google
+app.get('/login',
+  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
+                                            'https://www.googleapis.com/auth/userinfo.email'] }),
+  function(req, res){});
+
+app.get('/logincallback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+  	//TODO add to database?
+    res.redirect('/mydininglog');
+  });
+
+//TODO: incorporate into clientside
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
 });
 
 app.get('/newaccount', function(req, res){
@@ -111,25 +179,10 @@ app.post('/knapsack', function(req, res){
 
 	});
 });
-app.post('/retrieveUser', function(req, res){
-	var username = req.body.username;
-	var password = req.body.password;
-	var queryString = "SELECT * FROM users WHERE username=$1";
-    conn.query(queryString, [username], function(error, results){
-    	if(error){
-    		console.log(error);
-    	}
-    	if (results === undefined || results.rows.length === 0){
-    		console.log(results);
-    		console.log('no such user', username,'found');
-    	} else if (results.rows[0].password === password){
-    		console.log('password correct!');
-			res.render('mydining.html', {login: 'true'});
-    	} else {
-    		console.log('incorrect password, expected:',results.rows[0].password, 'but got', password);
-			res.render('login.html',{login: 'failed'});
-    	}
-    });
+
+app.post('/login', function(req, res, next) {
+	console.log('login!');
+  	passport.authenticate('google');
 });
 
 app.post('/review', function(req, res){
@@ -255,7 +308,7 @@ app.get('/mydining', function(req, res) {
 	res.render('mydining.html', {login: 'false'});
 });
 
-app.get('/mydininglog', function(req,res) {
+app.get('/mydininglog', ensureAuthenticated, function(req,res) {
 	res.render('mydininglog.html');
 });
 
@@ -823,4 +876,10 @@ function fillUsersDB() {
 			});
 		});
 	});
+}
+
+function ensureAuthenticated(req, res, next) {
+	console.log('ensure authenticated');
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/login');
 }
