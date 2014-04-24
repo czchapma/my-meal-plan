@@ -1,0 +1,5 @@
+#!/bin/bash
+
+key=$1
+
+ssh -i $key ec2-user@54.186.209.194
