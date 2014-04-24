@@ -16,7 +16,6 @@
 	-moz-border-radius:2px;
 	-webkit-border-radius:2px;
 	border-radius:2px;
-/*	border:1px solid #4A068F;*/
 	display:inline-block;
 	cursor:pointer;
 	color:#ffffff;
@@ -31,12 +30,13 @@
 	background-color:#C6B5C9;
 	color: #4A068F;
 }
+
 .SuggestButton:active {
 	position:relative;
 	top:1px;
 }
 
 #suggestion {
-	text-align: center;
-	width: 100px;
+    text-align: center;
+    margin-top: 50px;
 }

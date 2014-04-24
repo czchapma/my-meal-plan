@@ -21,10 +21,13 @@ body {
     width:100%;
     background-color:#C6B5C9;
     margin:auto;
-    font-family: Antonio;
+    font-family:'Vollkorn',sans-serif;
     color: black;
 }
 
+ul {
+    padding: 0;
+}
 #logo {
     margin: 10px;
     margin-right: 50px;
@@ -55,9 +58,11 @@ body {
 #nav_buttons a {
     padding:0 15px 0 15px;
     color:white;
+    font-family: Antonio;
     font-size:16pt;
     text-decoration:none;
     height: auto;
+    white-space: nowrap;
 }
 
 #nav_buttons a:link {
@@ -68,4 +73,36 @@ body {
 #nav_buttons a:hover {
     color:white;
     background-color:#7309AA;
+}
+
+button {
+    height: 30px;
+}
+
+#dining_bar {
+    width:100%;
+    background-color:#7309AA;
+}
+
+#dining_buttons {
+    margin-left: 175px;
+}
+
+#dining_buttons a {
+    display:inline-block;
+    height:20px;
+    padding:0 10px 0 10px;
+    color: white;
+    font-size:12pt;
+    text-decoration:none;
+}
+
+#dining_buttons a:link {
+    color:white;
+    vertical-align:center;
+}
+
+#dining_buttons a:hover {
+    color:#7309AA;
+    background-color:white;
 }

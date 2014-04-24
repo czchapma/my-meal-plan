@@ -1,185 +1,61 @@
-#menus {
-    display:block;
-}
-
-.tabs input[type=radio] {
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
-}
-.tabs {
-    width: 450px;
-    height:300px;
-    float: none;
-    list-style: none;
-    position: relative;
-    padding: 0;
-    margin: 75px auto;
-}
-
-.tabs label {
-    border-bottom: 4px solid green;
-}
-.tabs li{
-    float: left;
-}
-.tabs label {
-    display: block;
-    padding: 10px 20px;
-    border-radius: 2px 2px 0 0;
-    color: #4A068F;
-    font-size: 12px;
-    font-weight: normal;
-    font-family: 'Lily Script One', helveti;
-    background: rgba(255,255,255,0.2);
-    cursor: pointer;
-    position: relative;
-    top: 3px;
-    -webkit-transition: all 0.2s ease-in-out;
-    -moz-transition: all 0.2s ease-in-out;
-    -o-transition: all 0.2s ease-in-out;
-    transition: all 0.2s ease-in-out;
-}
-.tabs label:hover {
-    background: rgba(255,255,255,0.5);
-    top: 0;
-}
-
-[id^=tab]:checked + label {
-    background: #4A068F;
-    color: white;
-    top: 0;
-}
-
-[id^=tab]:checked ~ [id^=tab-content] {
-    display: block;
-}
-.tab-content{
-    z-index: 2;
-    display: none;
-    text-align: left;
-    width: 100%;
-    font-family:'Vollkorn',sans-serif;
-    font-size: 14px;
-    line-height: 140%;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    margin-bottom: 50px;
-    background-color: #E8E8E8;
-    color: black;
-    position: absolute;
-    top: 53px;
-    left: 0;
-    box-sizing: border-box;
-    -webkit-animation-duration: 0.5s;
-    -o-animation-duration: 0.5s;
-    -moz-animation-duration: 0.5s;
-    animation-duration: 0.5s;
-}
-
-.tab-content img {
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-
-body {
-    width:100%;
-    background-color:#C6B5C9;
-    margin:auto;
-    font-family: Antonio;
-    color: black;
-}
-
-#content {
-    font-family: "Vollkorn", sans-serif;
-}
-
-#dining_bar {
-    height:20px;
-    width:100%;
-    background-color:#7309AA;
-}
-
-#dining_buttons {
-
-    width:500px;
-    margin:auto;
-}
-
-#dining_buttons a{
-    display:inline-block;
-    height:20px;
-    padding:0 10px 0 10px;
-    color: white;
-    font-size:12pt;
-    text-decoration:none;
-}
-
-#dining_buttons a:link{
-    color:white;
-    vertical-align:center;
-}
-
-#dining_buttons a:hover{
-    color:#7309AA;
-    background-color:white;
-}
-
 /*
   css for my dining subpages
 */
-#log-form, #browse-form {
+.food-price {
+    color: green;
+}
+
+#browse-form {
     font-family:"Vollkorn", sans-serif;
-    margin-top: 50px;
     margin-left: 40%;
+}
+
+#log-form {
+    float: left;
+    margin-left: 50px;
 }
 
 #log-form input, #browse-form input {
     width: 200px;
     height: 30px;
 }
-#left-panel{
-    margin-left:50px;
-    background-color:#E8E8E8;;
-    float:left;
+
+#left-panel {
+    padding:10px;
+    margin: 50px;
+    float:right;
+    text-align: center;
+    background-color:#E8E8E8;
+    width: 40%;
 }
 
-#log-form-list-jos {
+#left-panel button {
+    width: 40%;
+}
+
+#log-input {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    height: 30px;
+    float: left;
+}
+
+[id^=log-form-list-] {
     overflow-y: auto;
     height: 300px;
 }
 
-#log-form-list-aco {
-    overflow-y: auto;
-    height: 300px;
+[id^=log-form-list-] li, #cart li {
+    display:block;
+    width:100%;
+    cursor: pointer;
+    list-style: none;
+    margin: 5px;
 }
 
-#log-form-list-ivy {
-    overflow-y: auto;
-    height: 300px;
-}
-
-#log-form-list-blueroom {
-    overflow-y: auto;
-    height: 300px;
-}
-
-#log-form-list-blueroom  li{
-    display:block;
-    width:100%;
-}
-#log-form-list-jos  li{
-    display:block;
-    width:100%;
-}
-#log-form-list-aco  li{
-    display:block;
-    width:100%;
-}
-#log-form-list-ivy  li{
-    display:block;
-    width:100%;
+[id^=log-form-list-] li:hover, #cart li:hover {
+    background: tan;
 }
 
 #prev-transactions {
@@ -226,3 +102,51 @@ body {
     font-family:"Vollkorn", sans-serif;
 }
 
+/* Accordion stuff */
+.accordion {
+    clear: both;
+    padding: 1px 5px 5px 5px;
+}
+
+.accordion label {
+    display: block;
+    padding: 5px;
+    color: white;
+    background-color:#7309AA;
+    cursor: pointer;
+}
+
+.accordion label:hover, [id^=tab]:checked + label {
+    background-color: #4A068F;
+}
+
+.accordion div .content {
+    display: none;
+}
+
+.accordion div:target .content {
+    display: block;
+}
+
+[id^=tab]:checked ~ [id^=tab-content] {
+    display: block;
+}
+
+input[type=radio] {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+
+.accordion > div {
+    overflow: hidden;
+    -webkit-transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+    -ms-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
+}
+
+.accordion > div:target {
+    height: 360px;
+}

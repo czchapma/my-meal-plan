@@ -3,6 +3,7 @@
     top: -9999px;
     left: -9999px;
 }
+
 .tabs {
     width: 804px;
     float: none;
@@ -54,8 +55,7 @@
     display: none;
     text-align: left;
     width: 100%;
-    font-family:'Vollkorn',sans-serif;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 140%;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -77,6 +77,9 @@
     margin-bottom: 20px;
 }
 
+.menus {
+    margin: 10px;
+}
 .menus *{
     display: inline-block;
     width: 50%;
