@@ -120,6 +120,17 @@ app.get('/newaccount', ensureAuthenticated, function(req, res){
 	res.render('newaccount.html', {name: req.user.displayName, email: req.user.emails[0].value});
 });
 
+//get 5 random items to rate, called in newaccount.js
+app.get('/random5', function(req, res){
+	var queryString = 'SELECT * FROM food ORDER BY RANDOM() LIMIT 5;';
+	connFood.query(queryString, function(err, response){
+		if(err){
+			console.log(err);
+		}
+		res.json(response.rows);
+	});
+});
+
 app.post('/storeUser', function(req, res) {
 	var name = req.body.name;
 	var email = req.body.email;

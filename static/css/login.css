@@ -24,3 +24,24 @@
     height: 30px;
     margin-left: 10px;
 }
+
+#rate {
+    font-family:"Vollkorn", sans-serif;
+    width: 500px;
+    margin-left: 40%;
+}
+#rate li {
+    font-family:"Vollkorn", sans-serif;
+    color: white;
+    list-style: decimal;
+    font-size: 16pt;
+}
+
+#rate img {
+    width: 35px;
+    opacity: .5;
+}
+
+#rate img:hover {
+    cursor: pointer;
+}
