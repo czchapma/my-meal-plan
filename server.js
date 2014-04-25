@@ -118,6 +118,14 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
+app.get('/isLoggedIn', function(req,res){
+  if (req.isAuthenticated()) {
+  	res.end('yes');
+  } else{
+  	res.end('no');
+  }
+});
+
 app.get('/newaccount', ensureAuthenticated, function(req, res){
 	res.render('newaccount.html', {name: req.user.displayName, email: req.user.emails[0].value});
 });
@@ -345,19 +353,31 @@ app.post('/trackCredits', function(req, res){
 });
 
 app.get('/dininghalls', function(req, res) {
-	res.render('dininghalls.html');
+  if (req.isAuthenticated()) {
+	res.render('dininghalls.html', {name : req.user.displayName});
+  } else{
+  	res.render('dininghalls.html');
+  }
 });
 
 app.get('/specials', function(req, res) {
-    res.render('specials.html');
+  if (req.isAuthenticated()) {
+	res.render('specials.html', {name : req.user.displayName});
+  } else{
+  	res.render('specials.html');
+  }
 });
 
 app.get('/mydining', function(req, res) {
-	res.render('mydining.html', {login: 'false'});
+  if (req.isAuthenticated()) {
+	res.render('mydining.html', {name : req.user.displayName});
+  } else{
+  	res.render('mydining.html');
+  }
 });
 
 app.get('/mydininglog', ensureAuthenticated, function(req,res) {
-	res.render('mydininglog.html', {user : req.user});
+	res.render('mydininglog.html', {name : req.user.displayName});
 });
 
 app.get('/menu/ratty', function(req, res) {
@@ -828,7 +848,11 @@ app.get('/itemlist', function(req, res){
 });
 
 app.get('/', function(req, res){
-	res.render('home.html');
+  if (req.isAuthenticated()) {
+	res.render('home.html', {name : req.user.displayName});
+  } else{
+  	res.render('home.html');
+  }
 });
 
 app.get('*', function(req,res){
