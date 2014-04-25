@@ -5,10 +5,11 @@ $(document).ready(function(){
     	if(result === 'yes'){
     		$('#login').hide();
     		$('#logout').show();
-    		$('#nav_buttons').append('Welcome! ' + name);
+    		$('#welcomeMsg').text('Welcome! ' + name);
     	} else{
     		$('#login').show();
     		$('#logout').hide();
+            $('#welcomeMsg').text('');
     	}
     });
 });
