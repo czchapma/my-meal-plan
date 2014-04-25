@@ -361,9 +361,18 @@ function makeListOfItems(eatery, result) {
 		    input.attr('in-cart', 'true');
 		}
 	    });
-	    
+	        var reportitem = $(document.createElement('button'));
+            reportitem.attr('id',priceItemSplit[0] + "button");
+            reportitem.html("Report a flavor/type");
+            reportitem.click(function(){
+                var flavor = window.prompt("Enter the flavor or type")
+                console.log("REPORTING ITEM" + this.id);
+                $.post("/flavor", {item: this.id, user:"fakeperson", flavor: flavor}, function(){});
+            });
+
             li.html(' <div class="food-item">' + priceItemSplit[0] + "</div><div class='food-price'>" + prettyPrint(priceItemSplit[1]) + "</div>");
             li.append(check);
+            li.append(reportitem);
             ul.append(li);
         }
     }

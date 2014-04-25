@@ -84,11 +84,52 @@ var connFood = anyDB.createConnection('sqlite3://food.db');
 fillFoodDB();
 var conn = anyDB.createConnection('sqlite3://users.db');
 var connBugs = anyDB.createConnection('sqlite3://bugs.db');
-connBugs.query('CREATE TABLE bugs(user STRING, time INTEGER, message STRING)');
+connBugs.query('CREATE TABLE bugs(user TEXT, time INTEGER, message TEXT)');
 conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, month TEXT,day TEXT, gender TEXT)');
 fillUsersDB();
 var connPurchases = anyDB.createConnection('sqlite3://purchases.db');
 connPurchases.query('CREATE TABLE purchases (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, date TEXT)');
+
+
+var connFlavors = anyDB.createConnection('sqlite3://flavors.db');
+connFlavors.query('CREATE TABLE flavors (user TEXT, item TEXT, flavor TEXT)');
+
+app.post("/flavor", function(req,res){
+	console.log("A FLAVOR!");
+	var user = req.body.user;
+	var flavor= req.body.flavor;
+	var item = req.body.item;
+	var queryString = 'INSERT INTO flavors VALUES ($1, $2, $3)';
+	var query = connFlavors.query(queryString, [user, item, flavor]); //TODO: log the actual time
+	query.on('error', console.error);
+	query.on('end', function(){
+		res.end();
+	});
+
+});
+
+app.get('/flavorData', function(req,res){
+	var queryString = 'SELECT * from flavors';
+	connFlavors.query(queryString, [], function(error, results){
+		if(error){
+			console.err(error);
+		}
+		res.json(results.rows);
+	});
+
+});
+
+app.get('/bugData', function(req,res){
+	var queryString = 'SELECT * from bugs';
+	connBugs.query(queryString, [], function(error, results){
+		if(error){
+			console.err(error);
+		}
+		res.json(results.rows);
+	});
+
+});
+
 
 app.post('/bugs',function(req, res) {
 	console.log("A BUG!");
@@ -868,6 +909,9 @@ app.get('/', function(req, res){
   }
 });
 
+app.get('/mod',function(req,res){
+	res.render('mod.html');
+});
 app.get('*', function(req,res){
 });
 
