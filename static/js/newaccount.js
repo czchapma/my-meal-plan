@@ -1,3 +1,5 @@
+var name = document.querySelector('meta[name=name]').content;
+var email = document.querySelector('meta[name=email]').content;
 $(document).ready(function(){
     //Logo redirects to home
     $('#logo').click(function(){
@@ -22,9 +24,7 @@ $(document).ready(function(){
 	}
     });
 
-    var name = document.querySelector('meta[name=name]').content;
     $('#name').val(name);
-    var email = document.querySelector('meta[name=email]').content;
     $('#email').val(email);
 
 	$.ajax({

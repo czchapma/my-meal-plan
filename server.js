@@ -85,6 +85,8 @@ fillFoodDB();
 var conn = anyDB.createConnection('sqlite3://users.db');
 conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, month TEXT,day TEXT, gender TEXT)');
 fillUsersDB();
+var connPurchases = anyDB.createConnection('sqlite3://purchases.db');
+connPurchases.query('CREATE TABLE purchases (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, date TEXT)');
 
 //Authenticates with google
 app.get('/login',
@@ -168,6 +170,30 @@ app.post('/storeUser', function(req, res) {
 		} else {
 			res.redirect('/mydininglog');
 		}
+	});
+});
+
+//Logs a purchase, used by mydininglog.js
+app.post('/logpurchase', function(req, res){
+	var email = req.user.emails[0].value;
+	var item = req.body.item;
+	var date = new Date().toDateString();
+	var queryString = 'INSERT INTO purchases VALUES ($1, $2, $3, $4)';
+	var query = connPurchases.query(queryString, [null,email, item, date]);
+	query.on('error', console.error);
+	query.on('end', function(){
+		res.end();
+	});
+});
+
+app.get('/allpurchases', function(req, res){
+	var email = req.user.emails[0].value;
+	var queryString = 'SELECT date,item from purchases WHERE email=$1';
+	connPurchases.query(queryString, [email], function(error, results){
+		if(error){
+			console.err(error);
+		}
+		res.json(results.rows);
 	});
 });
 
@@ -331,7 +357,7 @@ app.get('/mydining', function(req, res) {
 });
 
 app.get('/mydininglog', ensureAuthenticated, function(req,res) {
-	res.render('mydininglog.html');
+	res.render('mydininglog.html', {user : req.user});
 });
 
 app.get('/menu/ratty', function(req, res) {

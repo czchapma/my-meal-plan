@@ -5,10 +5,11 @@ $(document).ready(function(){
     });
     
     $('#allpurchase').click(function() {
-	$('#prev-transactions').show();
-	$('#left-panel').hide();
-	$('#log-form').hide();
-	$('#browse-items').hide();
+        $('#prev-transactions').show();
+    	$('#left-panel').hide();
+    	$('#log-form').hide();
+    	$('#browse-items').hide();
+        loadPurchases();
     });
     
     $('#purchase').click(function() {
@@ -100,6 +101,19 @@ $(document).ready(function(){
                 total.innerHTML = Number(check.getAttribute('price')) + Number(total.innerHTML);
             }
         });
+    });
+    $('#log-form').submit(function(event){
+        event.preventDefault();
+        var items = [];
+        $('#cart .food-item').each(function(idx){
+            items[idx] = $(this).text();
+        });
+        console.log(items);
+        for(var i=0; i<items.length; i++){
+            $.post( "/logpurchase", {item: items[i]}, function(data,status){
+                console.log(data);
+            });            
+        }
     });
 
     $.ajax({
@@ -374,5 +388,20 @@ function rate(curr){
     var rating = curr.attr('class')[curr.attr('class').length - 1];
     $.post( "/review", {username:fakeUsername, item: item, rating: rating}, function(data,status){
         console.log(data);
+    });
+}
+
+function loadPurchases(){
+    $.ajax({
+        url: "/allpurchases"
+    }).done(function(result) {
+        var ul = $('#prev-transactions ul');
+        ul.html('');
+        for (var i=0; i<result.length; i++){
+            var json = JSON.parse(JSON.stringify(result[i]));
+            var li = '<li><div class="prev-trans-item">'+ json['item'] + '</div><div class="prev-trans-date">' + json['date'] + '</div></li>';
+            ul.append(li);
+        }
+        console.log(result); 
     });
 }
