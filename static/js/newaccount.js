@@ -1,6 +1,13 @@
 var name = document.querySelector('meta[name=name]').content;
 var email = document.querySelector('meta[name=email]').content;
 $(document).ready(function(){
+
+    $('#logerror').click(function(){
+        var bug = window.prompt("Report your bug here. Please include your browser and OS information.");
+        $.post( "/bugs", {user:"fakeperson", message:bug}, function(data,status){
+        });
+    });
+    
     //Logo redirects to home
     $('#logo').click(function(){
 	$(location).attr('href','/');

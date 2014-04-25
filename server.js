@@ -83,11 +83,24 @@ var anyDB = require('any-db');
 var connFood = anyDB.createConnection('sqlite3://food.db');
 fillFoodDB();
 var conn = anyDB.createConnection('sqlite3://users.db');
+var connBugs = anyDB.createConnection('sqlite3://bugs.db');
+connBugs.query('CREATE TABLE bugs(user STRING, time INTEGER, message STRING)');
 conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, month TEXT,day TEXT, gender TEXT)');
 fillUsersDB();
 var connPurchases = anyDB.createConnection('sqlite3://purchases.db');
 connPurchases.query('CREATE TABLE purchases (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, date TEXT)');
 
+app.post('/bugs',function(req, res) {
+	console.log("A BUG!");
+	var user = req.body.user;
+	var message = req.body.message;
+	var queryString = 'INSERT INTO bugs VALUES ($1, $2, $3)';
+	var query = connBugs.query(queryString, [user, 0, message]); //TODO: log the actual time
+	query.on('error', console.error);
+	query.on('end', function(){
+		res.end();
+	});
+	});
 //Authenticates with google
 app.get('/login',
   passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',

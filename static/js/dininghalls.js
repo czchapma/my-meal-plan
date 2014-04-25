@@ -1,5 +1,12 @@
 var dininghalls = ['ratty','vdub', 'blueroom', 'ivyroom', 'aco', 'jos'];
 $(document).ready(function(){
+
+	$('#logerror').click(function(){
+    	var bug = window.prompt("Report your bug here. Please include your browser and OS information.");
+    	$.post( "/bugs", {user:"fakeperson", message:bug}, function(data,status){
+    	});
+    });
+    
     generateMenus();
     generateStatues();
     generateTimes();

@@ -1,4 +1,11 @@
 $(document).ready(function(){
+
+    $('#logerror').click(function(){
+        var bug = window.prompt("Report your bug here. Please include your browser and OS information.");
+        $.post( "/bugs", {user:"fakeperson", message:bug}, function(data,status){
+        });
+    });
+    
     //Logo redirects to home
     $('#logo').click(function(){
 	$(location).attr('href','/');
@@ -54,6 +61,7 @@ $(document).ready(function(){
             myhall = "jos"
         
         console.log(myhall);
+
         $.post( "/knapsack", {maxMoney:money, hall:myhall}, function(data,status){
             //TODO: make it so people can buy more than 1 of the same item. 
             var arr = data.split('\n');

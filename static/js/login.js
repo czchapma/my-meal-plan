@@ -1,4 +1,5 @@
 $(document).ready(function(){
+
     $.ajax({
         url: "/isLoggedIn"
     }).done(function(result) {
