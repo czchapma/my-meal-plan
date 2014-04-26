@@ -96,6 +96,9 @@ connRatings.query('CREATE TABLE ratings (id INTEGER PRIMARY KEY AUTOINCREMENT, e
 var connFlavors = anyDB.createConnection('sqlite3://flavors.db');
 connFlavors.query('CREATE TABLE flavors (user TEXT, item TEXT, flavor TEXT)');
 
+var connMissing = anyDB.createConnection('sqlite3://missing.db');
+connMissing.query('CREATE TABLE missing (food TEXT, price INTEGER, location TEXT)');
+
 app.post("/flavor", function(req,res){
 	console.log("A FLAVOR!");
 	var user = req.body.user;
@@ -166,6 +169,17 @@ app.get('/bugData', function(req,res){
 
 });
 
+app.get('/missingData',function(req,res){
+
+	var queryString = 'SELECT * from missing';
+	connMissing.query(queryString, [], function(error, results){
+		if(error){
+			console.err(error);
+		}
+		res.json(results.rows);
+	});
+});
+
 
 app.post('/bugs',function(req, res) {
 	console.log("A BUG!");
@@ -178,6 +192,19 @@ app.post('/bugs',function(req, res) {
 		res.end();
 	});
 	});
+
+app.post('/missing',function(req, res) {
+	console.log("SOMETHING MISSING!");
+	var food= req.body.food;
+	var price = req.body.price;
+	var location = req.body.location;
+	var queryString = 'INSERT INTO missing VALUES ($1, $2, $3)';
+	var query = connMissing.query(queryString, [food, price, location]); 
+	query.on('error', console.error);
+	query.on('end', function(){
+		res.end();
+	});
+});
 //Authenticates with google
 app.get('/login',
   passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',

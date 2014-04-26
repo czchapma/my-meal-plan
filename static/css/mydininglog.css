@@ -5,14 +5,26 @@
     color: green;
 }
 
+#missing-food-form{
+    display:block;
+}
+
+#right-panel
+{
+    margin-left:50px;
+    margin-top:50px;
+    float:left;
+    background-color:#E8E8E8;
+    padding:10px;
+
+}
 #browse-form {
     font-family:"Vollkorn", sans-serif;
     margin-left: 40%;
 }
 
 #log-form {
-    float: left;
-    margin-left: 50px;
+    display:block;
 }
 
 #log-form input, #browse-form input {
@@ -132,7 +144,7 @@
     display: block;
 }
 
-input[type=radio] {
+.accradio {
     position: absolute;
     top: -9999px;
     left: -9999px;

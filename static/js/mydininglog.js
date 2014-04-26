@@ -5,10 +5,15 @@ $(document).ready(function(){
         $.post( "/bugs", {user:"fakeperson", message:bug}, function(data,status){
         });
     });
-    
+    $('#missing-food-form').hide();
     //Logo redirects to home
     $('#logo').click(function(){
 	$(location).attr('href','/');
+    });
+
+    $('#somethingmissing').click(function(){
+        $('#missing-food-form').show();
+        $('#somethingmissing').hide();
     });
     
     $('#allpurchase').click(function() {
@@ -122,6 +127,58 @@ $(document).ready(function(){
                 console.log(data);
             });            
         }
+    });
+
+    $('#missing-food-form').submit(function(event){
+        $('#missing-error').html("");
+        event.preventDefault();
+        var food = $("#item").val();
+
+        if(food === "")
+        {
+             $('#missing-error').html($('#missing-error').html() + "Please give a food name \n");
+
+        }
+        var pricedollar = Number($('#pricedollar').val());
+        var pricecents = Number($('#pricecents').val());
+
+        if(parseInt(pricecents) !== pricecents || pricecents < 0 || pricecents >= 100)
+             $('#missing-error').html($('#missing-error').html() +  "Cents should be a whole number between 0 and 100 \n");
+
+        if(parseInt(pricedollar) !== pricedollar || pricedollar < 0)
+            $('#missing-error').html($('#missing-error').html() + "Dollars should be a whole number \n");
+
+        var blueroom= document.getElementById('blueroom');
+        var ivy = document.getElementById('ivy');
+        var aco = document.getElementById('aco');
+        var jos = document.getElementById('jos');
+        var myhall = "";
+        if(blueroom.checked)
+            myhall= "blueroom";
+        if(ivy.checked)
+            myhall = "ivy";
+        if(aco.checked)
+            myhall = "aco";
+        if(jos.checked)
+            myhall = "jos";
+
+        if(myhall === "")
+            $('#missing-error').html($('#missing-error').html() + "Please pick a dining hall \n");
+        console.log($('#missing-error'));
+        console.log(food);
+        console.log(pricedollar);
+        console.log(pricecents);
+        console.log(myhall);
+        if( $('#missing-error').html() === "")
+        {
+            $('#missing-food-form').hide();
+            $('#somethingmissing').show();
+
+             $.post( "/missing", {food:food, price:parseInt(100*(pricedollar + .01 * pricecents)), location:myhall}, function(data,status){
+                alert("Thank you! Your post will await moderation.");
+             });
+        }
+
     });
 
     $.ajax({

@@ -37,6 +37,7 @@
     </div>
 
     <div id="content">
+      <div id="right-panel">
       <form id="log-form" method="post">
         <h1>Log a Purchase</h1>
         <p>Add items to your cart</p>
@@ -44,8 +45,19 @@
         </ul>
         <button type="submit">Submit</button>
       </form>
+      <button id="somethingmissing"> Report missing food </button>
+      <form id="missing-food-form" method="post">
+        <p><label>Missing item:</label><input id="item" name="item" type="text"></p>
+        <p><label>Price: $</label><input id="pricedollar" name="pricedollar" type="number"> . <input type="number" name="pricecents" id="pricecents"> </p>
+        <p>Andrews Commons<input id="aco" class="rdio" name="dininghall" value="aco" type="radio"></p>
+        <p>Jo's <input id="jos" class="rdio" name="dininghall" value="jos" type="radio"></p>
+         <p>Ivy Room<input id="ivy" class="rdio" name="dininghall" value="ivy" type="radio"></p>
+         <p>BlueRoom<input id="blueroom" class="rdio" name="dininghall" value="blueroom" type="radio"></p>
+         <div id="missing-error"> </div>
+        <button type="submit"> Submit </button>
+        </form>
       
-      
+     </div>
       <div id="left-panel">
         <div id="knapsack-stuff"> 
 	  Your total so far is 
@@ -58,7 +70,7 @@
 	
         <div class="accordion">
           <div>
-	    <input type="radio" checked name="tabs" id="tab3">
+	    <input type="radio" checked name="tabs" id="tab3" class="accradio">
             <label id="blueroom-tab" for="tab3" class="tab">Blue Room</label>
             <div id="tab-content3" class="content">
               <ul id="log-form-list-blueroom">
@@ -66,7 +78,7 @@
             </div>
 	  </div>
           <div>
-	    <input type="radio" name="tabs" id="tab4">
+	    <input type="radio" name="tabs" id="tab4" class="accradio">
             <label id="ivyroom-tab" for="tab4">Ivy Room</label>
             <div id="tab-content4" class="content">
               <ul id="log-form-list-ivy">
@@ -74,7 +86,7 @@
             </div>
           </div>
           <div>
-	    <input type="radio" name="tabs" id="tab5">
+	    <input type="radio" name="tabs" id="tab5" class="accradio">
             <label id="aco-tab" for="tab5">Andrew's Commons</label>
             <div id="tab-content5" class="content">
               <ul id="log-form-list-aco">
@@ -82,7 +94,7 @@
             </div>
           </div>
           <div>
-	    <input type="radio" name="tabs" id="tab6">
+	    <input type="radio" name="tabs" id="tab6" class="accradio">
             <label id="jos-tab" for="tab6">Jo's</label>
             <div id="tab-content6" class="content">
               <ul id="log-form-list-jos">

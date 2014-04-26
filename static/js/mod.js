@@ -69,4 +69,58 @@ $(document).ready(function(){
     		ul.append(li);
     	}
     });
+
+	$.ajax({
+        url: "/missingData"
+    }).done(function(result) {
+    	var ul = $('#missing');
+    	console.log(result);
+    	var len = result.length;
+    	for(var i = 0; i < len; i++)
+    	{
+
+    		var lim = document.createElement('li');
+    		console.log(i + "m");
+    		lim.id = (i + "m");
+    		console.log(lim.id);
+    		var approve = $(document.createElement('button'));
+    		var deny = $(document.createElement('button'));
+    		console.log(lim);
+    		console.log(ul);
+    		lim.innerHTML = (  result[i].food + " " + result[i].price + " " + result[i].location);
+    		approve.html("Approve <div class='food'>" + result[i].food+ "</div> <div class='price'>" + result[i].price +" </div> <div class='location'> "+ result[i].location + "</div> <div class='i'>" + i + "m</div>");
+    		deny.html("Approve <div class='food'>" + result[i].food+ "</div> <div class='price'>" + result[i].price +" </div> <div class='location'> " +result[i].location + "</div> <div class='i'>" + i + "m</div>");
+
+    		approve.click(function(){
+    			var foodclass = this.getElementsByClassName("food");
+    			var priceclass = this.getElementsByClassName("flavor");
+    			var locationclass = this.getElementsByClassName("location");
+    			var iclass = this.getElementsByClassName("i");
+    			
+    			var myli = document.getElementById(iclass[0].innerHTML);
+    			console.log(myli);
+    			$(myli).hide();
+    			$.post("/approveMissing",{food: foodclass[0].innerHTML, price: Number(priceclass[0].innerHTML), location:locationclass[0].innerHTML}, function(){
+
+    			});
+    		});
+
+    		deny.click(function(){
+    			var foodclass = this.getElementsByClassName("food");
+    			var priceclass = this.getElementsByClassName("flavor");
+    			var locationclass = this.getElementsByClassName("location");
+    			var iclass = this.getElementsByClassName("i");
+    			
+    			var myli = document.getElementById(iclass[0].innerHTML);
+    			console.log(myli);
+    			$(myli).hide();
+    			$.post("/denyMissing",{food: foodclass[0].innerHTML, price: Number(priceclass[0].innerHTML), location:locationclass[0].innerHTML}, function(){
+
+    			});
+    		});
+    		$(lim).append(approve);
+    		$(lim).append(deny);
+    		ul.append(lim);
+    	}
+    });
 });
