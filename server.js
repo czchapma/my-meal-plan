@@ -108,6 +108,40 @@ app.post("/flavor", function(req,res){
 
 });
 
+app.post("/approve", function(req,res){
+	var flavor = req.body.flavor;
+	var item = req.body.item;
+
+	var queryStringP = 'SELECT price, location FROM food WHERE item=$1';
+	connFood.query(queryStringP, [item],function(error, results){
+		if(error){
+			console.err(error);
+		}
+		var info = results.rows[0];
+		if(Number(info.price) === info.price) //TODO: make this actually check that price is defined
+		{
+			connFood.query('INSERT INTO food VALUES ($1,$2,$3)', [(item + " - " + flavor), info.price, info.location]);
+		}
+		var queryStringD = 'DELETE FROM flavors WHERE item=$1 AND flavor=$2';
+		var queryD = connFlavors.query(queryStringD, [item, flavor]); 
+		queryD.on('error', console.error);
+		queryD.on('end', function(){
+			res.end();
+		});
+	});
+});
+
+app.post("/deny",function(req,res){
+	var flavor = req.body.flavor;
+	var item = req.body.item;
+	var queryStringD = 'DELETE FROM flavors WHERE item=$1 AND flavor=$2';
+	var queryD = connFlavors.query(queryStringD, [item, flavor]); 
+	queryD.on('error', console.error);
+	queryD.on('end', function(){
+		res.end();
+	});
+});
+
 app.get('/flavorData', function(req,res){
 	var queryString = 'SELECT * from flavors';
 	connFlavors.query(queryString, [], function(error, results){

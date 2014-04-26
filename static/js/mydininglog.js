@@ -366,8 +366,8 @@ function makeListOfItems(eatery, result) {
             reportitem.html("Report a flavor/type");
             reportitem.click(function(){
                 var flavor = window.prompt("Enter the flavor or type")
-                console.log("REPORTING ITEM" + this.id);
-                $.post("/flavor", {item: this.id, user:"fakeperson", flavor: flavor}, function(){});
+                console.log("REPORTING ITEM" + this.id.substring(0, this.id.length - 6));
+                $.post("/flavor", {item: this.id.substring(0, this.id.length - 6), user:"fakeperson", flavor: flavor}, function(){});
             });
 
             li.html(' <div class="food-item">' + priceItemSplit[0] + "</div><div class='food-price'>" + prettyPrint(priceItemSplit[1]) + "</div>");
