@@ -136,6 +136,26 @@ app.post("/approve", function(req,res){
 	});
 });
 
+app.post("/approveMissing", function(req,res){
+	console.log("approving missing");
+	var food = req.body.food;
+	var price = req.body.price;
+	var location = req.body.location;
+	console.log(food);
+	console.log(price);
+	console.log(location);
+	connFood.query('INSERT INTO food VALUES ($1,$2,$3)', [food, price, location]).on('end',function(error, result){
+		console.log(error);});
+		
+		var queryStringD = 'DELETE FROM missing WHERE food=$1 AND price=$2 AND location=$3';
+		var queryD = connMissing.query(queryStringD, [food, price,location]); 
+		queryD.on('error', console.error);
+		queryD.on('end', function(){
+			res.end();
+		});
+
+});
+
 app.post("/deny",function(req,res){
 	var flavor = req.body.flavor;
 	var item = req.body.item;

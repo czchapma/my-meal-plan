@@ -282,7 +282,7 @@ function makeListOfItems(eatery, result) {
 	    });
 	        var reportitem = $(document.createElement('button'));
             reportitem.attr('id',priceItemSplit[0] + "button");
-            reportitem.html("Report a flavor/type");
+            reportitem.html("Add a flavor/type");
             reportitem.click(function(){
                 var flavor = window.prompt("Enter the flavor or type")
                 console.log("REPORTING ITEM" + this.id.substring(0, this.id.length - 6));
