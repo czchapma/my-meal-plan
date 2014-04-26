@@ -72,7 +72,6 @@
 
 #prev-transactions {
     font-family:"Vollkorn", sans-serif;
-    display: none;
     margin-top: 50px;
     color: white;
     text-align: center;
@@ -86,7 +85,6 @@
 
 #browse-items {
     font-family:"Vollkorn", sans-serif;
-    display: none;
 }
 #browse-results {
     font-family:"Vollkorn", sans-serif;

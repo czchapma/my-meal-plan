@@ -1,0 +1,52 @@
+<!DOCTYPE html />
+<html>
+  <head>
+    <title>MyMealPlan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <meta name="name" content="{{name}}">
+    <link rel="icon" href="static/imgs/avocado.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="static/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/mydininglog.css" />
+    <link href="http://fonts.googleapis.com/css?family=Vollkorn:400,400italic,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="static/css/mobile.css" type="text/css" media="only screen and (max-width: 760px)"/>
+    
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="static/js/browseitems.js"></script>
+    <script type="text/javascript" src="static/js/login.js"></script>
+  </head>
+  <body>
+    <div id="nav_bar">
+      <a id="logo" ><strong>My Meal Plan</strong></a>
+      <div id="nav_buttons">
+	<a id="dininghalls" href="/dininghalls">Dining Halls</a>
+	<a id="mydining" href="/mydining">My Dining</a>
+	<a id="specials" href="/specials">Specials at a Glance</a>
+	<a id="login" href="/login">Login</a>
+  <a id="logout" href="/logout">Logout</a>
+   <button id="logerror"> Report a bug </button>
+  <span id="welcomeMsg"></span>
+      </div>
+    </div>
+    <div id="dining_bar">
+      <div id="dining_buttons">
+        <a id="credits_and_points" href="/mydining"> Credits and Points </a>
+        <a id="purchase" href="/logpurchase"> Log Purchase </a>
+        <a id="allpurchase" href="/prevtransactions"> Previous Transactions </a>
+        <a id="browse" href="/browseitems"> Browse Items </a>
+      </div>
+    </div>
+
+    <div id="content">     
+      <div id="browse-items">
+        <form id="browse-form" action="/retrieveUser" method="post">
+          <h1>Search</h1>
+          <input id="browse-input" name="browse-input" type="text">
+        </form>
+        <div id="browse-results">
+          <ul>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

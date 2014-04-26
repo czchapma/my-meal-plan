@@ -224,7 +224,7 @@ app.get('/logincallback',
 			res.redirect('/newaccount');
 		} else{
 			//already in DB
-			res.redirect('/mydininglog');
+			res.redirect('/logpurchase');
 		}
 	});
 });
@@ -288,12 +288,12 @@ app.post('/storeUser', function(req, res) {
 						console.log('stderr:',data);
 					});
 					addToML.on('exit', function(code){
-						res.redirect('/mydininglog');
+						res.redirect('/logpurchase');
 					});		
 				});
 			});
 		} else {
-			res.redirect('/mydininglog');
+			res.redirect('/logpurchase');
 		}
 	});
 });
@@ -493,15 +493,24 @@ app.get('/specials', function(req, res) {
 
 app.get('/mydining', function(req, res) {
   if (req.isAuthenticated()) {
-	res.render('mydining.html', {name : req.user.displayName});
+	res.render('creditsandpoints.html', {name : req.user.displayName});
   } else{
-  	res.render('mydining.html');
+  	res.render('creditsandpoints.html');
   }
 });
 
-app.get('/mydininglog', ensureAuthenticated, function(req,res) {
-	res.render('mydininglog.html', {name : req.user.displayName});
+app.get('/browseitems', ensureAuthenticated, function(req,res) {
+	res.render('browseitems.html', {name : req.user.displayName});
 });
+
+app.get('/logpurchase', ensureAuthenticated, function(req,res) {
+	res.render('logpurchase.html', {name : req.user.displayName});
+});
+
+app.get('/prevtransactions', ensureAuthenticated, function(req,res) {
+	res.render('prevtransactions.html', {name : req.user.displayName});
+});
+
 
 app.get('/menu/ratty', function(req, res) {
 	makeRequest('http://www.brown.edu/Student_Services/Food_Services/eateries/refectory_menu.php',function(body){
