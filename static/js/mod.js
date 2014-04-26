@@ -85,15 +85,18 @@ $(document).ready(function(){
     		console.log(lim.id);
     		var approve = $(document.createElement('button'));
     		var deny = $(document.createElement('button'));
+    		console.log("A");
+    		ul.append(lim);
     		console.log(lim);
     		console.log(ul);
     		lim.innerHTML = (  result[i].food + " " + result[i].price + " " + result[i].location);
-    		approve.html("Approve <div class='food'>" + result[i].food+ "</div> <div class='price'>" + result[i].price +" </div> <div class='location'> "+ result[i].location + "</div> <div class='i'>" + i + "m</div>");
-    		deny.html("Approve <div class='food'>" + result[i].food+ "</div> <div class='price'>" + result[i].price +" </div> <div class='location'> " +result[i].location + "</div> <div class='i'>" + i + "m</div>");
+    		approve.html("Approve <div class='food'>" + result[i].food+ "</div> <div class='price'>" + result[i].price +"</div> <div class='location'>"+ result[i].location + "</div> <div class='i'>" + i + "m</div>");
+    		deny.html("Deny <div class='food'>" + result[i].food+ "</div> <div class='price'>" + result[i].price +"</div> <div class='location'>" +result[i].location + "</div> <div class='i'>" + i + "m</div>");
 
+    		console.log(approve);
     		approve.click(function(){
     			var foodclass = this.getElementsByClassName("food");
-    			var priceclass = this.getElementsByClassName("flavor");
+    			var priceclass = this.getElementsByClassName("price");
     			var locationclass = this.getElementsByClassName("location");
     			var iclass = this.getElementsByClassName("i");
     			
@@ -104,7 +107,7 @@ $(document).ready(function(){
 
     			});
     		});
-
+    		console.log(approve);
     		deny.click(function(){
     			var foodclass = this.getElementsByClassName("food");
     			var priceclass = this.getElementsByClassName("flavor");
@@ -118,9 +121,9 @@ $(document).ready(function(){
 
     			});
     		});
-    		$(lim).append(approve);
-    		$(lim).append(deny);
-    		ul.append(lim);
+    		$("#" + i + "m").append(approve);
+    		$("#" + i + "m").append(deny);
+    		
     	}
     });
 });
