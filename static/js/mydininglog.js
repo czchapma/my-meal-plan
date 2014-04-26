@@ -267,7 +267,14 @@ $(document).ready(function(){
                     $(this).siblings('.avocado-3').css({'opacity': .5});
                     $(this).siblings('.avocado-4').css({'opacity': .5});
                 }); 
+
                 ul.append(li);
+
+                if(priceItemSplit.length === 3){
+                    //show stored rating
+                    console.log(priceItemSplit[2]);
+                    $('.avocado-' + priceItemSplit[2]).last().trigger('click');
+                }
             }
         }
     });

@@ -89,6 +89,8 @@ conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,u
 fillUsersDB();
 var connPurchases = anyDB.createConnection('sqlite3://purchases.db');
 connPurchases.query('CREATE TABLE purchases (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, date TEXT)');
+var connRatings = anyDB.createConnection('sqlite3://ratings.db');
+connRatings.query('CREATE TABLE ratings (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, rating INTEGER)');
 
 
 var connFlavors = anyDB.createConnection('sqlite3://flavors.db');
@@ -314,7 +316,14 @@ app.post('/review', function(req, res){
 			});
 
 			ls.on('exit', function (code) {
-		  	res.end(output);
+				//Add Rating to ratings db
+				queryString = 'INSERT INTO ratings VALUES ($1, $2, $3, $4)';
+				connRatings.query(queryString, [null, username, item, rating], function(dbErr, dbRes){
+					if(dbErr){
+						console.log(dbErr);
+					}
+		  			res.end(output);
+				});
 			});
 
 		} else {
@@ -375,8 +384,7 @@ app.post('/suggest',function(req,res){
 	conn.query(queryString, [username], function(err, results){
 		var id = String(results.rows[0].id);
 		var ls = spawn('java', ["RunML", "PING SUGGEST",id, numItems, k]);
-		var output = "";
-		ls.stdout.on('data', function (data) {
+		var output = dbdout.on('data', function (data) {
 		  output += data;
 		});
 
@@ -890,14 +898,26 @@ app.get('/itemlistivy', function(req, res){
 });
 
 app.get('/itemlist', function(req, res){
-	var myQuery = connFood.query('SELECT * from food');
-	myQuery.on('row', function(row){
-		if (row !== undefined){
-			res.write(row.item + "," + row.price + '\n');
+	var ratingsQuery = connRatings.query('SELECT * from ratings', function(err, result){
+		console.log(result);
+		var map = {};
+		for(var i=0; i<result.rows.length; i++){
+			map[result.rows[i]['item']] = result.rows[i]['rating'];
 		}
-	});
-	myQuery.on('end', function(){
-		res.end();
+		console.log(map);
+		var foodQuery = connFood.query('SELECT * from food');
+		foodQuery.on('row', function(row){
+			if (row !== undefined){
+				if (map[row.item]){
+					res.write(row.item + "," + row.price + "," + map[row.item] + '\n');
+				} else {
+					res.write(row.item + "," + row.price + '\n');
+				}
+			}
+		});
+		foodQuery.on('end', function(){
+			res.end();
+		});
 	});
 });
 
