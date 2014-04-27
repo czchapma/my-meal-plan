@@ -451,7 +451,7 @@ app.get('/populateTests', function(req,res){
 });
 
 app.post('/suggest',function(req,res){
-	var username = req.body.username;
+  	var username = req.user.emails[0].value;
 	var numItems = req.body.numItems;
 	var k = 3;
 	console.log(username);
@@ -459,8 +459,9 @@ app.post('/suggest',function(req,res){
 	var queryString = "SELECT id FROM users WHERE username=$1";
 	conn.query(queryString, [username], function(err, results){
 		var id = String(results.rows[0].id);
-		var ls = spawn('java', ["RunML", "PING SUGGEST",id, numItems, k]);
-		var output = dbdout.on('data', function (data) {
+		var ls = spawn('java', ["RunML", "PING", "SUGGEST",id, numItems, k]);
+		var output = "";
+		ls.stdout.on('data', function (data) {
 		  output += data;
 		});
 
