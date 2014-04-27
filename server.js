@@ -18,9 +18,13 @@ var passport = require('passport')
 
 // API Access link for creating client ID and secret:
 // https://code.google.com/apis/console/
-var GOOGLE_CLIENT_ID = "332163333251.apps.googleusercontent.com";
-var GOOGLE_CLIENT_SECRET = "2DF_1WSIP_7jW7z9Gp_Rs0ok";
+var GOOGLE_CLIENT_ID = "332163333251-85agi4c8jqn9abr2s8cfnglfrmim17rl.apps.googleusercontent.com";
+var GOOGLE_CLIENT_SECRET = "lDt73HYtQlINdjV5A0dELjMk";
+if (!process.env.PORT){
+	GOOGLE_CLIENT_ID = "332163333251.apps.googleusercontent.com";
+	GOOGLE_CLIENT_SECRET = "2DF_1WSIP_7jW7z9Gp_Rs0ok";
 
+}
 passport.serializeUser(function(user, done) {
   done(null, user);
 });
@@ -136,7 +140,7 @@ app.post("/approve", function(req,res){
 	var queryStringP = 'SELECT price, location FROM food WHERE item=$1';
 	connFood.query(queryStringP, [item],function(error, results){
 		if(error){
-			console.err(error);
+			console.error(error);
 		}
 		var info = results.rows[0];
 		if(Number(info.price) === info.price) //TODO: make this actually check that price is defined
@@ -189,7 +193,7 @@ app.get('/flavorData', function(req,res){
 	var queryString = 'SELECT * from flavors';
 	connFlavors.query(queryString, [], function(error, results){
 		if(error){
-			console.err(error);
+			console.error(error);
 		}
 		res.json(results.rows);
 	});
@@ -200,7 +204,7 @@ app.get('/bugData', function(req,res){
 	var queryString = 'SELECT * from bugs';
 	connBugs.query(queryString, [], function(error, results){
 		if(error){
-			console.err(error);
+			console.error(error);
 		}
 		res.json(results.rows);
 	});
@@ -212,7 +216,7 @@ app.get('/missingData',function(req,res){
 	var queryString = 'SELECT * from missing';
 	connMissing.query(queryString, [], function(error, results){
 		if(error){
-			console.err(error);
+			console.error(error);
 		}
 		res.json(results.rows);
 	});
@@ -381,7 +385,7 @@ app.get('/allpurchases', function(req, res){
 	var queryString = 'SELECT date,item from purchases WHERE email=$1';
 	connPurchases.query(queryString, [email], function(error, results){
 		if(error){
-			console.err(error);
+			console.error(error);
 		}
 		res.json(results.rows);
 	});
