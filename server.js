@@ -1080,6 +1080,7 @@ function fillFoodDB() {
 			var split = lines[i].split(',');
 			if (split.length === 2){
 				var item = split[0].trim();
+				addFoodToClient(item);
 				var price = split[1].trim();
 				price = price.replace('$','');
 				price = Math.ceil(100 * parseFloat(price));
