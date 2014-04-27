@@ -167,10 +167,9 @@ function shutdownHoverAndRate(curr) {
 }
 
 function rate(curr){
-    var fakeUsername = 'christine_chapman@brown.edu';
     var item = curr.siblings('.food-item').text();
     var rating = curr.attr('class')[curr.attr('class').length - 1];
-    $.post( "/review", {username:fakeUsername, item: item, rating: rating}, function(data,status){
+    $.post( "/review", {item: item, rating: rating}, function(data,status){
         console.log(data);
     });
 }

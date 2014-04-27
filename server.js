@@ -403,10 +403,10 @@ app.post('/login', function(req, res, next) {
 });
 
 app.post('/review', function(req, res){
-	var username = req.body.username;
+	var email = req.user.emails[0].value;
 	var item = req.body.item;
 	var rating = req.body.rating;
-	review(res, username, [item], [rating]);
+	review(res, email, [item], [rating]);
 });
 
 //TODO: fix security threat. By just concatenating the calls to RunML. someone could use some form of injection I think. 
