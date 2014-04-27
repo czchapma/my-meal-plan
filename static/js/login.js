@@ -1,5 +1,4 @@
 var name = document.querySelector('meta[name=name]').content;
-var email = document.querySelector('meta[name=email]').content;
 $(document).ready(function(){
     $.ajax({
         url: "/isLoggedIn"
