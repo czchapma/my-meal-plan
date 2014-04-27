@@ -142,3 +142,16 @@ html,body {
 #dining_buttons {
     margin-left: 5px;
 }
+
+#missing-food-form{
+    display:block;
+}
+
+#log-form {
+    display:block;
+}
+
+#log-form input, #browse-form input {
+    width: 200px;
+    height: 30px;
+}
