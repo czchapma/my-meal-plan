@@ -48,7 +48,7 @@ $(document).ready(function(){
 	$.ajax({
 	    url: "/specials/" + entry
 	}).done(function(result) {
-	    $('#' + entry).text(hallToDescription[entry] + ': ' + result);
+	    $('#' + entry).html("<h2>" +  hallToDescription[entry] + '</h2> <div class="foods"> ' + result + "</div>");
 	});
     });
 });
