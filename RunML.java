@@ -66,25 +66,13 @@ public class RunML
 			client = loadClient();
 		} catch(IOException e){
 			//if file not found (or corrupted), create new
-			//TODO: need to change this initial list
+			
 			ArrayList<String> foods = new ArrayList<String>();
-			foods.add("Chobani");
-			foods.add("Sandwich");
-			foods.add("Falafel");
-			foods.add("Ice Cream");
-			foods.add("Milk");
-			foods.add("Tuna");
 			client = new ML_Client(foods);
 		} catch (ClassNotFoundException e){
 			//if file not found (or corrupted), create new
-			//TODO: need to change this initial list
+		
 			ArrayList<String> foods = new ArrayList<String>();
-			foods.add("Chobani");
-			foods.add("Sandwich");
-			foods.add("Falafel");
-			foods.add("Ice Cream");
-			foods.add("Milk");
-			foods.add("Tuna");
 			client = new ML_Client(foods);
 		}
 		//for debugging purposes:

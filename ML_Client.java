@@ -240,6 +240,9 @@ public class ML_Client implements Serializable
 	//TODO: Look at the k nearest neighbors for foods the user of curId might like. Return the numWanted best foods. 
 	public String[] getRec(int curId, int k, int numWanted)
 	{
+		int tempWanted = numWanted; //Store the old numwanted
+		numWanted = numWanted + (int) Math.ceil(.1 * foods.size());//Now make the client find 10% of the food database more 
+		//this way we can make it randomized so the user doesn't get the same suggestions each time.
 		HashMap<Integer,Double> neighbors = dists.get(curId);
 		ArrayList<Tupleish> allNeighbors = new ArrayList<Tupleish>();
 		String[] suggestions = new String[numWanted];
@@ -298,7 +301,10 @@ public class ML_Client implements Serializable
 				suggestions[i] = foods.get((int)Math.floor(Math.random() * foods.size()));
 			}
 		}
-		return suggestions;
+		ArrayList<String> suggest = new ArrayList<String>(Arrays.asList(suggestions));
+		Collections.shuffle(suggest);//randomizing woo!
+
+		return Arrays.copyOfRange((String[])suggest.toArray(),0,tempWanted);
 	}
 	
 	public String toString()
