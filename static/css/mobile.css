@@ -155,3 +155,7 @@ html,body {
     width: 200px;
     height: 30px;
 }
+
+button {
+    height: 30px;
+}
