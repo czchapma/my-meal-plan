@@ -124,7 +124,7 @@ $(document).ready(function(){
         console.log(items);
         for(var i=0; i<items.length; i++){
             $.post( "/logpurchase", {item: items[i]}, function(data,status){
-                console.log(data);
+                window.location = '/prevtransactions';
             });            
         }
     });

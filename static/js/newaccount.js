@@ -45,10 +45,12 @@ $(document).ready(function(){
             //don't submit,error out!
             $('#rate_msg').show();
         } else {
-            console.log(formData);
-            $.post( "/storeUser", formData, function(data,status){
-                window.location = '/logpurchase';
-            });
+            if (!$('#creating').is(':visible')) {
+                $('#creating').show();
+                $.post( "/storeUser", formData, function(data,status){
+                    window.location = '/logpurchase';
+                });
+            }
         }
     });
 

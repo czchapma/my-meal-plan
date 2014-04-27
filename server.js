@@ -101,7 +101,7 @@ connMissing.query('CREATE TABLE missing (food TEXT, price INTEGER, location TEXT
 
 app.post("/flavor", function(req,res){
 	console.log("A FLAVOR!");
-	var user = req.body.user;
+	var user = req.user.emails[0].value;
 	var flavor= req.body.flavor;
 	var item = req.body.item;
 	var queryString = 'INSERT INTO flavors VALUES ($1, $2, $3)';
@@ -205,7 +205,10 @@ app.get('/missingData',function(req,res){
 
 app.post('/bugs',function(req, res) {
 	console.log("A BUG!");
-	var user = req.body.user;
+	var user = 'not logged in!';
+  	if (req.isAuthenticated()) {
+		user = req.user.emails[0].value;
+	}
 	var message = req.body.message;
 	var queryString = 'INSERT INTO bugs VALUES ($1, $2, $3)';
 	var query = connBugs.query(queryString, [user, 0, message]); //TODO: log the actual time
@@ -403,16 +406,16 @@ app.post('/login', function(req, res, next) {
 });
 
 app.post('/review', function(req, res){
-	var username = req.body.username;
+	var email = req.user.emails[0].value;
 	var item = req.body.item;
 	var rating = req.body.rating;
-	review(res, username, [item], [rating]);
+	review(res, email, [item], [rating]);
 });
 
 //TODO: fix security threat. By just concatenating the calls to RunML. someone could use some form of injection I think. 
 //My guess is that you could do something to turn the string into multiple lines, and then literally run anything serverside.
 app.post('/guess',function(req,res){
-	var username = req.body.username;
+	var username = req.user.emails[0].value;
 	var item = req.body.item;
 	var rating = req.body.rating;
 	var queryString = "SELECT id FROM users WHERE username=$1";
@@ -961,7 +964,7 @@ app.get('/itemlistaco', function(req, res){
 });
 
 app.get('/itemlistblueroom', function(req, res){
-	var myQuery = connFood.query('SELECT * from food WHERE location="ivyroom"');
+	var myQuery = connFood.query('SELECT * from food WHERE location="blueroom"');
 	myQuery.on('row', function(row){
 		if (row !== undefined){
 			res.write(row.item + "," + row.price + '\n');
@@ -973,7 +976,7 @@ app.get('/itemlistblueroom', function(req, res){
 });
 
 app.get('/itemlistivy', function(req, res){
-	var myQuery = connFood.query('SELECT * from food WHERE location="blueroom"');
+	var myQuery = connFood.query('SELECT * from food WHERE location="ivyroom"');
 	myQuery.on('row', function(row){
 		if (row !== undefined){
 			res.write(row.item + "," + row.price + '\n');

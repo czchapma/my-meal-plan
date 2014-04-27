@@ -107,3 +107,7 @@
 #new-account-form{
     min-width:700px;
 }
+
+#creating {
+    display: none;
+}
