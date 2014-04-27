@@ -127,7 +127,7 @@ app.post("/approve", function(req,res){
 		{
 			var newfood = (item + " - " + flavor);
 			connFood.query('INSERT INTO food VALUES ($1,$2,$3)', [newfood, info.price, info.location]);
-			addFoodToClient(newfood);
+			addFoodToClient([newfood]);
 		}
 		var queryStringD = 'DELETE FROM flavors WHERE item=$1 AND flavor=$2';
 		var queryD = connFlavors.query(queryStringD, [item, flavor]); 
@@ -148,7 +148,7 @@ app.post("/approveMissing", function(req,res){
 	console.log(location);
 	connFood.query('INSERT INTO food VALUES ($1,$2,$3)', [food, price, location]).on('end',function(error, result){
 		console.log(error);});
-		addFoodToClient(food);
+		addFoodToClient([food]);
 		var queryStringD = 'DELETE FROM missing WHERE food=$1 AND price=$2 AND location=$3';
 		var queryD = connMissing.query(queryStringD, [food, price,location]); 
 		queryD.on('error', console.error);
@@ -1079,17 +1079,19 @@ function fillFoodDB() {
 		var curr = foodList[locIndex];
 		var data = fs.readFileSync('data/' + foodList[locIndex] + '.csv', 'utf8');
 		var lines = data.split('\n');
+		var itemList = [];
 		for (var i=0; i<lines.length; i++){
 			var split = lines[i].split(',');
 			if (split.length === 2){
 				var item = split[0].trim();
-				addFoodToClient(item);
+				itemList.push(item);
 				var price = split[1].trim();
 				price = price.replace('$','');
 				price = Math.ceil(100 * parseFloat(price));
 				connFood.query(queryString, [item, price,curr]);
 			}
 		}
+		addFoodToClient(itemList);
 	}
 }
 
@@ -1123,12 +1125,19 @@ function ensureAuthenticated(req, res, next) {
   res.redirect('/login');
 }
 
-function addFoodToClient(food){
-	var ls = spawn('java',["RunML","FOODLIST",food]);
-		ls.stderr.on('data', function (data) {
-		  console.log('stderr: ' + data);
-		});
+function addFoodToClient(foodList){
+	if(foodList.length === 0){
+		return;
+	}
 
+	var food = foodList.pop();
+	var ls = spawn('java',["RunML","FOODLIST",food]);
+	ls.stderr.on('data', function (data) {
+	  console.log('stderr: ' + data);
+	});
+	ls.on('exit', function(code){
+		addFoodToClient(foodList);
+	});
 }
 
 function review (res, username, items, ratings){

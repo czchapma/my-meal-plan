@@ -48,7 +48,14 @@ $(document).ready(function(){
 	$.ajax({
 	    url: "/specials/" + entry
 	}).done(function(result) {
-	    $('#' + entry).html("<h2>" +  hallToDescription[entry] + '</h2> <div class="foods"> ' + result + "</div>");
+		var diningHall = hallToDescription[entry];
+		var foods = result;
+		if (entry === 'vdub'){
+			var split = foods.split(' ');
+			diningHall = diningHall + ' ' + split[0];
+			foods = foods.replace(split[0] + ' ','');
+		}
+	    $('#' + entry).html("<h2>" +  diningHall + '</h2> <div class="foods"> ' + foods + "</div>");
 	});
     });
 });
