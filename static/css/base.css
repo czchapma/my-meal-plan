@@ -75,6 +75,10 @@ ul {
     background-color:#7309AA;
 }
 
+#login {
+    display: none;
+}
+
 button {
     height: 30px;
 }
