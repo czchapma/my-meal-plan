@@ -278,6 +278,17 @@ app.get('/random5', function(req, res){
 	});
 });
 
+//get 1 random item to rate, called in newaccount.js
+app.get('/random', function(req, res){
+	var queryString = 'SELECT * FROM food ORDER BY RANDOM() LIMIT 1;';
+	connFood.query(queryString, function(err, response){
+		if(err){
+			console.log(err);
+		}
+		res.json(response.rows);
+	});
+});
+
 app.post('/storeUser', function(req, res) {
 	var name = req.body.name;
 	var email = req.body.email;
@@ -313,12 +324,14 @@ app.post('/storeUser', function(req, res) {
 						var ratings = [];
 						for (var i=1; i<=5; i++){
 							var curr = req.body['item' + i];
+							if (!curr){
+								break;
+							}
 							var item = curr.substring(0,curr.length - 1);
 							var rating = curr.substring(curr.length - 1, curr.length);
 							items.push(item);
 							ratings.push(rating);
 						}
-						console.log(items,ratings);
 						review(res, email, items, ratings);
 					});		
 				});

@@ -1,6 +1,7 @@
 var name = document.querySelector('meta[name=name]').content;
 var email = document.querySelector('meta[name=email]').content;
 var ratings = {};
+var numNewItems = 0;
 $(document).ready(function(){
 
     $('#logerror').click(function(){
@@ -40,7 +41,7 @@ $(document).ready(function(){
             count += 1;
             formData += '&item' + count + '=' + item + ratings[item];
         }
-        if(count < 5){
+        if(count < 5 && numNewItems < 10){
             //don't submit,error out!
             $('#rate_msg').show();
         } else {
@@ -62,7 +63,7 @@ $(document).ready(function(){
 				var json = JSON.parse(JSON.stringify(result[index]));
                 var li = $(document.createElement('li'));
                 var avocados = '<img class="avocado-1" src="static/imgs/avocado.png"/><img class="avocado-2" src="static/imgs/avocado.png"/><img class="avocado-3" src="static/imgs/avocado.png"/><img class="avocado-4" src="static/imgs/avocado.png"/><img class="avocado-5" src="static/imgs/avocado.png"/>';
-                li.html('<div class="food-item">' + json['item'] + "</div><div class='food-price'>" + prettyPrint(json['price']) + "</div>" + avocados + "<input type=button value='X'>");
+                li.html('<div class="food-item">' + json['item'] + "</div><div class='food-price'>" + prettyPrint(json['price']) + "</div>" + avocados + "<input type=button value='X' class='remove'>");
                 li.find('.avocado-1').click(function(){
                     for(var i=2; i<=5; i++){
                         $(this).siblings('.avocado-' + i).css({'opacity':.5});
@@ -171,7 +172,22 @@ $(document).ready(function(){
                     $(this).siblings('.avocado-3').css({'opacity': .5});
                     $(this).siblings('.avocado-3').css({'opacity': .5});
                     $(this).siblings('.avocado-4').css({'opacity': .5});
-                }); 
+                });
+                li.find('.remove').click(function(){
+                    var currRem = $(this);
+                    numNewItems += 1;
+                    if (numNewItems >= 10){
+                        $('#right-panel label').text("It seems like you haven't tried many items! You can press 'submit' and move on.");
+                        $('#rate').hide();
+                    }
+                    $.ajax({
+                        url: "/random"
+                    }).done(function(resultNew) { 
+                        var json2 = JSON.parse(JSON.stringify(resultNew));
+                        currRem.siblings('.food-item').text(json2[0]['item']);
+                        currRem.siblings('.food-price').text(prettyPrint(json2[0]['price']));
+                    });
+                });
                 ul.append(li);
             }
 		});
