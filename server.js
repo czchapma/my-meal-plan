@@ -719,7 +719,7 @@ app.get('/status/vdub', function(req, res) {
 	var day = moment().day();
 	var toReturn = {};
 	//Weekends closed
-	if (day === 6 || day === 7){
+	if (day === 0 || day === 7){
 		toReturn['open'] = 'false';
 		toReturn['message'] = 'Closed! Re-opens Monday at 7:30AM';
 	}
