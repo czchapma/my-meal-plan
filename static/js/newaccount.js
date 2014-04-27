@@ -62,7 +62,7 @@ $(document).ready(function(){
 				var json = JSON.parse(JSON.stringify(result[index]));
                 var li = $(document.createElement('li'));
                 var avocados = '<img class="avocado-1" src="static/imgs/avocado.png"/><img class="avocado-2" src="static/imgs/avocado.png"/><img class="avocado-3" src="static/imgs/avocado.png"/><img class="avocado-4" src="static/imgs/avocado.png"/><img class="avocado-5" src="static/imgs/avocado.png"/>';
-                li.html('<div class="food-item">' + json['item'] + "</div><div class='food-price'>" + prettyPrint(json['price']) + "</div>" + avocados);
+                li.html('<div class="food-item">' + json['item'] + "</div><div class='food-price'>" + prettyPrint(json['price']) + "</div>" + avocados + "<input type=button value='X'>");
                 li.find('.avocado-1').click(function(){
                     for(var i=2; i<=5; i++){
                         $(this).siblings('.avocado-' + i).css({'opacity':.5});

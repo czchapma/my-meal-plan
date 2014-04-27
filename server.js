@@ -1113,7 +1113,6 @@ function review (res, username, items, ratings){
 			if (results.rows.length > 0) {
 				var item = items.pop();
 				var rating = ratings.pop();
-				console.log('curr item:' + item + 'curr rating:' + rating);
 				var id = String(results.rows[0].id);
 				var ls = spawn('java', ['RunML', "MODIFY", "REVIEW",id,item,rating]);
 				var output = "";
