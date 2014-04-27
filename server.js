@@ -648,7 +648,8 @@ app.get('/menu/jos', function(req, res){
 			res.write('Quesadillas\n');
 		}
 	}
-	res.end('Gnocchi\nCustom Salad\nSpicy With\nBeef Carb\nTurkey Carb\nChicken Carb\nMozerella Sticks\nFries\nOnion Rings');
+
+	res.end(getThreeBurners() + '\nCustom Salad\nSpicy With\nBeef Carb\nTurkey Carb\nChicken Carb\nMozerella Sticks\nFries\nOnion Rings');
 });
 
 app.get('/status/ratty', function(req, res) {
@@ -927,7 +928,7 @@ app.get('/specials/jos', function(req, res){
 			res.write('Quesadillas, ');
 		}
 	}
-	res.end('Gnocchi');
+	res.end(getThreeBurners());
 });
 
 app.get('/specials/aco', function(req, res){
@@ -1154,4 +1155,13 @@ function review (res, username, items, ratings){
 			}
 		});
 	}
+}
+
+function getThreeBurners(){
+	var day = moment().day();
+	var threeBurners = 'Crepes';
+	if (day === 6 || day === 7){
+		threeBurners = 'Early Early Breakfast'
+	}
+	return threeBurners;
 }
