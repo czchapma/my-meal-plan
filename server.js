@@ -219,8 +219,10 @@ app.get('/missingData',function(req,res){
 	connMissing.query(queryString, [], function(error, results){
 		if(error){
 			console.error(error);
+			res.end();
+		} else {
+			res.json(results.rows);
 		}
-		res.json(results.rows);
 	});
 });
 
