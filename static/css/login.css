@@ -1,12 +1,18 @@
 #login-content, #newaccount-content {
     padding: 10px;
-    width: 450px;
-    margin-left: calc(50% - 200px);
+    width: 80%;
+    margin-left: 10%;
     margin-top: 100px;
+    background-color:#E8E8E8;
 }
 
 #newaccount-content {
     margin-top: 50px;
+    
+}
+
+#newaccount-content *{
+    color:black;
 }
 
 #login-content label, #newaccount-content label {
@@ -24,15 +30,30 @@
     height: 30px;
     margin-left: 10px;
 }
-
+#right-panel{
+    display:inline-block;
+    width:40%;
+    padding:2%;
+}
+#left-panel{
+    display:inline-block;
+    width:40%;
+    padding:2%;
+}
 #rate {
     font-family:"Vollkorn", sans-serif;
-    width: 500px;
-    margin-left: 40%;
+    width: 60%;
+    background-color:#F5F5F5;
+    border:2px;
+    border-style:solid;
+    border-color:#A4A4A4;
+    height:200px;
+    overflow-y:auto;
+    margin-left:30%;
 }
 #rate li {
     font-family:"Vollkorn", sans-serif;
-    color: white;
+    color: black;
     list-style: decimal;
     font-size: 16pt;
 }

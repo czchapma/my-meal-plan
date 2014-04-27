@@ -32,6 +32,7 @@
     </div>
     <div id="newaccount-content">
       <form id="new-account-form" method="post" action="/storeUser">
+      <div id="left-panel">
 	<p><label>Name:</label><input id="name" name="name" type="text"></p>
 	<p><label>Email:</label><input id="email" name="email" type="email" readonly="readonly"></p>
 	<p><label>Gender Identity:</label></p>
@@ -58,9 +59,9 @@
 	  </select>
 	  
 	  <select name="year" id="year">
-            <option value="2014">2011</option>
-            <option value="2013">2011</option>
-            <option value="2012">2011</option>
+            <option value="2014">2014</option>
+            <option value="2013">2013</option>
+            <option value="2012">2012</option>
             <option value="2011">2011</option>
             <option value="2010">2010</option>
             <option value="2009">2009</option>
@@ -95,10 +96,13 @@
             <option value="1980">1980</option>
 	  </select>
 	</p>
-    <label>To get started, rate these five items, one being the worst and five being the best</label>
-    <span id="rate_msg">You must rate all 5 items before continuing!</span>
-    <ul id="rate"></ul>
-	<button id="submit" name="submit" type="submit">Submit</button>
+    </div>
+    <div id="right-panel">
+        <label>To get started, rate these five items, one being the worst and five being the best</label>
+        <span id="rate_msg">You must rate all 5 items before continuing!</span>
+        <ul id="rate"></ul>
+    	<button id="submit" name="submit" type="submit">Submit</button>
+    </div>
   </form>
  </div>
 </body>
