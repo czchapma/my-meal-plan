@@ -1,0 +1,11 @@
+#!/bin/bash
+
+#citation: http://www.unix.com/unix-for-dummies-questions-and-answers/17137-copy-rename-list-files.html
+
+mkdir ~/backups
+ls ~/my-meal-plan/*.db | while read file
+do 
+
+	cp ${file} ${file%.db}$(date +"%Y%m%d").db
+	mv ${file%.db}$(date +"%Y%m%d").db ~/backups
+done
