@@ -1,0 +1,20 @@
+.prev-trans-date{
+	display:none;
+}
+
+#content {
+	background-color:#E8E8E8;
+	width: 60%;
+	margin:auto;
+	height:500px;
+	overflow-y:auto;
+	margin-top:10px;
+}
+
+li {
+	color:black;
+}
+
+ul{
+	display:block;
+}
