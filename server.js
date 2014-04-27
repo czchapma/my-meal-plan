@@ -961,7 +961,7 @@ app.get('/itemlistaco', function(req, res){
 });
 
 app.get('/itemlistblueroom', function(req, res){
-	var myQuery = connFood.query('SELECT * from food WHERE location="ivyroom"');
+	var myQuery = connFood.query('SELECT * from food WHERE location="blueroom"');
 	myQuery.on('row', function(row){
 		if (row !== undefined){
 			res.write(row.item + "," + row.price + '\n');
@@ -973,7 +973,7 @@ app.get('/itemlistblueroom', function(req, res){
 });
 
 app.get('/itemlistivy', function(req, res){
-	var myQuery = connFood.query('SELECT * from food WHERE location="blueroom"');
+	var myQuery = connFood.query('SELECT * from food WHERE location="ivyroom"');
 	myQuery.on('row', function(row){
 		if (row !== undefined){
 			res.write(row.item + "," + row.price + '\n');
