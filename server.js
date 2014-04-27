@@ -101,6 +101,7 @@ function resetServer(){
 			connBugs = anyDB.createConnection('sqlite3://bugs.db');
 			connPurchases = anyDB.createConnection('sqlite3://purchases.db');
 			connRatings = anyDB.createConnection('sqlite3://ratings.db');		
+			connMissing = anyDB.createConnection('sqlite3://missing.db');
 
 			conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, month TEXT,day TEXT, gender TEXT)');
 			fillFoodDB();
@@ -114,7 +115,7 @@ function resetServer(){
 }
 
 //Comment out for for LIVE SITE!!
-//resetServer();
+resetServer();
 
 var monthToNum = {'January' : 1, 'February' : 2, 'March' : 3, 'April' : 4, 'May': 5, 'June': 6, 'July' : 7, 'August' : 8, 'September' : 9, 'October' : 10, 'November' : 11, 'December' : 12};
 
