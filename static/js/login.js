@@ -1,5 +1,5 @@
+var name = document.querySelector('meta[name=name]').content;
 $(document).ready(function(){
-
     $.ajax({
         url: "/isLoggedIn"
     }).done(function(result) {
