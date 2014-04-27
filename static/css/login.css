@@ -45,3 +45,8 @@
 #rate img:hover {
     cursor: pointer;
 }
+
+#rate_msg {
+    display: none;
+    color: red;
+}

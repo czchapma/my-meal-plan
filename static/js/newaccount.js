@@ -1,10 +1,11 @@
 var name = document.querySelector('meta[name=name]').content;
 var email = document.querySelector('meta[name=email]').content;
+var ratings = {};
 $(document).ready(function(){
 
     $('#logerror').click(function(){
         var bug = window.prompt("Report your bug here. Please include your browser and OS information.");
-        $.post( "/bugs", {user:"fakeperson", message:bug}, function(data,status){
+        $.post( "/bugs", {user:email, message:bug}, function(data,status){
         });
     });
     
@@ -32,7 +33,22 @@ $(document).ready(function(){
     });
 
     $('#new-account-form').submit(function(event){
-        //TODO THIS
+        event.preventDefault();
+        var formData = $(this).serialize();
+        var count = 0;
+        for (var item in ratings){
+            count += 1;
+            formData += '&item' + count + '=' + item + ratings[item];
+        }
+        if(count < 5){
+            //don't submit,error out!
+            $('#rate_msg').show();
+        } else {
+            console.log(formData);
+            $.post( "/storeUser", formData, function(data,status){
+                window.location = '/logpurchase';
+            });
+        }
     });
 
     $('#name').val(name);
@@ -185,7 +201,5 @@ function shutdownHoverAndRate(curr) {
 function rate(curr){
     var item = curr.siblings('.food-item').text();
     var rating = curr.attr('class')[curr.attr('class').length - 1];
-    $.post( "/review", {username:email, item: item, rating: rating}, function(data,status){
-        console.log(data);
-    });
+    ratings[item] = rating;
 }

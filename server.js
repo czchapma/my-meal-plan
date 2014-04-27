@@ -308,7 +308,18 @@ app.post('/storeUser', function(req, res) {
 						console.log('stderr:',data);
 					});
 					addToML.on('exit', function(code){
-						res.redirect('/logpurchase');
+						//Handle ratings
+						var items = [];
+						var ratings = [];
+						for (var i=1; i<=5; i++){
+							var curr = req.body['item' + i];
+							var item = curr.substring(0,curr.length - 1);
+							var rating = curr.substring(curr.length - 1, curr.length);
+							items.push(item);
+							ratings.push(rating);
+						}
+						console.log(items,ratings);
+						review(res, email, items, ratings);
 					});		
 				});
 			});
@@ -382,36 +393,7 @@ app.post('/review', function(req, res){
 	var username = req.body.username;
 	var item = req.body.item;
 	var rating = req.body.rating;
-	var queryString = "SELECT id FROM users WHERE username=$1";
-	conn.query(queryString, [username], function(err, results){
-		if (results.rows.length > 0) {
-			var id = String(results.rows[0].id);
-			var ls = spawn('java', ['RunML', "MODIFY", "REVIEW",id,item,rating]);
-			var output = "";
-			ls.stdout.on('data', function (data) {
-		  		output += data;
-			});
-
-			ls.stderr.on('data', function (data) {
-		  		console.log('stderr: ' + data);
-			});
-
-			ls.on('exit', function (code) {
-				//Add Rating to ratings db
-				queryString = 'INSERT INTO ratings VALUES ($1, $2, $3, $4)';
-				connRatings.query(queryString, [null, username, item, rating], function(dbErr, dbRes){
-					if(dbErr){
-						console.log(dbErr);
-					}
-		  			res.end(output);
-				});
-			});
-
-		} else {
-			console.log('username',username,'not in db');
-			res.end();
-		}
-	});
+	review(res, username, [item], [rating]);
 });
 
 //TODO: fix security threat. By just concatenating the calls to RunML. someone could use some form of injection I think. 
@@ -1120,4 +1102,44 @@ function fillUsersDB() {
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login');
+}
+
+function review (res, username, items, ratings){
+	if (items.length === 0 || ratings.length === 0){
+		res.end();
+	} else {
+		var queryString = "SELECT id FROM users WHERE username=$1";
+		conn.query(queryString, [username], function(err, results){
+			if (results.rows.length > 0) {
+				var item = items.pop();
+				var rating = ratings.pop();
+				console.log('curr item:' + item + 'curr rating:' + rating);
+				var id = String(results.rows[0].id);
+				var ls = spawn('java', ['RunML', "MODIFY", "REVIEW",id,item,rating]);
+				var output = "";
+				ls.stdout.on('data', function (data) {
+			  		output += data;
+				});	
+
+				ls.stderr.on('data', function (data) {
+			  		console.log('stderr: ' + data);
+				});	
+
+				ls.on('exit', function (code) {
+					//Add Rating to ratings db
+					queryString = 'INSERT INTO ratings VALUES ($1, $2, $3, $4)';
+					connRatings.query(queryString, [null, username, item, rating], function(dbErr, dbRes){
+						if(dbErr){
+							console.log(dbErr);
+						}
+						review(res, username, items, ratings);
+					});
+				});	
+
+			} else {
+				console.log('username',username,'not in db');
+				res.end();
+			}
+		});
+	}
 }
