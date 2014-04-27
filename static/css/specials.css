@@ -2,6 +2,7 @@
     width: 600px;
     margin-left: calc(50% - 300px);
     margin-top: 50px;
+    background-color:#E8E8E8;
 }
 
 #specials-content li {
@@ -40,3 +41,17 @@
     text-align: center;
     margin-top: 50px;
 }
+
+h2 {
+	margin-left:10px;
+	margin-bottom:5px;
+	display:inline-block;
+	width:300px;
+}
+
+.foods {
+	margin-left:10px;
+	display:inline-block;
+	width:600px;
+}
+
