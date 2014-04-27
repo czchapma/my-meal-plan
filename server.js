@@ -125,7 +125,9 @@ app.post("/approve", function(req,res){
 		var info = results.rows[0];
 		if(Number(info.price) === info.price) //TODO: make this actually check that price is defined
 		{
-			connFood.query('INSERT INTO food VALUES ($1,$2,$3)', [(item + " - " + flavor), info.price, info.location]);
+			var newfood = (item + " - " + flavor);
+			connFood.query('INSERT INTO food VALUES ($1,$2,$3)', [newfood, info.price, info.location]);
+			addFoodToClient(newfood);
 		}
 		var queryStringD = 'DELETE FROM flavors WHERE item=$1 AND flavor=$2';
 		var queryD = connFlavors.query(queryStringD, [item, flavor]); 
@@ -146,7 +148,7 @@ app.post("/approveMissing", function(req,res){
 	console.log(location);
 	connFood.query('INSERT INTO food VALUES ($1,$2,$3)', [food, price, location]).on('end',function(error, result){
 		console.log(error);});
-		
+		addFoodToClient(food);
 		var queryStringD = 'DELETE FROM missing WHERE food=$1 AND price=$2 AND location=$3';
 		var queryD = connMissing.query(queryStringD, [food, price,location]); 
 		queryD.on('error', console.error);
@@ -377,9 +379,7 @@ app.post('/knapsack', function(req, res){
 	});
 	myQuery.on('end', function(){
 		foodList = foodList.substring(0, foodList.length -1);
-		//TODO: GIANT INJECTION PROBLEM HERE. COULD MAKE MONEY SOMETHING LIKE "680; DO ALL MY OTHER THINGS" and it would be TERRIBLE
-		foodList = foodList.substring(0, foodList.length -1);
-		//TODO: GIANT INJECTION PROBLEM HERE. COULD MAKE MONEY SOMETHING LIKE "680; DO ALL MY OTHER THINGS" and it would be TERRIBLE
+		
 		var ls = spawn('java',["Knapsack",foodList,req.body.maxMoney]);
 		var output = "";
 		ls.stdout.on('data', function (data) {
@@ -418,7 +418,7 @@ app.post('/guess',function(req,res){
 	var queryString = "SELECT id FROM users WHERE username=$1";
 	conn.query(queryString, [username], function(err, results){
 		var id = String(results.rows[0].id);
-		var ls = spawn('java', ["RunML", "PING GUESS",id,item,rating]);
+		var ls = spawn('java', ["RunML", "PING", "GUESS",id,item,rating]);
 		var output = "";
 		ls.stdout.on('data', function (data) {
 		  output += data;
@@ -1116,6 +1116,14 @@ function fillUsersDB() {
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login');
+}
+
+function addFoodToClient(food){
+	var ls = spawn('java',["RunML","FOODLIST",food]);
+		ls.stderr.on('data', function (data) {
+		  console.log('stderr: ' + data);
+		});
+
 }
 
 function review (res, username, items, ratings){

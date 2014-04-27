@@ -94,6 +94,11 @@ public class ML_Client implements Serializable
 			
 	}
 
+	public void addToFoodList(String myfood)
+	{
+		foods.add(myfood);
+	}
+
 	private void updateDists(User_Reviews existentUser)
 	{
 		//TODO: Issue warning if user does not already exist in client

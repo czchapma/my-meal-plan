@@ -175,6 +175,11 @@ public class RunML
 					System.out.println("PRINTING:");
 					System.out.println(client);
 				}
+
+			else if(args[0].equals("FOODLIST"))
+			{
+				client.addToFoodList(args[1]);
+			}
 			
 			//Finally, serialize client
 			saveClient(client);
