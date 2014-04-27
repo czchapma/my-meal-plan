@@ -32,6 +32,7 @@
     </div>
     <div id="newaccount-content">
       <form id="new-account-form" method="post" action="/storeUser">
+      <div id="create"> <strong> Create your Profile </strong> </div>
       <div id="left-panel">
 	<p><label>Name:</label><input id="name" name="name" type="text"></p>
 	<p><label>Email:</label><input id="email" name="email" type="email" readonly="readonly"></p>
@@ -101,8 +102,9 @@
         <label>To get started, rate these five items, one being the worst and five being the best</label>
         <span id="rate_msg">You must rate all 5 items before continuing!</span>
         <ul id="rate"></ul>
-    	<button id="submit" name="submit" type="submit">Submit</button>
+    	
     </div>
+    <button id="submit" name="submit" type="submit" class="submit">Submit</button>
   </form>
  </div>
 </body>
