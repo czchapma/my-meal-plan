@@ -37,7 +37,7 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:8080/logincallback"
+    callbackURL: "/logincallback"
   },
   function(accessToken, refreshToken, profile, done) {
     // asynchronous verification, for effect...
@@ -66,38 +66,54 @@ app.configure(function() {
   app.use(express.static(__dirname)); //allows css to work with rendered html
 });
 
-var monthToNum = {'January' : 1, 'February' : 2, 'March' : 3, 'April' : 4, 'May': 5, 'June': 6, 'July' : 7, 'August' : 8, 'September' : 9, 'October' : 10, 'November' : 11, 'December' : 12};
+//Create DBs
+var anyDB = require('any-db');
+var connFood = anyDB.createConnection('sqlite3://food.db');
+var conn = anyDB.createConnection('sqlite3://users.db');
+var connBugs = anyDB.createConnection('sqlite3://bugs.db');
+var connPurchases = anyDB.createConnection('sqlite3://purchases.db');
+var connRatings = anyDB.createConnection('sqlite3://ratings.db');
 
-//delete pre-existing databases
-exec("rm -f *.db");
-exec("rm -f *.ser");
+
+var connFlavors = anyDB.createConnection('sqlite3://flavors.db');
+
+var connMissing = anyDB.createConnection('sqlite3://missing.db');
+
 exec("rm -f locked.txt");
 exec("javac *.java", function(error, stdout, stderr){
 	if(error !== null) {
 		console.log(stderr);
 	}
 });
-//Create DBs
-var anyDB = require('any-db');
-//TODO: Lol probably shouldn't store password directly in DB
-var connFood = anyDB.createConnection('sqlite3://food.db');
-fillFoodDB();
-var conn = anyDB.createConnection('sqlite3://users.db');
-var connBugs = anyDB.createConnection('sqlite3://bugs.db');
-connBugs.query('CREATE TABLE bugs(user TEXT, time INTEGER, message TEXT)');
-conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, month TEXT,day TEXT, gender TEXT)');
-fillUsersDB();
-var connPurchases = anyDB.createConnection('sqlite3://purchases.db');
-connPurchases.query('CREATE TABLE purchases (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, date TEXT)');
-var connRatings = anyDB.createConnection('sqlite3://ratings.db');
-connRatings.query('CREATE TABLE ratings (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, rating INTEGER)');
 
 
-var connFlavors = anyDB.createConnection('sqlite3://flavors.db');
-connFlavors.query('CREATE TABLE flavors (user TEXT, item TEXT, flavor TEXT)');
+//Should ideally only be called once
+function resetServer(){
+	//delete pre-existing databases
+	exec("rm -f *.db", function(error, stdout, stderr){
+		exec("rm -f *.ser", function(error2, stdout2, stderr2){
+			connFood = anyDB.createConnection('sqlite3://food.db');
+			conn = anyDB.createConnection('sqlite3://users.db');
+			connBugs = anyDB.createConnection('sqlite3://bugs.db');
+			connPurchases = anyDB.createConnection('sqlite3://purchases.db');
+			connRatings = anyDB.createConnection('sqlite3://ratings.db');		
 
-var connMissing = anyDB.createConnection('sqlite3://missing.db');
-connMissing.query('CREATE TABLE missing (food TEXT, price INTEGER, location TEXT)');
+			conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, month TEXT,day TEXT, gender TEXT)');
+			fillFoodDB();
+			connBugs.query('CREATE TABLE bugs(user TEXT, time INTEGER, message TEXT)');
+			connPurchases.query('CREATE TABLE purchases (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, date TEXT)');
+			connRatings.query('CREATE TABLE ratings (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, rating INTEGER)');
+			connFlavors.query('CREATE TABLE flavors (user TEXT, item TEXT, flavor TEXT)');
+			connMissing.query('CREATE TABLE missing (food TEXT, price INTEGER, location TEXT)');
+		});
+	});
+}
+
+//Comment out for for LIVE SITE!!
+resetServer();
+
+var monthToNum = {'January' : 1, 'February' : 2, 'March' : 3, 'April' : 4, 'May': 5, 'June': 6, 'July' : 7, 'August' : 8, 'September' : 9, 'October' : 10, 'November' : 11, 'December' : 12};
+
 
 app.post("/flavor", function(req,res){
 	console.log("A FLAVOR!");
@@ -1182,7 +1198,7 @@ function review (res, username, items, ratings){
 function getThreeBurners(){
 	var day = moment().day();
 	var threeBurners = 'Crepes';
-	if (day === 6 || day === 7){
+	if (day === 0 || day === 7){
 		threeBurners = 'Early Early Breakfast'
 	}
 	return threeBurners;
