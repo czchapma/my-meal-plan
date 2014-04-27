@@ -194,8 +194,10 @@ app.get('/flavorData', function(req,res){
 	connFlavors.query(queryString, [], function(error, results){
 		if(error){
 			console.error(error);
+			res.end();
+		} else {
+			res.json(results.rows);
 		}
-		res.json(results.rows);
 	});
 
 });
