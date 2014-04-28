@@ -558,7 +558,7 @@ app.get('/prevtransactions', ensureAuthenticated, function(req,res) {
 
 
 app.get('/menu/ratty', function(req, res) {
-	makeRequest('http://www.brown.edu/Student_Services/Food_Services/eateries/refectory_menu.php',function(body){
+	makeRequest(res, 'http://www.brown.edu/Student_Services/Food_Services/eateries/refectory_menu.php',function(body){
 		$ = cheerio.load(body);
 		var day = moment().day();
 		var bSrc = $('#Breakfast').attr('src');
@@ -581,7 +581,7 @@ app.get('/menu/ratty', function(req, res) {
 });
 
 app.get('/menu/vdub', function(req,res) {
-	makeRequest('http://www.brown.edu/Student_Services/Food_Services/eateries/verneywoolley_menu.php', function(body){
+	makeRequest(res, 'http://www.brown.edu/Student_Services/Food_Services/eateries/verneywoolley_menu.php', function(body){
 		$ = cheerio.load(body);
 		var src = $('iframe').first().attr('src');
 		var ignoreList = ["",".","OPENS FOR LUNCH","Opens for lunch","Opens for Lunch",'spring 1', 'spring 2', 'spring 3', 'spring 4', 'spring 5', 'spring 6', 'spring 7', 'Breakfast','Lunch','Dinner', 'Daily Sidebars'];
@@ -623,12 +623,12 @@ app.get('/menu/vdub', function(req,res) {
 				res.end(toReturn[3] + '\n' + toReturn[0]);
 			}
 		}
-		makeRequest(src, callback);
+		makeRequest(res, src, callback);
 	});
 });
 
 app.get('/menu/blueroom', function(req,res) {
-	makeRequest('https://www.google.com/calendar/htmlembed?showTitle=0&showNav=0&showDate=0&showPrint=0&showTabs=0&showCalendars=0&showTz=0&mode=AGENDA&height=500&wkst=1&bgcolor=%23FFFFFF&src=brown.edu_ecua9ff3gkcocn27ffon8700dk%40group.calendar.google.com&color=%23B1440E&src=brown.edu_1qo9psm1828mt6apg4df9rb9dc%40group.calendar.google.com&color=%23875509&src=brown.edu_eof6uj287ti6bvajbhsbfest90%40group.calendar.google.com&color=%232F6309&src=brown.edu_urf3617tirt011tjh67jc8l3o8%40group.calendar.google.com&color=%232F6309&ctz=America%2FNew_York', function(body){
+	makeRequest(res, 'https://www.google.com/calendar/htmlembed?showTitle=0&showNav=0&showDate=0&showPrint=0&showTabs=0&showCalendars=0&showTz=0&mode=AGENDA&height=500&wkst=1&bgcolor=%23FFFFFF&src=brown.edu_ecua9ff3gkcocn27ffon8700dk%40group.calendar.google.com&color=%23B1440E&src=brown.edu_1qo9psm1828mt6apg4df9rb9dc%40group.calendar.google.com&color=%23875509&src=brown.edu_eof6uj287ti6bvajbhsbfest90%40group.calendar.google.com&color=%232F6309&src=brown.edu_urf3617tirt011tjh67jc8l3o8%40group.calendar.google.com&color=%232F6309&ctz=America%2FNew_York', function(body){
 		$ = cheerio.load(body);
 		var day = $('.events').first();
 		var obj = {}
@@ -644,7 +644,7 @@ app.get('/menu/blueroom', function(req,res) {
 });
 
 app.get('/menu/ivyroom', function(req, res){
-	makeRequest('http://www.brown.edu/Student_Services/Food_Services/eateries/ivyroom_menu.php', function(body){
+	makeRequest(res, 'http://www.brown.edu/Student_Services/Food_Services/eateries/ivyroom_menu.php', function(body){
 		$ = cheerio.load(body);
 		var src = $('iframe').first().attr('src');
 		var ignoreList = ['.', ''];
@@ -867,7 +867,7 @@ app.get('/times/aco', function(req,res){
 });
 
 app.get('/specials/ratty', function(req, res){
-	makeRequest('http://www.brown.edu/Student_Services/Food_Services/eateries/refectory_menu.php',function(body){
+	makeRequest(res, 'http://www.brown.edu/Student_Services/Food_Services/eateries/refectory_menu.php',function(body){
 		$ = cheerio.load(body);
 		var lSrc = $('#Lunch').attr('src');
 		var dSrc = $('#Dinner').attr('src');
@@ -883,7 +883,7 @@ app.get('/specials/ratty', function(req, res){
 });
 
 app.get('/specials/vdub', function(req, res){
-	makeRequest('http://www.brown.edu/Student_Services/Food_Services/eateries/verneywoolley_menu.php', function(body){
+	makeRequest(res, 'http://www.brown.edu/Student_Services/Food_Services/eateries/verneywoolley_menu.php', function(body){
 		$ = cheerio.load(body);
 		var src = $('iframe').first().attr('src');
 		var ignoreList = ["",".","OPENS FOR LUNCH","Opens for lunch","Opens for Lunch",'spring 1', 'spring 2', 'spring 3', 'spring 4', 'spring 5', 'Breakfast','Lunch','Dinner', 'Daily Sidebars'];
@@ -904,12 +904,12 @@ app.get('/specials/vdub', function(req, res){
 				}
 			});
 		}
-		makeRequest(src, callback);
+		makeRequest(res, src, callback);
 	});
 });
 
 app.get('/specials/blueroom', function(req, res){
-	makeRequest('https://www.google.com/calendar/htmlembed?showTitle=0&showNav=0&showDate=0&showPrint=0&showTabs=0&showCalendars=0&showTz=0&mode=AGENDA&height=500&wkst=1&bgcolor=%23FFFFFF&src=brown.edu_ecua9ff3gkcocn27ffon8700dk%40group.calendar.google.com&color=%23B1440E&src=brown.edu_1qo9psm1828mt6apg4df9rb9dc%40group.calendar.google.com&color=%23875509&src=brown.edu_eof6uj287ti6bvajbhsbfest90%40group.calendar.google.com&color=%232F6309&src=brown.edu_urf3617tirt011tjh67jc8l3o8%40group.calendar.google.com&color=%232F6309&ctz=America%2FNew_York', function(body){
+	makeRequest(res, 'https://www.google.com/calendar/htmlembed?showTitle=0&showNav=0&showDate=0&showPrint=0&showTabs=0&showCalendars=0&showTz=0&mode=AGENDA&height=500&wkst=1&bgcolor=%23FFFFFF&src=brown.edu_ecua9ff3gkcocn27ffon8700dk%40group.calendar.google.com&color=%23B1440E&src=brown.edu_1qo9psm1828mt6apg4df9rb9dc%40group.calendar.google.com&color=%23875509&src=brown.edu_eof6uj287ti6bvajbhsbfest90%40group.calendar.google.com&color=%232F6309&src=brown.edu_urf3617tirt011tjh67jc8l3o8%40group.calendar.google.com&color=%232F6309&ctz=America%2FNew_York', function(body){
 		$ = cheerio.load(body);
 		var day = $('.events').first();
 		var obj = {}
@@ -922,7 +922,7 @@ app.get('/specials/blueroom', function(req, res){
 });
 
 app.get('/specials/ivyroom', function(req, res){
-	makeRequest('http://www.brown.edu/Student_Services/Food_Services/eateries/ivyroom_menu.php', function(body){
+	makeRequest(res, 'http://www.brown.edu/Student_Services/Food_Services/eateries/ivyroom_menu.php', function(body){
 		$ = cheerio.load(body);
 		var src = $('iframe').first().attr('src');
 		var ignoreList = ['.', ''];
@@ -940,7 +940,7 @@ app.get('/specials/ivyroom', function(req, res){
 			});
 			res.end(toReturn);
 		}
-		makeRequest(src, callback);
+		makeRequest(res, src, callback);
 	});
 });
 
@@ -1058,10 +1058,14 @@ app.listen(port, function(){
 });
 
 
-function makeRequest(url, callback){
-	request(url, function(error, response, body){
-		callback(body);
-	});
+function makeRequest(res, url, callback){
+	if (url){
+		request(url, function(error, response, body){
+			callback(body);
+		});
+	} else {
+		res.end();
+	}
 }
 
 function makeRattyIvyMenu(response, menuUrl, ignoreList, specials){
@@ -1084,7 +1088,7 @@ function makeRattyIvyMenu(response, menuUrl, ignoreList, specials){
 		});
 		response.end(toReturn.substr(0,toReturn.length - 1));
 	}
-	makeRequest(menuUrl, callback);
+	makeRequest(response, menuUrl, callback);
 }
 
 function andrewsSpecials(res) {
