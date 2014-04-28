@@ -102,7 +102,8 @@ function resetServer(){
 			connPurchases = anyDB.createConnection('sqlite3://purchases.db');
 			connRatings = anyDB.createConnection('sqlite3://ratings.db');		
 			connMissing = anyDB.createConnection('sqlite3://missing.db');
-
+			connFlavors = anyDB.createConnection('sqlite3://flavors.db');
+			
 			conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, month TEXT,day TEXT, gender TEXT)');
 			fillFoodDB();
 			connBugs.query('CREATE TABLE bugs(user TEXT, time INTEGER, message TEXT)');
