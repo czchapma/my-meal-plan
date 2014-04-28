@@ -487,20 +487,23 @@ app.post('/suggest',function(req,res){
 	console.log(numItems);
 	var queryString = "SELECT id FROM users WHERE username=$1";
 	conn.query(queryString, [username], function(err, results){
-		var id = String(results.rows[0].id);
-		var ls = spawn('java', ["RunML", "PING", "SUGGEST",id, numItems, k]);
-		var output = "";
-		ls.stdout.on('data', function (data) {
-		  output += data;
-		});
+		if(results.rows[0] !== undefined)
+		{
+			var id = String(results.rows[0].id);
+			var ls = spawn('java', ["RunML", "PING", "SUGGEST",id, numItems, k]);
+			var output = "";
+			ls.stdout.on('data', function (data) {
+			  output += data;
+			});
 
-		ls.stderr.on('data', function (data) {
-		  console.log('stderr: ' + data);
-		});
+			ls.stderr.on('data', function (data) {
+			  console.log('stderr: ' + data);
+			});
 
-		ls.on('exit', function (code) {
-		  res.end(output);
-		});
+			ls.on('exit', function (code) {
+			  res.end(output);
+			});
+		}
 	});
 });
 
