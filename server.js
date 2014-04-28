@@ -116,7 +116,7 @@ function resetServer(){
 }
 
 //Comment out for for LIVE SITE!!
-resetServer();
+//resetServer();
 
 var monthToNum = {'January' : 1, 'February' : 2, 'March' : 3, 'April' : 4, 'May': 5, 'June': 6, 'July' : 7, 'August' : 8, 'September' : 9, 'October' : 10, 'November' : 11, 'December' : 12};
 
@@ -760,6 +760,7 @@ app.get('/status/blueroom', function(req, res){
 	var hour = new Date().getHours();
 	var minute = new Date().getMinutes();
 	var day = moment().day();
+	console.log(day);
 	var toReturn = {};
 	//Weekdays: 7:30AM - 9PM
 	if (day !== 6 && day !== 7){
@@ -1215,6 +1216,7 @@ function review (res, username, items, ratings){
 
 function getThreeBurners(){
 	var day = moment().day();
+	
 	var threeBurners = 'Crepes';
 	if (day === 0 || day === 7){
 		threeBurners = 'Early Early Breakfast'
