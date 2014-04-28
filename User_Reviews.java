@@ -101,10 +101,12 @@ public class User_Reviews implements Serializable {
 	public double diff(User_Reviews otherUser)
 	{
 		double diff = 0;
-		if(otherUser.getIdentity() != genderIdentity)
-			diff += 10;//later make this scalable so training phase can pick best parameter
-		diff += Math.pow(((birthMonth/ 12.0 + birthYear)
-			 - (otherUser.getBirthMonth()/ 12.0 + otherUser.getBirthYear())),2); //later add in scalable parameter for training phase
+
+		//got rid of all other user criteria in dist except reviews
+		/*if(otherUser.getIdentity() != genderIdentity)
+			diff += 10;//later make this scalable so training phase can pick best parameter*/
+		/*diff += Math.pow(((birthMonth/ 12.0 + birthYear)
+			 - (otherUser.getBirthMonth()/ 12.0 + otherUser.getBirthYear())),2);*/ //later add in scalable parameter for training phase
 		Set<String> myreviewed = reviews.keySet();
 		Set<String> theirReviewed = otherUser.getReviews().keySet();
 		
