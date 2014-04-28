@@ -59,7 +59,7 @@ $(document).ready(function(){
         if(tab3.checked)
             myhall= "blueroom"
         if(tab4.checked)
-            myhall = "ivy"
+            myhall = "ivyroom"
         if(tab5.checked)
             myhall = "aco"
         if(tab6.checked)
@@ -95,7 +95,7 @@ $(document).ready(function(){
         if(tab3.checked)
             myhall= "blueroom"
         if(tab4.checked)
-            myhall = "ivy"
+            myhall = "ivyroom"
         if(tab5.checked)
             myhall = "aco"
         if(tab6.checked)
