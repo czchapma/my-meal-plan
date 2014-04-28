@@ -72,16 +72,16 @@ app.configure(function() {
 
 //Create DBs
 var anyDB = require('any-db');
-var connFood = anyDB.createConnection('sqlite3://food.db');
-var conn = anyDB.createConnection('sqlite3://users.db');
-var connBugs = anyDB.createConnection('sqlite3://bugs.db');
+//var connFood = anyDB.createConnection('sqlite3://food.db');
+var conn = anyDB.createConnection('sqlite3://myMealPlanData.db');
+/*var connBugs = anyDB.createConnection('sqlite3://bugs.db');
 var connPurchases = anyDB.createConnection('sqlite3://purchases.db');
 var connRatings = anyDB.createConnection('sqlite3://ratings.db');
 
 
 var connFlavors = anyDB.createConnection('sqlite3://flavors.db');
 
-var connMissing = anyDB.createConnection('sqlite3://missing.db');
+var connMissing = anyDB.createConnection('sqlite3://missing.db');*/
 
 exec("rm -f locked.txt");
 exec("javac *.java", function(error, stdout, stderr){
@@ -96,27 +96,27 @@ function resetServer(){
 	//delete pre-existing databases
 	exec("rm -f *.db", function(error, stdout, stderr){
 		exec("rm -f *.ser", function(error2, stdout2, stderr2){
-			connFood = anyDB.createConnection('sqlite3://food.db');
-			conn = anyDB.createConnection('sqlite3://users.db');
-			connBugs = anyDB.createConnection('sqlite3://bugs.db');
+			//connFood = anyDB.createConnection('sqlite3://food.db');
+			conn = anyDB.createConnection('sqlite3://myMealPlanData.db');
+			/*connBugs = anyDB.createConnection('sqlite3://bugs.db');
 			connPurchases = anyDB.createConnection('sqlite3://purchases.db');
 			connRatings = anyDB.createConnection('sqlite3://ratings.db');		
 			connMissing = anyDB.createConnection('sqlite3://missing.db');
-			connFlavors = anyDB.createConnection('sqlite3://flavors.db');
+			connFlavors = anyDB.createConnection('sqlite3://flavors.db');*/
 			
 			conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, month TEXT,day TEXT, gender TEXT)');
 			fillFoodDB();
-			connBugs.query('CREATE TABLE bugs(user TEXT, time INTEGER, message TEXT)');
-			connPurchases.query('CREATE TABLE purchases (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, date TEXT)');
-			connRatings.query('CREATE TABLE ratings (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, rating INTEGER)');
-			connFlavors.query('CREATE TABLE flavors (user TEXT, item TEXT, flavor TEXT)');
-			connMissing.query('CREATE TABLE missing (food TEXT, price INTEGER, location TEXT)');
+			conn.query('CREATE TABLE bugs(user TEXT, time INTEGER, message TEXT)');
+			conn.query('CREATE TABLE purchases (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, date TEXT)');
+			conn.query('CREATE TABLE ratings (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, rating INTEGER)');
+			conn.query('CREATE TABLE flavors (user TEXT, item TEXT, flavor TEXT)');
+			conn.query('CREATE TABLE missing (food TEXT, price INTEGER, location TEXT)');
 		});
 	});
 }
 
 //Comment out for for LIVE SITE!!
-//resetServer();
+resetServer();
 
 var monthToNum = {'January' : 1, 'February' : 2, 'March' : 3, 'April' : 4, 'May': 5, 'June': 6, 'July' : 7, 'August' : 8, 'September' : 9, 'October' : 10, 'November' : 11, 'December' : 12};
 
@@ -127,7 +127,7 @@ app.post("/flavor", function(req,res){
 	var flavor= req.body.flavor;
 	var item = req.body.item;
 	var queryString = 'INSERT INTO flavors VALUES ($1, $2, $3)';
-	var query = connFlavors.query(queryString, [user, item, flavor]); //TODO: log the actual time
+	var query = conn.query(queryString, [user, item, flavor]); //TODO: log the actual time
 	query.on('error', console.error);
 	query.on('end', function(){
 		res.end();
@@ -140,7 +140,7 @@ app.post("/approve", function(req,res){
 	var item = req.body.item;
 
 	var queryStringP = 'SELECT price, location FROM food WHERE item=$1';
-	connFood.query(queryStringP, [item],function(error, results){
+	conn.query(queryStringP, [item],function(error, results){
 		if(error){
 			console.error(error);
 		}
@@ -148,11 +148,11 @@ app.post("/approve", function(req,res){
 		if(Number(info.price) === info.price) //TODO: make this actually check that price is defined
 		{
 			var newfood = (item + " - " + flavor);
-			connFood.query('INSERT INTO food VALUES ($1,$2,$3)', [newfood, info.price, info.location]);
+			conn.query('INSERT INTO food VALUES ($1,$2,$3)', [newfood, info.price, info.location]);
 			addFoodToClient([newfood]);
 		}
 		var queryStringD = 'DELETE FROM flavors WHERE item=$1 AND flavor=$2';
-		var queryD = connFlavors.query(queryStringD, [item, flavor]); 
+		var queryD = conn.query(queryStringD, [item, flavor]); 
 		queryD.on('error', console.error);
 		queryD.on('end', function(){
 			res.end();
@@ -168,11 +168,11 @@ app.post("/approveMissing", function(req,res){
 	console.log(food);
 	console.log(price);
 	console.log(location);
-	connFood.query('INSERT INTO food VALUES ($1,$2,$3)', [food, price, location]).on('end',function(error, result){
+	conn.query('INSERT INTO food VALUES ($1,$2,$3)', [food, price, location]).on('end',function(error, result){
 		console.log(error);});
 		addFoodToClient([food]);
 		var queryStringD = 'DELETE FROM missing WHERE food=$1 AND price=$2 AND location=$3';
-		var queryD = connMissing.query(queryStringD, [food, price,location]); 
+		var queryD = conn.query(queryStringD, [food, price,location]); 
 		queryD.on('error', console.error);
 		queryD.on('end', function(){
 			res.end();
@@ -184,7 +184,7 @@ app.post("/deny",function(req,res){
 	var flavor = req.body.flavor;
 	var item = req.body.item;
 	var queryStringD = 'DELETE FROM flavors WHERE item=$1 AND flavor=$2';
-	var queryD = connFlavors.query(queryStringD, [item, flavor]); 
+	var queryD = conn.query(queryStringD, [item, flavor]); 
 	queryD.on('error', console.error);
 	queryD.on('end', function(){
 		res.end();
@@ -193,7 +193,7 @@ app.post("/deny",function(req,res){
 
 app.get('/flavorData', function(req,res){
 	var queryString = 'SELECT * from flavors';
-	connFlavors.query(queryString, [], function(error, results){
+	conn.query(queryString, [], function(error, results){
 		if(error){
 			console.error(error);
 			res.end();
@@ -206,7 +206,7 @@ app.get('/flavorData', function(req,res){
 
 app.get('/bugData', function(req,res){
 	var queryString = 'SELECT * from bugs';
-	connBugs.query(queryString, [], function(error, results){
+	conn.query(queryString, [], function(error, results){
 		if(error){
 			console.error(error);
 		}
@@ -218,7 +218,7 @@ app.get('/bugData', function(req,res){
 app.get('/missingData',function(req,res){
 
 	var queryString = 'SELECT * from missing';
-	connMissing.query(queryString, [], function(error, results){
+	conn.query(queryString, [], function(error, results){
 		if(error){
 			console.error(error);
 			res.end();
@@ -237,7 +237,7 @@ app.post('/bugs',function(req, res) {
 	}
 	var message = req.body.message;
 	var queryString = 'INSERT INTO bugs VALUES ($1, $2, $3)';
-	var query = connBugs.query(queryString, [user, 0, message]); //TODO: log the actual time
+	var query = conn.query(queryString, [user, 0, message]); //TODO: log the actual time
 	query.on('error', console.error);
 	query.on('end', function(){
 		res.end();
@@ -250,7 +250,7 @@ app.post('/missing',function(req, res) {
 	var price = req.body.price;
 	var location = req.body.location;
 	var queryString = 'INSERT INTO missing VALUES ($1, $2, $3)';
-	var query = connMissing.query(queryString, [food, price, location]); 
+	var query = conn.query(queryString, [food, price, location]); 
 	query.on('error', console.error);
 	query.on('end', function(){
 		res.end();
@@ -301,7 +301,7 @@ app.get('/newaccount', ensureAuthenticated, function(req, res){
 //get 5 random items to rate, called in newaccount.js
 app.get('/random5', function(req, res){
 	var queryString = 'SELECT * FROM food ORDER BY RANDOM() LIMIT 5;';
-	connFood.query(queryString, function(err, response){
+	conn.query(queryString, function(err, response){
 		if(err){
 			console.log(err);
 		}
@@ -312,7 +312,7 @@ app.get('/random5', function(req, res){
 //get 1 random item to rate, called in newaccount.js
 app.get('/random', function(req, res){
 	var queryString = 'SELECT * FROM food ORDER BY RANDOM() LIMIT 1;';
-	connFood.query(queryString, function(err, response){
+	conn.query(queryString, function(err, response){
 		if(err){
 			console.log(err);
 		}
@@ -379,7 +379,7 @@ app.post('/logpurchase', function(req, res){
 	var item = req.body.item;
 	var date = new Date().toDateString();
 	var queryString = 'INSERT INTO purchases VALUES ($1, $2, $3, $4)';
-	var query = connPurchases.query(queryString, [null,email, item, date]);
+	var query = conn.query(queryString, [null,email, item, date]);
 	query.on('error', console.error);
 	query.on('end', function(){
 		res.end();
@@ -389,7 +389,7 @@ app.post('/logpurchase', function(req, res){
 app.get('/allpurchases', function(req, res){
 	var email = req.user.emails[0].value;
 	var queryString = 'SELECT date,item from purchases WHERE email=$1';
-	connPurchases.query(queryString, [email], function(error, results){
+	conn.query(queryString, [email], function(error, results){
 		if(error){
 			console.error(error);
 		}
@@ -399,7 +399,7 @@ app.get('/allpurchases', function(req, res){
 
 app.post('/knapsack', function(req, res){
 	console.log(req.body.hall);
-	var myQuery = connFood.query('SELECT * from food WHERE location=$1',[req.body.hall]);
+	var myQuery = conn.query('SELECT * from food WHERE location=$1',[req.body.hall]);
 	var foodList = '';
 	myQuery.on('row', function(row){
 		if (row !== undefined){
@@ -966,7 +966,7 @@ app.get('/specials/aco', function(req, res){
 });
 
 app.get('/itemlistjos', function(req, res){
-	var myQuery = connFood.query('SELECT * from food WHERE location="jos" ');
+	var myQuery = conn.query('SELECT * from food WHERE location="jos" ');
 	myQuery.on('row', function(row){
 		if (row !== undefined){
 			res.write(row.item + "," + row.price + '\n');
@@ -978,7 +978,7 @@ app.get('/itemlistjos', function(req, res){
 });
 
 app.get('/itemlistaco', function(req, res){
-	var myQuery = connFood.query('SELECT * from food WHERE location="aco"');
+	var myQuery = conn.query('SELECT * from food WHERE location="aco"');
 	myQuery.on('row', function(row){
 		if (row !== undefined){
 			res.write(row.item + "," + row.price + '\n');
@@ -990,7 +990,7 @@ app.get('/itemlistaco', function(req, res){
 });
 
 app.get('/itemlistblueroom', function(req, res){
-	var myQuery = connFood.query('SELECT * from food WHERE location="blueroom"');
+	var myQuery = conn.query('SELECT * from food WHERE location="blueroom"');
 	myQuery.on('row', function(row){
 		if (row !== undefined){
 			res.write(row.item + "," + row.price + '\n');
@@ -1002,7 +1002,7 @@ app.get('/itemlistblueroom', function(req, res){
 });
 
 app.get('/itemlistivy', function(req, res){
-	var myQuery = connFood.query('SELECT * from food WHERE location="ivyroom"');
+	var myQuery = conn.query('SELECT * from food WHERE location="ivyroom"');
 	myQuery.on('row', function(row){
 		if (row !== undefined){
 			res.write(row.item + "," + row.price + '\n');
@@ -1014,14 +1014,14 @@ app.get('/itemlistivy', function(req, res){
 });
 
 app.get('/itemlist', function(req, res){
-	var ratingsQuery = connRatings.query('SELECT * from ratings', function(err, result){
+	var ratingsQuery = conn.query('SELECT * from ratings', function(err, result){
 		console.log(result);
 		var map = {};
 		for(var i=0; i<result.rows.length; i++){
 			map[result.rows[i]['item']] = result.rows[i]['rating'];
 		}
 		console.log(map);
-		var foodQuery = connFood.query('SELECT * from food');
+		var foodQuery = conn.query('SELECT * from food');
 		foodQuery.on('row', function(row){
 			if (row !== undefined){
 				if (map[row.item]){
@@ -1104,7 +1104,7 @@ function andrewsSpecials(res) {
 
 function fillFoodDB() {
 	var foodList = ['jos','aco', 'ivyroom', 'blueroom'];
-	connFood.query('CREATE TABLE food (item TEXT PRIMARY KEY,price INT, location TEXT)');
+	conn.query('CREATE TABLE food (item TEXT PRIMARY KEY,price INT, location TEXT)');
 	for (var locIndex=0; locIndex < foodList.length; locIndex ++){
 		var queryString = 'INSERT INTO food VALUES ($1, $2, $3)';
 		var curr = foodList[locIndex];
@@ -1119,7 +1119,7 @@ function fillFoodDB() {
 				var price = split[1].trim();
 				price = price.replace('$','');
 				price = Math.ceil(100 * parseFloat(price));
-				connFood.query(queryString, [item, price,curr]);
+				conn.query(queryString, [item, price,curr]);
 			}
 		}
 		addFoodToClient(itemList);
@@ -1194,7 +1194,7 @@ function review (res, username, items, ratings){
 				ls.on('exit', function (code) {
 					//Add Rating to ratings db
 					queryString = 'INSERT INTO ratings VALUES ($1, $2, $3, $4)';
-					connRatings.query(queryString, [null, username, item, rating], function(dbErr, dbRes){
+					conn.query(queryString, [null, username, item, rating], function(dbErr, dbRes){
 						if(dbErr){
 							console.log(dbErr);
 						}
