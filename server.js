@@ -1087,7 +1087,7 @@ function makeRattyIvyMenu(response, menuUrl, ignoreList, specials){
 		});
 		response.end(toReturn.substr(0,toReturn.length - 1));
 	}
-	makeRequest(menuUrl, callback);
+	makeRequest(response, menuUrl, callback);
 }
 
 function andrewsSpecials(res) {
