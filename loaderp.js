@@ -11,9 +11,10 @@ connFood = anyDB.createConnection('sqlite3://food.db');
 			connMissing = anyDB.createConnection('sqlite3://missing.db');
 			connFlavors = anyDB.createConnection('sqlite3://flavors.db');
 			
+			connFlavors.query('CREATE TABLE flavors (user TEXT, item TEXT, flavor TEXT)');
+			connMissing.query('CREATE TABLE missing (food TEXT, price INTEGER, location TEXT)');
 			conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, month TEXT,day TEXT, gender TEXT)');
 			connBugs.query('CREATE TABLE bugs(user TEXT, time INTEGER, message TEXT)');
 			connPurchases.query('CREATE TABLE purchases (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, date TEXT)');
 			connRatings.query('CREATE TABLE ratings (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, rating INTEGER)');
-			connFlavors.query('CREATE TABLE flavors (user TEXT, item TEXT, flavor TEXT)');
-			connMissing.query('CREATE TABLE missing (food TEXT, price INTEGER, location TEXT)');
+		
