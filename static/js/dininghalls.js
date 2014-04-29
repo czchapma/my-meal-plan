@@ -1,10 +1,5 @@
 var dininghalls = ['ratty','vdub', 'blueroom', 'ivyroom', 'aco', 'jos'];
 $(document).ready(function(){
-    
-    generateMenus();
-    generateStatues();
-    generateTimes();
-
     //Logo redirects to home
     $('#logo').click(function(){
 	$(location).attr('href','/');
@@ -12,6 +7,34 @@ $(document).ready(function(){
 
     if ($("#status-ivyroom").hasClass('closed'))
 	$("#ivy-room-tab").css("border-bottom", "4px solid red");
+
+	$('#ratty_breakfast_link').click(function(){
+		$('#ratty_breakfast').show();
+		$('#ratty_lunch').hide();
+		$('#ratty_dinner').hide();
+		$('#dining_buttons a').css({'background-color':'#7309AA', 'color':'white'});
+		$(this).css({'color':'#7309AA', 'background-color':'white'});
+	});
+	$('#ratty_lunch_link').click(function(){
+		$('#ratty_breakfast').hide();
+		$('#ratty_lunch').show();
+		$('#ratty_dinner').hide();
+		$('#dining_buttons a').css({'background-color':'#7309AA', 'color':'white'});
+		$(this).css({'color':'#7309AA', 'background-color':'white'});
+
+	});
+	$('#ratty_dinner_link').click(function(){
+		$('#ratty_breakfast').hide();
+		$('#ratty_lunch').hide();
+		$('#ratty_dinner').show();
+		$('#dining_buttons a').css({'background-color':'#7309AA', 'color':'white'});
+		$(this).css({'color':'#7309AA', 'background-color':'white'});
+
+	});
+
+	generateMenus();
+    generateStatues();
+    generateTimes();
 });
 
 function generateStatues(){
@@ -53,16 +76,7 @@ function generateTimes(){
 
 function generateMenus(){
     //Generate Ratty menu
-    $.ajax({
-	url: "/menu/ratty"
-    }).done(function(result) {
-	var parent = $('#tab-content1 .menus');
-	var split = result.split('\n');
-	for (var i=0; i<split.length; i++){
-	    var li ='<li>'+ split[i] + '</li>';
-	    parent.append(li);
-	}
-    });
+    generateRatty();
 
     //Generate VDub menu
     $.ajax({
@@ -126,4 +140,30 @@ function generateMenus(){
 	    parent.append(li);
 	}
     });
+}
+function generateRatty(){
+    var meals = ['breakfast','lunch','dinner'];
+    for (var mealId=0; mealId<meals.length; mealId++){
+    	$.post( "/menu/ratty", {meal:meals[mealId]}, function(data,status){
+    		if (data === ''){
+				generateRatty();
+				return;
+			}
+    		var split = data.split('\n');
+    		var meal = split[0];
+			var parent = $('#tab-content1 #ratty_' + meal);
+			for (var i=1; i<split.length; i++){
+			    var li ='<li>'+ split[i] + '</li>';
+			    parent.append(li);
+			}
+    	});
+   		var date = new Date();
+		if (date.getHours() < 11 || date.getHours() > 20){
+			$('#ratty_breakfast_link').trigger('click');
+		} else if (date.getHours() < 16){
+			$('#ratty_lunch_link').trigger('click');
+		} else {
+			$('#ratty_dinner_link').trigger('click');
+		}
+    }
 }

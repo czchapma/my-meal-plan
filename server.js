@@ -564,26 +564,37 @@ app.get('/prevtransactions', ensureAuthenticated, function(req,res) {
 });
 
 
-app.get('/menu/ratty', function(req, res) {
+app.post('/menu/ratty', function(req, res) {
+	var meal = req.body.meal;
 	makeRequest(res, 'http://www.brown.edu/Student_Services/Food_Services/eateries/refectory_menu.php',function(body){
 		$ = cheerio.load(body);
 		var day = moment().day();
 		var bSrc = $('#Breakfast').attr('src');
 		var lSrc = $('#Lunch').attr('src');
 		var dSrc = $('#Dinner').attr('src');
-		var ignoreList = ["",".","OPENS FOR LUNCH", "Opens for lunch","Opens for Lunch", "Roots & Shoots","Grill","Bistro","Chef\'s Corner"];
+		var ignoreList = ["",".","OPENS FOR LUNCH", "Opens for lunch","Opens for Lunch", "Opens at lunch", "Opens at Lunch", "Roots & Shoots","Grill","Bistro","Chef\'s Corner"];
 		var time = new Date().getHours();
-		//TODO if time > 18 need THE NEXT DAYS breakfast
-		if (day !== 0 && (time < 11 || time > 18)){
-			//Breakfast
+		res.write(meal + '\n');
+		if (meal === 'breakfast'){
 			makeRattyIvyMenu(res,bSrc,ignoreList, false);
-		} else if (time < 15 || (day === 0 && time > 18)) {
-			//Lunch
+		} else if (meal === 'lunch'){
 			makeRattyIvyMenu(res,lSrc,ignoreList, false);
+		} else if (meal === 'dinner'){
+			makeRattyIvyMenu(res,dSrc,ignoreList, false);
 		} else {
-			//Dinner
-			makeRattyIvyMenu(res, dSrc, ignoreList, false);
+			res.end('invalid meal type ' + meal);
 		}
+		//TODO if time > 18 need THE NEXT DAYS breakfast
+		// if (day !== 0 && (time < 11 || time > 18)){
+			//Breakfast
+			// makeRattyIvyMenu(res,[bSrc,lSrc,dSrc],ignoreList, false);
+		// } else if (time < 15 || (day === 0 && time > 18)) {
+		// 	//Lunch
+		// 	makeRattyIvyMenu(res,lSrc,ignoreList, false);
+		// } else {
+		// 	//Dinner
+		// 	makeRattyIvyMenu(res, dSrc, ignoreList, false);
+		// }
 	});
 });
 
