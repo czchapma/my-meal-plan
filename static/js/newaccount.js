@@ -3,12 +3,6 @@ var email = document.querySelector('meta[name=email]').content;
 var ratings = {};
 var numNewItems = 0;
 $(document).ready(function(){
-
-    $('#logerror').click(function(){
-        var bug = window.prompt("Report your bug here. Please include your browser and OS information.");
-        $.post( "/bugs", {user:email, message:bug}, function(data,status){
-        });
-    });
     
     //Logo redirects to home
     $('#logo').click(function(){

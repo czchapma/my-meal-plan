@@ -8,11 +8,6 @@ $(document).ready(function(){
     	loggedIn = (result === 'yes');
 	});
 
-	$('#logerror').click(function(){
-    	var bug = window.prompt("Report your bug here. Please include your browser and OS information.");
-    	$.post( "/bugs", {message:bug}, function(data,status){
-    	});
-    });
     //Logo redirects to home
 
     $('#suggestion').hide();

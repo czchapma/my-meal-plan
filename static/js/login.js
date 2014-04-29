@@ -14,6 +14,13 @@ $(document).ready(function(){
     	}
     });
 
+    $('#logerror').click(function(){
+        var bug = window.prompt("Report your bug here. Please include your browser and OS information.");
+        $.post( "/bugs", {message:bug}, function(data,status){
+        });
+    });
+
+
     //secret thing
     var rand = Math.floor((Math.random()*10000)+1);
     if (rand === 2222){

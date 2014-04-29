@@ -237,7 +237,8 @@ app.post('/bugs',function(req, res) {
 	}
 	var message = req.body.message;
 	var queryString = 'INSERT INTO bugs VALUES ($1, $2, $3)';
-	var query = conn.query(queryString, [user, 0, message]); //TODO: log the actual time
+	var date = new Date();
+	var query = conn.query(queryString, [user, date.toLocaleString(), message]); //TODO: log the actual time
 	query.on('error', console.error);
 	query.on('end', function(){
 		res.end();
@@ -270,7 +271,10 @@ app.get('/logincallback',
   	console.log(email);
   	var queryString = 'SELECT id FROM users WHERE username=$1';
     conn.query(queryString, [email], function(nameError, nameRes){
-		if (nameRes.rows.length === 0){
+		if (nameError || nameRes.rows.length === 0){
+			if (nameError){
+				console.log(nameError);
+			}
 			//Not in DB
 			res.redirect('/newaccount');
 		} else{
