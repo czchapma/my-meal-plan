@@ -584,17 +584,6 @@ app.post('/menu/ratty', function(req, res) {
 		} else {
 			res.end('invalid meal type ' + meal);
 		}
-		//TODO if time > 18 need THE NEXT DAYS breakfast
-		// if (day !== 0 && (time < 11 || time > 18)){
-			//Breakfast
-			// makeRattyIvyMenu(res,[bSrc,lSrc,dSrc],ignoreList, false);
-		// } else if (time < 15 || (day === 0 && time > 18)) {
-		// 	//Lunch
-		// 	makeRattyIvyMenu(res,lSrc,ignoreList, false);
-		// } else {
-		// 	//Dinner
-		// 	makeRattyIvyMenu(res, dSrc, ignoreList, false);
-		// }
 	});
 });
 
@@ -602,7 +591,7 @@ app.get('/menu/vdub', function(req,res) {
 	makeRequest(res, 'http://www.brown.edu/Student_Services/Food_Services/eateries/verneywoolley_menu.php', function(body){
 		$ = cheerio.load(body);
 		var src = $('iframe').first().attr('src');
-		var ignoreList = ["",".","OPENS FOR LUNCH","Opens for lunch","Opens for Lunch",'spring 1', 'spring 2', 'spring 3', 'spring 4', 'spring 5', 'spring 6', 'spring 7', 'Breakfast','Lunch','Dinner', 'Daily Sidebars'];
+		var ignoreList = ["",".","OPENS FOR LUNCH","Opens for lunch","Opens for Lunch",'spring 1', 'spring 2', 'spring 3', 'spring 4', 'spring 5', 'spring 6', 'spring 7', 'spring 8', 'Breakfast','Lunch','Dinner', 'Daily Sidebars'];
 
 		function callback(body){
 			var toReturn = ["","","",""];
@@ -628,18 +617,8 @@ app.get('/menu/vdub', function(req,res) {
 			for(var i=0; i< toReturn.length; i++){
 				toReturn[i] = toReturn[i].substr(0,toReturn[i].length - 1);
 			}
-
-			var time = new Date().getHours();
-			if (time < 11 || time > 19){
-				//Breakfast
-				res.end(toReturn[1]);
-			} else if (time < 15){
-				//Lunch
-				res.end(toReturn[2] + '\n' + toReturn[0]);
-			} else {
-				//Dinner
-				res.end(toReturn[3] + '\n' + toReturn[0]);
-			}
+			var json = {'breakfast':toReturn[1], 'lunch':toReturn[2] + '\n' + toReturn[0], 'dinner': toReturn[3] + '\n' + toReturn[0]};
+			res.json(json);
 		}
 		makeRequest(res, src, callback);
 	});
@@ -775,7 +754,6 @@ app.get('/status/blueroom', function(req, res){
 	var hour = new Date().getHours();
 	var minute = new Date().getMinutes();
 	var day = moment().day();
-	console.log(day);
 	var toReturn = {};
 	//Weekdays: 7:30AM - 9PM
 	if (day !== 6 && day !== 7){
@@ -905,7 +883,7 @@ app.get('/specials/vdub', function(req, res){
 	makeRequest(res, 'http://www.brown.edu/Student_Services/Food_Services/eateries/verneywoolley_menu.php', function(body){
 		$ = cheerio.load(body);
 		var src = $('iframe').first().attr('src');
-		var ignoreList = ["",".","OPENS FOR LUNCH","Opens for lunch","Opens for Lunch",'spring 1', 'spring 2', 'spring 3', 'spring 4', 'spring 5', 'Breakfast','Lunch','Dinner', 'Daily Sidebars'];
+		var ignoreList = ["",".","OPENS FOR LUNCH","Opens for lunch","Opens for Lunch",'spring 1', 'spring 2', 'spring 3', 'spring 4', 'spring 5', 'spring 6', 'spring 7', 'spring 8', 'Breakfast','Lunch','Dinner', 'Daily Sidebars'];
 
 		function callback(body){
 			var toReturn = ["","","",""];

@@ -8,34 +8,39 @@ $(document).ready(function(){
     if ($("#status-ivyroom").hasClass('closed'))
 	$("#ivy-room-tab").css("border-bottom", "4px solid red");
 
-	$('#ratty_breakfast_link').click(function(){
-		$('#ratty_breakfast').show();
-		$('#ratty_lunch').hide();
-		$('#ratty_dinner').hide();
-		$('#dining_buttons a').css({'background-color':'#7309AA', 'color':'white'});
-		$(this).css({'color':'#7309AA', 'background-color':'white'});
-	});
-	$('#ratty_lunch_link').click(function(){
-		$('#ratty_breakfast').hide();
-		$('#ratty_lunch').show();
-		$('#ratty_dinner').hide();
-		$('#dining_buttons a').css({'background-color':'#7309AA', 'color':'white'});
-		$(this).css({'color':'#7309AA', 'background-color':'white'});
-
-	});
-	$('#ratty_dinner_link').click(function(){
-		$('#ratty_breakfast').hide();
-		$('#ratty_lunch').hide();
-		$('#ratty_dinner').show();
-		$('#dining_buttons a').css({'background-color':'#7309AA', 'color':'white'});
-		$(this).css({'color':'#7309AA', 'background-color':'white'});
-
-	});
-
+	setupDiningBar();
 	generateMenus();
     generateStatues();
     generateTimes();
 });
+
+function setupDiningBar(){
+	var halls = ['ratty','vdub'];
+	halls.forEach(function(entry){
+		$('#' + entry + '_breakfast_link').click(function(){
+			$('#' + entry + '_breakfast').show();
+			$('#' + entry + '_lunch').hide();
+			$('#' + entry + '_dinner').hide();
+			$(this).siblings('a').css({'background-color':'#7309AA', 'color':'white'});
+			$(this).css({'color':'#7309AA', 'background-color':'white'});
+		});
+		$('#' + entry + '_lunch_link').click(function(){
+			$('#' + entry + '_breakfast').hide();
+			$('#' + entry + '_lunch').show();
+			$('#' + entry + '_dinner').hide();
+			$(this).siblings('a').css({'background-color':'#7309AA', 'color':'white'});
+			$(this).css({'color':'#7309AA', 'background-color':'white'});	
+
+		});
+		$('#' + entry + '_dinner_link').click(function(){
+			$('#' + entry + '_breakfast').hide();
+			$('#' + entry + '_lunch').hide();
+			$('#' + entry + '_dinner').show();
+			$(this).siblings('a').css({'background-color':'#7309AA', 'color':'white'});
+			$(this).css({'color':'#7309AA', 'background-color':'white'});
+		});
+	});
+}
 
 function generateStatues(){
     dininghalls.forEach(function(entry){
@@ -82,12 +87,24 @@ function generateMenus(){
     $.ajax({
 	url: "/menu/vdub"
     }).done(function(result) {
-	var parent = $('#tab-content2 .menus');
-	var split = result.split('\n');
-	for (var i=0; i<split.length; i++){
-	    var li ='<li>'+ split[i] + '</li>';
-	    parent.append(li);
-	}
+    	var meal = ['breakfast', 'lunch', 'dinner'];
+    	for (var mealId=0; mealId < meal.length; mealId++){
+			var parent = $('#tab-content2 #vdub_' + meal[mealId]);
+			var split = result[meal[mealId]].split('\n');
+			for (var i=0; i<split.length; i++){
+			    var li ='<li>'+ split[i] + '</li>';
+			    parent.append(li);
+			}
+		}
+		var date = new Date();
+		if (date.getHours() < 11 || date.getHours() >= 20){
+			$('#vdub_breakfast_link').trigger('click');
+		} else if (date.getHours() < 14){
+			$('#vdub_lunch_link').trigger('click');
+		} else {
+			$('#vdub_dinner_link').trigger('click');
+		}
+
     });
 
     //Generate Blue Room menu
@@ -158,7 +175,7 @@ function generateRatty(){
 			}
     	});
    		var date = new Date();
-		if (date.getHours() < 11 || date.getHours() > 20){
+		if (date.getHours() < 11 || date.getHours() >= 20){
 			$('#ratty_breakfast_link').trigger('click');
 		} else if (date.getHours() < 16){
 			$('#ratty_lunch_link').trigger('click');
