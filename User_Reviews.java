@@ -114,8 +114,8 @@ public class User_Reviews implements Serializable {
 		{
 			if(theirReviewed.contains(s))
 			{
-				diff += Math.pow((reviews.get(s) - otherUser.getReviews().get(s)),2);
-			}
+				diff += Math.pow((reviews.get(s) - otherUser.getReviews().get(s)),2) - 1; //subtracting 1 so that people who have more reviews in common can be closer
+			} 
 		}
 		return diff;
 	}
