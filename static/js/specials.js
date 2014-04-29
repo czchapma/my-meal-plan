@@ -40,17 +40,20 @@ $(document).ready(function(){
     });
 
     dininghalls.forEach(function(entry){
-	$.ajax({
-	    url: "/specials/" + entry
-	}).done(function(result) {
-		var diningHall = hallToDescription[entry];
-		var foods = result;
-		if (entry === 'vdub'){
-			var split = foods.split(' ');
-			diningHall = diningHall + ' ' + split[0];
-			foods = foods.replace(split[0] + ' ','');
+    	var date = new Date();
+    	if (entry !== 'ivyroom' || date.getHours() < 14){
+			$.ajax({
+			    url: "/specials/" + entry
+			}).done(function(result) {
+				var diningHall = hallToDescription[entry];
+				var foods = result;
+				if (entry === 'vdub'){
+					var split = foods.split(' ');
+					diningHall = diningHall + ' ' + split[0];
+					foods = foods.replace(split[0] + ' ','');
+				} 
+				$('#' + entry).html("<h2>" +  diningHall + '</h2> <div class="foods"> ' + foods + "</div>");
+			});
 		}
-	    $('#' + entry).html("<h2>" +  diningHall + '</h2> <div class="foods"> ' + foods + "</div>");
-	});
     });
 });
