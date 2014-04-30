@@ -69,7 +69,7 @@ $(document).ready(function(){
                 var check = document.getElementById(arr[i]);
                 var myitem = document.getElementById(arr[i] + 'li');
 		$(check).attr('in-cart', 'false');
-                myitem.setAttribute('style','');
+                myitem.setAttribute('style','background-color:gray');
                 cart.append(myitem);
                 total.innerHTML = Number(check.getAttribute('price')) + Number(total.innerHTML);
             }
@@ -268,11 +268,15 @@ function makeListOfItems(eatery, result) {
 		var input = $(this).children('item');
 		if (input.attr('in-cart') == 'true') {
                     var myitem = document.getElementById(input.attr('id') + 'li');
+                    myitem.setAttribute("style","background-color:transparent;");
+                    
                     ul.append(myitem);
                     total.innerHTML = 0 - Number(input.attr('price')) + Number(total.innerHTML);
 		    input.attr('in-cart', 'false');
 		} else {
+
                     var myitem = document.getElementById(input.attr('id') + 'li');
+                    myitem.setAttribute("style","background-color:white;");
                     cart.append(myitem);
                     total.innerHTML = Number(input.attr('price')) + Number(total.innerHTML);
 		    input.attr('in-cart', 'true');
