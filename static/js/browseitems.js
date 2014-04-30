@@ -135,7 +135,7 @@ $(document).ready(function(){
             var item = $(this).children('.food-item').text().toLowerCase();
             var currText = $('#browse-input').val().toLowerCase();
             //if item does not start with currText, hide the li
-            if (item.lastIndexOf(currText, 0) === 0) {
+            if ((item.lastIndexOf(currText, 0) === 0) || item.indexOf(' ' + currText) > -1) {
                 $(this).show();
             } else {
                 $(this).hide();
