@@ -88,20 +88,7 @@ $(document).ready(function(){
         
         var cart = $('#cart');
         var money = (680 + 680 - Number(total.innerHTML));
-        var tab3 = document.getElementById('tab3');
-        var tab4 = document.getElementById('tab4');
-        var tab5 = document.getElementById('tab5');
-        var tab6 = document.getElementById('tab6');
-        var myhall = "";
-        if(tab3.checked)
-            myhall= "blueroom"
-        if(tab4.checked)
-            myhall = "ivyroom"
-        if(tab5.checked)
-            myhall = "aco"
-        if(tab6.checked)
-            myhall = "jos"
-        
+        var myhall = getDiningHall();        
         console.log(myhall);
         $.post( "/knapsack", {maxMoney:money, hall:myhall}, function(data,status){
             //TODO: make it so people can buy more than 1 of the same item. 
@@ -292,14 +279,14 @@ function makeListOfItems(eatery, result) {
 		    input.attr('in-cart', 'true');
 		}
 	    });
-	        var reportitem = $(document.createElement('button'));
-            reportitem.attr('id',priceItemSplit[0] + "button");
-            reportitem.html("Add a flavor/type");
-            reportitem.click(function(){
-                var flavor = window.prompt("Enter the flavor or type")
-                console.log("REPORTING ITEM" + this.id.substring(0, this.id.length - 6));
-                $.post("/flavor", {item: this.id.substring(0, this.id.length - 6), user:"fakeperson", flavor: flavor}, function(){});
-            });
+        var reportitem = $(document.createElement('button'));
+        reportitem.attr('id',priceItemSplit[0] + "button");
+        reportitem.html("Add a flavor/type");
+        reportitem.click(function(){
+            var flavor = window.prompt("Enter the flavor or type")
+            console.log("REPORTING ITEM" + this.id.substring(0, this.id.length - 6));
+            $.post("/flavor", {item: this.id.substring(0, this.id.length - 6), location:getDiningHall(), flavor: flavor}, function(){});
+        });
 
             li.html(' <div class="food-item">' + priceItemSplit[0] + "</div><div class='food-price'>" + prettyPrint(priceItemSplit[1]) + "</div>");
             li.append(check);
@@ -319,6 +306,7 @@ function prettyPrint(price){
     return toReturn;
 }
 
+
 function updateTotal(){
     total.innerHTML = "";
     var foods = $("#cart").children();
@@ -331,3 +319,23 @@ function updateTotal(){
     }
     total.innerHTML = sum;
 }
+
+function getDiningHall(){
+    var tab3 = document.getElementById('tab3');
+    var tab4 = document.getElementById('tab4');
+    var tab5 = document.getElementById('tab5');
+    var tab6 = document.getElementById('tab6');
+    var myhall = "";
+    if(tab3.checked)
+        myhall= "blueroom"
+    if(tab4.checked)
+        myhall = "ivyroom"
+    if(tab5.checked)
+        myhall = "aco"
+    if(tab6.checked)
+        myhall = "jos"
+
+    return myhall;
+}
+
+

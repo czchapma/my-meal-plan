@@ -109,7 +109,7 @@ function resetServer(){
 			conn.query('CREATE TABLE bugs(user TEXT, time INTEGER, message TEXT)');
 			conn.query('CREATE TABLE purchases (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, date TEXT)');
 			conn.query('CREATE TABLE ratings (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, rating INTEGER)');
-			conn.query('CREATE TABLE flavors (user TEXT, item TEXT, flavor TEXT)');
+			conn.query('CREATE TABLE flavors (user TEXT, item TEXT, flavor TEXT, location TEXT)');
 			conn.query('CREATE TABLE missing (food TEXT, price INTEGER, location TEXT)');
 		});
 	});
@@ -126,8 +126,9 @@ app.post("/flavor", function(req,res){
 	var user = req.user.emails[0].value;
 	var flavor= req.body.flavor;
 	var item = req.body.item;
-	var queryString = 'INSERT INTO flavors VALUES ($1, $2, $3)';
-	var query = conn.query(queryString, [user, item, flavor]); //TODO: log the actual time
+	var loc = req.body.location;
+	var queryString = 'INSERT INTO flavors VALUES ($1, $2, $3, $4)';
+	var query = conn.query(queryString, [user, item, flavor, loc]);
 	query.on('error', console.error);
 	query.on('end', function(){
 		res.end();
@@ -138,9 +139,10 @@ app.post("/flavor", function(req,res){
 app.post("/approve", function(req,res){
 	var flavor = req.body.flavor;
 	var item = req.body.item;
-
-	var queryStringP = 'SELECT price, location FROM food WHERE item=$1';
-	conn.query(queryStringP, [item],function(error, results){
+	var location = req.body.location;
+	console.log('location',location);
+	var queryStringP = 'SELECT price FROM food WHERE item=$1 AND location=$2';
+	conn.query(queryStringP, [item, location],function(error, results){
 		if(error){
 			console.error(error);
 		}
@@ -148,11 +150,11 @@ app.post("/approve", function(req,res){
 		if(Number(info.price) === info.price) //TODO: make this actually check that price is defined
 		{
 			var newfood = (item + " - " + flavor);
-			conn.query('INSERT INTO food VALUES ($1,$2,$3, $4)', [null, newfood, info.price, info.location]);
+			conn.query('INSERT INTO food VALUES ($1,$2,$3, $4)', [null, newfood, info.price, location]);
 			addFoodToClient([newfood]);
 		}
-		var queryStringD = 'DELETE FROM flavors WHERE item=$1 AND flavor=$2';
-		var queryD = conn.query(queryStringD, [item, flavor]); 
+		var queryStringD = 'DELETE FROM flavors WHERE item=$1 AND flavor=$2 AND location=$3';
+		var queryD = conn.query(queryStringD, [item, flavor, location]); 
 		queryD.on('error', console.error);
 		queryD.on('end', function(){
 			res.end();
@@ -183,8 +185,10 @@ app.post("/approveMissing", function(req,res){
 app.post("/deny",function(req,res){
 	var flavor = req.body.flavor;
 	var item = req.body.item;
-	var queryStringD = 'DELETE FROM flavors WHERE item=$1 AND flavor=$2';
-	var queryD = conn.query(queryStringD, [item, flavor]); 
+	var location = req.body.location;
+
+	var queryStringD = 'DELETE FROM flavors WHERE item=$1 AND flavor=$2 AND location=$3';
+	var queryD = conn.query(queryStringD, [item, flavor,location]); 
 	queryD.on('error', console.error);
 	queryD.on('end', function(){
 		res.end();
