@@ -8,12 +8,21 @@
 #missing-food-form{
     display:block;
 }
+#mainstuff{
+    width:80%;
+    margin:auto;
+}
 
+#cart{
+    height:300px;
+    overflow-y:scroll;
+}
 #right-panel
 {
+    display:inline-block;
     margin-left:50px;
     margin-top:50px;
-    float:left;
+    width:30%;
     background-color:#E8E8E8;
     padding:10px;
 
@@ -33,12 +42,13 @@
 }
 
 #left-panel {
+    display:inline-block;
     padding:10px;
     margin: 50px;
-    float:right;
+    float:left;
     text-align: center;
     background-color:#E8E8E8;
-    width: 40%;
+    width: 50%;
 }
 
 #left-panel button {
