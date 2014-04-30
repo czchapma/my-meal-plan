@@ -316,7 +316,8 @@ function makeListOfItems(eatery, result) {
         var reportitem = $(document.createElement('button'));
         reportitem.attr('id',priceItemSplit[0] + "button");
         reportitem.html("Add a flavor/type");
-        reportitem.click(function(){
+        reportitem.click(function(event){
+            event.preventDefault();
             var flavor = window.prompt("Enter the flavor or type")
             console.log("REPORTING ITEM" + this.id.substring(0, this.id.length - 6));
             $.post("/flavor", {item: this.id.substring(0, this.id.length - 6), location:getDiningHall(), flavor: flavor}, function(){});
