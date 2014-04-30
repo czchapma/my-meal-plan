@@ -3,12 +3,6 @@ var email = document.querySelector('meta[name=email]').content;
 var ratings = {};
 var numNewItems = 0;
 $(document).ready(function(){
-    
-    //Logo redirects to home
-    $('#logo').click(function(){
-	$(location).attr('href','/');
-    });
-
     if ($('#other').prop('checked') === true) {
 	//if checked, show other box
 	$('#otherType').show();

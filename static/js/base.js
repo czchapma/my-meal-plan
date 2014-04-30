@@ -1,5 +1,11 @@
 var name = document.querySelector('meta[name=name]').content;
 $(document).ready(function(){
+
+    //Home logo redirects to home
+    $('#logo').click(function(){
+        $(location).attr('href','/');
+    });
+
     $.ajax({
         url: "/isLoggedIn"
     }).done(function(result) {

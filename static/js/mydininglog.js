@@ -1,9 +1,5 @@
 $(document).ready(function(){
     $('#missing-food-form').hide();
-    //Logo redirects to home
-    $('#logo').click(function(){
-	$(location).attr('href','/');
-    });
 
     $('#somethingmissing').click(function(){
         $('#missing-food-form').show();
