@@ -1052,11 +1052,12 @@ app.get('/itemlist', function(req, res){
 });
 
 app.get('/', function(req, res){
-  if (req.isAuthenticated()) {
-	res.render('home.html', {name : req.user.displayName});
-  } else{
-  	res.render('home.html');
-  }
+	res.redirect('/dininghalls');
+ //  if (req.isAuthenticated()) {
+	// res.render('home.html', {name : req.user.displayName});
+ //  } else{
+ //  	res.render('home.html');
+ //  }
 });
 
 app.get('/mod',function(req,res){
