@@ -32,4 +32,22 @@ $(document).ready(function(){
         document.getElementById('letitgo').play();
         $('img').attr('src','static/imgs/frozen.jpg');
     }
+
+    if (rand > 9500){
+        $('body *').css({'background-color':'black'});
+        $('body *').css({'color':'#fd9fb6'})
+        $('body').css({'background-color' : 'transparent'});
+        $('body').css({'background-image':'url("static/imgs/nothingtoseehere.jpeg")'});
+        $('body').css({'background-size':'50%'});
+        
+        $('#nav_bar').css({'background-color':'black'});
+        $('#nav_bar *').css({'color':'#fd9fb6'});
+        $('#home-content').css({'background-color':'black'});
+
+        $('#home-content').css({'color':'#fd9fb6'});
+        $('#nav_bar').append('<audio id="meh" src="totallyuninteresting.wav" preload="auto"></audio>');   
+        $('#nav_buttons a:hover').css({'background-color':'#FFF6DB'})     
+        document.getElementById('meh').play();
+        //$('img').attr('src','static/imgs/nothingtoseehere.jpg');
+    }
 });

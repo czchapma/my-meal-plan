@@ -150,7 +150,11 @@ $(document).ready(function(){
         if(blueroom.checked)
             myhall= "blueroom";
         if(ivy.checked)
+        {
+
+            console.log("IVYROOM CHECKED");
             myhall = "ivyroom";
+        }
         if(aco.checked)
             myhall = "aco";
         if(jos.checked)
