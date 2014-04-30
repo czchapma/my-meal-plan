@@ -23,7 +23,7 @@ $(document).ready(function(){
 
     //secret thing
     var rand = Math.floor((Math.random()*10000)+1);
-    if (rand === 2222){
+    if (rand < 9500 && rand > 9450){
         $('#nav_bar').css({'background-color':'#7fedf0'});
         $('body').css({'background-color':'#C6F2FC'});
         $('#home-content').css({'background-color':'#FFF6DB'});
@@ -33,7 +33,7 @@ $(document).ready(function(){
         $('img').attr('src','static/imgs/frozen.jpg');
     }
 
-    if (rand > 9500){
+    if (rand < 9500 && rand > 9450){
         $('body *').css({'background-color':'black'});
         $('body *').css({'color':'#fd9fb6'})
         $('body').css({'background-color' : 'transparent'});
