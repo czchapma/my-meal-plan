@@ -75,6 +75,25 @@ $(document).ready(function(){
     }
 
     //*************************************************************************
+
+    $('#tryagain').click( function(){
+        var foods = $("#cart").children();
+       
+        for(var i = 0; i < foods.length; i++)
+        {   
+            var isknapsack = $(foods[i]).children('item').attr('fromKnapsack'); //need which ones were put automatically
+            if(isknapsack === "true") //only remove if the element was automatically chosen
+            {
+                var eatery = $(foods[i]).children('item').attr('hall'); //need which list to put back in
+                $(foods[i]).children('item').attr('in-cart', 'false'); //cuz it's not in the cart anymore               
+                 var ul= $('#log-form-list-' + eatery); 
+                 $(foods[i]).css({"background-color":"transparent"});   //change background back                
+                ul.append(foods[i]);  //put the li into the appropriate list
+            }           
+        }
+        updateTotal(); 
+    });
+
     console.log(knapsack);
     knapsack.addEventListener('click', function() {
         knapsack2.disabled=true; //stop the user from over clicking and pinging and getting concurency problems
@@ -106,6 +125,7 @@ $(document).ready(function(){
                 var check = document.getElementById(arr[i]);
                 var myitem = document.getElementById(arr[i] + 'li');
 		        $(check).attr('in-cart', 'true');
+                $(check).attr('fromKnapsack','true');
                 myitem.setAttribute('style','background-color:gray');
                 cart.append(myitem);
                 updateTotal();
@@ -133,6 +153,7 @@ $(document).ready(function(){
             {
                 var check = document.getElementById(arr[i]);
                 $(check).attr('in-cart', 'true');
+                $(check).attr('fromKnapsack','true');
                	var myitem = document.getElementById(arr[i] + 'li');
                 myitem.setAttribute('style','background-color:gray');
                 cart.append(myitem);
@@ -298,6 +319,7 @@ function makeListOfItems(eatery, result) {
             check.setAttribute('id', priceItemSplit[0]);
             check.setAttribute('price',priceItemSplit[1]);
             check.setAttribute('hall',eatery);
+            check.setAttribute('fromKnapsack','false');
 	    check.setAttribute('in-cart', 'false');
 	    $(li).click(function() {
 		var input = $(this).children('item');
@@ -308,14 +330,16 @@ function makeListOfItems(eatery, result) {
                     ul.append(myitem);
                     updateTotal();
 		    input.attr('in-cart', 'false');
-		} else {
+		} 
+        else {
 
                     var myitem = document.getElementById(input.attr('id') + 'li');
                     myitem.setAttribute("style","background-color:white;");
+                    input.attr('fromKnapsack','false');
                     cart.append(myitem);
                     updateTotal();
-		    input.attr('in-cart', 'true');
-		}
+		            input.attr('in-cart', 'true');
+		    }
 	    });
         var reportitem = $(document.createElement('button'));
         reportitem.attr('id',priceItemSplit[0] + "button");
