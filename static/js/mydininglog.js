@@ -42,6 +42,8 @@ $(document).ready(function(){
 
     console.log(knapsack);
     knapsack.addEventListener('click', function() {
+        knapsack2.disabled=true; //stop the user from over clicking and pinging and getting concurency problems
+        knapsack.disabled=true;
         console.log("CLicked");
         var cart = $('#cart');
         var money = (680 - Number(total.innerHTML));
@@ -68,17 +70,22 @@ $(document).ready(function(){
             {
                 var check = document.getElementById(arr[i]);
                 var myitem = document.getElementById(arr[i] + 'li');
-		$(check).attr('in-cart', 'false');
+		        $(check).attr('in-cart', 'true');
                 myitem.setAttribute('style','background-color:gray');
                 cart.append(myitem);
-                total.innerHTML = Number(check.getAttribute('price')) + Number(total.innerHTML);
+                updateTotal();
+                knapsack2.disabled=false; //let the user click again
+                knapsack.disabled=false;
             }
         });
     });
     console.log(knapsack);
 
     knapsack2.addEventListener('click', function() {
+        knapsack2.disabled=true; //stop the user from over clicking and pinging and getting concurency problems
+        knapsack.disabled=true;
         console.log("CLicked");
+        
         var cart = $('#cart');
         var money = (680 + 680 - Number(total.innerHTML));
         var tab3 = document.getElementById('tab3');
@@ -103,9 +110,12 @@ $(document).ready(function(){
             {
                 var check = document.getElementById(arr[i]);
                 $(check).attr('in-cart', 'true');
-		var myitem = document.getElementById(arr[i] + 'li');
+               	var myitem = document.getElementById(arr[i] + 'li');
+                myitem.setAttribute('style','background-color:gray');
                 cart.append(myitem);
-                total.innerHTML = Number(check.getAttribute('price')) + Number(total.innerHTML);
+                updateTotal();
+                knapsack2.disabled=false; //let the user click again
+                knapsack.disabled=false;
             }
         });
     });
@@ -271,14 +281,14 @@ function makeListOfItems(eatery, result) {
                     myitem.setAttribute("style","background-color:transparent;");
                     
                     ul.append(myitem);
-                    total.innerHTML = 0 - Number(input.attr('price')) + Number(total.innerHTML);
+                    updateTotal();
 		    input.attr('in-cart', 'false');
 		} else {
 
                     var myitem = document.getElementById(input.attr('id') + 'li');
                     myitem.setAttribute("style","background-color:white;");
                     cart.append(myitem);
-                    total.innerHTML = Number(input.attr('price')) + Number(total.innerHTML);
+                    updateTotal();
 		    input.attr('in-cart', 'true');
 		}
 	    });
@@ -307,4 +317,17 @@ function prettyPrint(price){
     toReturn += '.';
     toReturn +=  price - (dollar * 100);
     return toReturn;
+}
+
+function updateTotal(){
+    total.innerHTML = "";
+    var foods = $("#cart").children();
+    console.log(foods);
+    var sum = 0;
+    for(var i = 0; i < foods.length; i++)
+    {
+        var myitem = $(foods[i]).children('item');
+        sum+= Number(myitem.attr('price'));
+    }
+    total.innerHTML = sum;
 }
