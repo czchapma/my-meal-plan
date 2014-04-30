@@ -23,7 +23,7 @@ $(document).ready(function(){
 
     //secret thing
     var rand = Math.floor((Math.random()*10000)+1);
-    if (rand < 9500 && rand > 9450){
+    if (rand < 4500 && rand > 4450){
         $('#nav_bar').css({'background-color':'#7fedf0'});
         $('body').css({'background-color':'#C6F2FC'});
         $('#home-content').css({'background-color':'#FFF6DB'});
