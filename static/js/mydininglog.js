@@ -74,9 +74,10 @@ $(document).ready(function(){
                 myitem.setAttribute('style','background-color:gray');
                 cart.append(myitem);
                 updateTotal();
-                knapsack2.disabled=false; //let the user click again
-                knapsack.disabled=false;
+                
             }
+            knapsack2.disabled=false; //let the user click again
+            knapsack.disabled=false;
         });
     });
     console.log(knapsack);
@@ -101,9 +102,10 @@ $(document).ready(function(){
                 myitem.setAttribute('style','background-color:gray');
                 cart.append(myitem);
                 updateTotal();
-                knapsack2.disabled=false; //let the user click again
-                knapsack.disabled=false;
+                
             }
+            knapsack2.disabled=false; //let the user click again
+            knapsack.disabled=false;
         });
     });
     $('#log-form').submit(function(event){
