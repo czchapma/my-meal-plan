@@ -1035,7 +1035,7 @@ app.get('/itemlist', function(req, res){
 			map[result.rows[i]['item']] = result.rows[i]['rating'];
 		}
 		console.log(map);
-		var foodQuery = conn.query('SELECT g item, price from food');
+		var foodQuery = conn.query('SELECT DISTINCT item, price from food');
 		foodQuery.on('row', function(row){
 			if (row !== undefined){
 				if (map[row.item]){
