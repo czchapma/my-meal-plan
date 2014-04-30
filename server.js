@@ -308,7 +308,7 @@ app.get('/newaccount', ensureAuthenticated, function(req, res){
 
 //get 5 random items to rate, called in newaccount.js
 app.get('/random5', function(req, res){
-	var queryString = 'SELECT * FROM food ORDER BY RANDOM() LIMIT 5;';
+	var queryString = 'SELECT DISTINCT * FROM food ORDER BY RANDOM() LIMIT 5;';
 	conn.query(queryString, function(err, response){
 		if(err){
 			console.log(err);
@@ -1035,7 +1035,7 @@ app.get('/itemlist', function(req, res){
 			map[result.rows[i]['item']] = result.rows[i]['rating'];
 		}
 		console.log(map);
-		var foodQuery = conn.query('SELECT * from food');
+		var foodQuery = conn.query('SELECT DISTINCT item, price from food');
 		foodQuery.on('row', function(row){
 			if (row !== undefined){
 				if (map[row.item]){
@@ -1060,9 +1060,10 @@ app.get('/', function(req, res){
  //  }
 });
 
-app.get('/mod',function(req,res){
+app.get('/mod', isModerator, function(req,res){
 	res.render('mod.html');
 });
+
 app.get('*', function(req,res){
 });
 
@@ -1169,6 +1170,17 @@ function fillUsersDB() {
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login');
+}
+
+function isModerator(req, res, next) {
+  if (req.isAuthenticated()) {
+  	var user = getUser(req);
+  	var modList = ['christine_chapman@brown.edu', 'steven_mcgarty@brown.edu', 'raymond_zeng@brown.edu', 'zachary_olstein@brown.edu'];
+  	if (modList.indexOf(user) > -1) {
+		return next();
+  	}
+  }
+  res.redirect('/');
 }
 
 function getUser(req){
