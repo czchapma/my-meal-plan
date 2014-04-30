@@ -1060,9 +1060,10 @@ app.get('/', function(req, res){
  //  }
 });
 
-app.get('/mod',function(req,res){
+app.get('/mod', isModerator, function(req,res){
 	res.render('mod.html');
 });
+
 app.get('*', function(req,res){
 });
 
@@ -1169,6 +1170,17 @@ function fillUsersDB() {
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login');
+}
+
+function isModerator(req, res, next) {
+  if (req.isAuthenticated()) {
+  	var user = getUser(req);
+  	var modList = ['christine_chapman@brown.edu', 'steven_mcgarty@brown.edu', 'raymond_zeng@brown.edu', 'zachary_olstein@brown.edu'];
+  	if (modList.indexOf(user) > -1) {
+		return next();
+  	}
+  }
+  res.redirect('/');
 }
 
 function getUser(req){
