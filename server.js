@@ -148,7 +148,7 @@ app.post("/approve", function(req,res){
 		if(Number(info.price) === info.price) //TODO: make this actually check that price is defined
 		{
 			var newfood = (item + " - " + flavor);
-			conn.query('INSERT INTO food VALUES ($1,$2,$3)', [newfood, info.price, info.location]);
+			conn.query('INSERT INTO food VALUES ($1,$2,$3, $4)', [null, newfood, info.price, info.location]);
 			addFoodToClient([newfood]);
 		}
 		var queryStringD = 'DELETE FROM flavors WHERE item=$1 AND flavor=$2';
@@ -168,7 +168,7 @@ app.post("/approveMissing", function(req,res){
 	console.log(food);
 	console.log(price);
 	console.log(location);
-	conn.query('INSERT INTO food VALUES ($1,$2,$3)', [food, price, location]).on('end',function(error, result){
+	conn.query('INSERT INTO food VALUES ($1,$2,$3,$4)', [null, food, price, location]).on('end',function(error, result){
 		console.log(error);});
 		addFoodToClient([food]);
 		var queryStringD = 'DELETE FROM missing WHERE food=$1 AND price=$2 AND location=$3';
@@ -566,7 +566,8 @@ app.get('/prevtransactions', ensureAuthenticated, function(req,res) {
 
 app.post('/menu/ratty', function(req, res) {
 	var meal = req.body.meal;
-	makeRequest(res, 'http://www.brown.edu/Student_Services/Food_Services/eateries/refectory_menu.php',function(body){
+	var url = getRattyUrl();
+	makeRequest(res,getRattyUrl(),function(body){
 		$ = cheerio.load(body);
 		var day = moment().day();
 		var bSrc = $('#Breakfast').attr('src');
@@ -864,12 +865,12 @@ app.get('/times/aco', function(req,res){
 });
 
 app.get('/specials/ratty', function(req, res){
-	makeRequest(res, 'http://www.brown.edu/Student_Services/Food_Services/eateries/refectory_menu.php',function(body){
+	makeRequest(res, getRattyUrl(),function(body){
 		$ = cheerio.load(body);
 		var lSrc = $('#Lunch').attr('src');
 		var dSrc = $('#Dinner').attr('src');
 		var time = new Date().getHours();
-		if (time < 15){
+		if (time < 15 || time > 19){
 			//Lunch
 			makeRattyIvyMenu(res,lSrc,[], true);
 		} else {
@@ -1101,9 +1102,9 @@ function andrewsSpecials(res) {
 
 function fillFoodDB() {
 	var foodList = ['jos','aco', 'ivyroom', 'blueroom'];
-	conn.query('CREATE TABLE food (item TEXT PRIMARY KEY,price INT, location TEXT)');
+	conn.query('CREATE TABLE food (id INTEGER PRIMARY KEY AUTOINCREMENT,item TEXT,price INT, location TEXT)');
 	for (var locIndex=0; locIndex < foodList.length; locIndex ++){
-		var queryString = 'INSERT INTO food VALUES ($1, $2, $3)';
+		var queryString = 'INSERT INTO food VALUES ($1, $2, $3, $4)';
 		var curr = foodList[locIndex];
 		var data = fs.readFileSync('data/' + foodList[locIndex] + '.csv', 'utf8');
 		var lines = data.split('\n');
@@ -1116,7 +1117,7 @@ function fillFoodDB() {
 				var price = split[1].trim();
 				price = price.replace('$','');
 				price = Math.ceil(100 * parseFloat(price));
-				conn.query(queryString, [item, price,curr]);
+				conn.query(queryString, [null, item, price,curr]);
 			}
 		}
 		addFoodToClient(itemList);
@@ -1215,4 +1216,19 @@ function getThreeBurners(){
 		threeBurners = 'Early Early Breakfast'
 	}
 	return threeBurners;
+}
+
+function getRattyUrl(){
+	var day = new Date().getDay();
+	var hour = new Date().getHours();
+	var url = 'http://www.brown.edu/Student_Services/Food_Services/eateries/refectory_menu.php';
+	if (hour > 19){
+		//show tomorrow
+		day = day + 1;
+		if (day > 6){
+			day = 0;
+		}
+		url = 'http://www.brown.edu/Student_Services/Food_Services/eateries/refectory_menu.php?day=' + day;
+	}
+	return url;
 }
