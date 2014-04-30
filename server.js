@@ -407,30 +407,38 @@ app.get('/allpurchases', function(req, res){
 
 app.post('/knapsack', function(req, res){
 	console.log(req.body.hall);
-	var myQuery = conn.query('SELECT * from food WHERE location=$1',[req.body.hall]);
-	var foodList = '';
-	myQuery.on('row', function(row){
-		if (row !== undefined){
-				foodList += row.item + "," + row.price + ',';
-		}
+	var ratings = {};
+	var ratingsQuery = conn.query('SELECT item,rating from ratings WHERE user=$1',[req.user.emails[0].value]);
+	ratingsQuery.on('row', function(row){
+		ratings[row.item] = ratings[row.rating];
 	});
-	myQuery.on('end', function(){
-		foodList = foodList.substring(0, foodList.length -1);
-		
-		var ls = spawn('java',["Knapsack",foodList,req.body.maxMoney]);
-		var output = "";
-		ls.stdout.on('data', function (data) {
-		  output += data;
-		});
 
-		ls.stderr.on('data', function (data) {
-		  console.log('stderr: ' + data);
+	ratingsQuery.on('end', function(){
+		var myQuery = conn.query('SELECT * from food WHERE location=$1',[req.body.hall]);
+		var foodList = '';
+		myQuery.on('row', function(row){
+			if (row !== undefined && (!ratings[row.item] || ratings[row.item] >= 3)) {
+					foodList += row.item + "," + row.price + ',';
+			}
 		});
+		myQuery.on('end', function(){
+			foodList = foodList.substring(0, foodList.length -1);
+			
+			var ls = spawn('java',["Knapsack",foodList,req.body.maxMoney]);
+			var output = "";
+			ls.stdout.on('data', function (data) {
+			  output += data;
+			});	
 
-		ls.on('exit', function (code) {
-		  res.end(output);
+			ls.stderr.on('data', function (data) {
+			  console.log('stderr: ' + data);
+			});	
+
+			ls.on('exit', function (code) {
+			  res.end(output);
+			});	
+
 		});
-
 	});
 });
 
