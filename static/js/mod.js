@@ -33,20 +33,21 @@ $(document).ready(function(){
     		var deny = $(document.createElement('button'));
     		console.log(li);
     		console.log(ul);
-    		li.html("<strong>" + result[i].user + "</strong> " + result[i].item + " " + result[i].flavor);
-    		approve.html("Approve <div class='food'>" + result[i].item + "</div> <div class='flavor'>" + result[i].flavor + "</div> <div class='i'>" + i + "</div>");
-    		deny.html("Deny <div class='food'>" + result[i].item + "</div> <div class='flavor'>" + result[i].flavor + "</div> <div class='i'>" + i + "</div>");
+    		li.html("<strong>" + result[i].user + "</strong> (" + result[i].location + ") " + result[i].item + " " + result[i].flavor );
+    		approve.html("Approve <div class='food'>" + result[i].item + "</div> <div class='flavor'>" + result[i].flavor + "</div> <div class='i'>" + i + "</div> <div class='location'>" + result[i].location + "</div>");
+    		deny.html("Deny <div class='food'>" + result[i].item + "</div> <div class='flavor'>" + result[i].flavor + "</div> <div class='i'>" + i + "</div> <div class='location'>" + result[i].location + "</div>");
 
     		approve.click(function(){
     			var foodclass = this.getElementsByClassName("food");
     			var flavorclass = this.getElementsByClassName("flavor");
     			var iclass = this.getElementsByClassName("i");
-    			
+    			var lclass = this.getElementsByClassName("location");
+
     			console.log("#" +  iclass[0].innerHTML);
     			var myli = document.getElementById(iclass[0].innerHTML);
     			console.log(myli);
     			$(myli).hide();
-    			$.post("/approve",{item: foodclass[0].innerHTML, flavor: flavorclass[0].innerHTML}, function(){
+    			$.post("/approve",{item: foodclass[0].innerHTML, flavor: flavorclass[0].innerHTML, location: lclass[0].innerHTML}, function(){
 
     			})
     		});
@@ -55,12 +56,13 @@ $(document).ready(function(){
     			var foodclass = this.getElementsByClassName("food");
     			var flavorclass = this.getElementsByClassName("flavor");
     			var iclass = this.getElementsByClassName("i");
-    			
+                var lclass = this.getElementsByClassName("location");
+
     			console.log("#" +  iclass[0].innerHTML);
     			var myli = document.getElementById(iclass[0].innerHTML);
     			console.log(myli);
     			$(myli).hide();
-    			$.post("/deny",{item: foodclass[0].innerHTML, flavor: flavorclass[0].innerHTML}, function(){
+    			$.post("/deny",{item: foodclass[0].innerHTML, flavor: flavorclass[0].innerHTML, location: lclass[0].innerHTML}, function(){
 
     			})
     		});
