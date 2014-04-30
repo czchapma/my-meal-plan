@@ -308,7 +308,7 @@ app.get('/newaccount', ensureAuthenticated, function(req, res){
 
 //get 5 random items to rate, called in newaccount.js
 app.get('/random5', function(req, res){
-	var queryString = 'SELECT * FROM food ORDER BY RANDOM() LIMIT 5;';
+	var queryString = 'SELECT DISTINCT * FROM food ORDER BY RANDOM() LIMIT 5;';
 	conn.query(queryString, function(err, response){
 		if(err){
 			console.log(err);
@@ -1035,7 +1035,7 @@ app.get('/itemlist', function(req, res){
 			map[result.rows[i]['item']] = result.rows[i]['rating'];
 		}
 		console.log(map);
-		var foodQuery = conn.query('SELECT * from food');
+		var foodQuery = conn.query('SELECT g item, price from food');
 		foodQuery.on('row', function(row){
 			if (row !== undefined){
 				if (map[row.item]){
