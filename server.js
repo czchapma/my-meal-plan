@@ -566,7 +566,8 @@ app.get('/prevtransactions', ensureAuthenticated, function(req,res) {
 
 app.post('/menu/ratty', function(req, res) {
 	var meal = req.body.meal;
-	makeRequest(res, 'http://www.brown.edu/Student_Services/Food_Services/eateries/refectory_menu.php',function(body){
+	var url = getRattyUrl();
+	makeRequest(res,getRattyUrl(),function(body){
 		$ = cheerio.load(body);
 		var day = moment().day();
 		var bSrc = $('#Breakfast').attr('src');
@@ -864,12 +865,12 @@ app.get('/times/aco', function(req,res){
 });
 
 app.get('/specials/ratty', function(req, res){
-	makeRequest(res, 'http://www.brown.edu/Student_Services/Food_Services/eateries/refectory_menu.php',function(body){
+	makeRequest(res, getRattyUrl(),function(body){
 		$ = cheerio.load(body);
 		var lSrc = $('#Lunch').attr('src');
 		var dSrc = $('#Dinner').attr('src');
 		var time = new Date().getHours();
-		if (time < 15){
+		if (time < 15 || time > 19){
 			//Lunch
 			makeRattyIvyMenu(res,lSrc,[], true);
 		} else {
@@ -1215,4 +1216,19 @@ function getThreeBurners(){
 		threeBurners = 'Early Early Breakfast'
 	}
 	return threeBurners;
+}
+
+function getRattyUrl(){
+	var day = new Date().getDay();
+	var hour = new Date().getHours();
+	var url = 'http://www.brown.edu/Student_Services/Food_Services/eateries/refectory_menu.php';
+	if (hour > 19){
+		//show tomorrow
+		day = day + 1;
+		if (day > 6){
+			day = 0;
+		}
+		url = 'http://www.brown.edu/Student_Services/Food_Services/eateries/refectory_menu.php?day=' + day;
+	}
+	return url;
 }
