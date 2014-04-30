@@ -116,3 +116,19 @@
 #content {
     margin-top:-70px;
 }
+
+/*Blue Room Specific CSS*/
+#tab-content3 .menus *{
+    width: 100%;
+    display: inline;
+    text-align: center;
+}
+
+#tab-content3 .menus strong {
+    display: inline-block;
+    text-align: center;
+}
+
+#current-br {
+    color: green;
+}
