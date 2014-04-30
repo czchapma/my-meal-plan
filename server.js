@@ -237,7 +237,7 @@ app.post('/bugs',function(req, res) {
 	console.log("A BUG!");
 	var user = 'not logged in!';
   	if (req.isAuthenticated()) {
-		user = getUser();
+		user = getUser(req);
 	}
 	var message = req.body.message;
 	var queryString = 'INSERT INTO bugs VALUES ($1, $2, $3)';
@@ -271,7 +271,7 @@ app.get('/logincallback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
   	//check if in the db
-  	var email = getUser();
+  	var email = getUser(req);
   	console.log(email);
   	var queryString = 'SELECT id FROM users WHERE username=$1';
     conn.query(queryString, [email], function(nameError, nameRes){
@@ -303,7 +303,7 @@ app.get('/isLoggedIn', function(req,res){
 });
 
 app.get('/newaccount', ensureAuthenticated, function(req, res){
-	res.render('newaccount.html', {name: req.user.displayName, email: getUser()});
+	res.render('newaccount.html', {name: req.user.displayName, email: getUser(req)});
 });
 
 //get 5 random items to rate, called in newaccount.js
@@ -383,7 +383,7 @@ app.post('/storeUser', function(req, res) {
 
 //Logs a purchase, used by mydininglog.js
 app.post('/logpurchase', function(req, res){
-	var email = getUser();
+	var email = getUser(req);
 	var item = req.body.item;
 	var date = new Date().toDateString();
 	var queryString = 'INSERT INTO purchases VALUES ($1, $2, $3, $4)';
@@ -395,7 +395,7 @@ app.post('/logpurchase', function(req, res){
 });
 
 app.get('/allpurchases', function(req, res){
-	var email = getUser();
+	var email = getUser(req);
 	var queryString = 'SELECT date,item from purchases WHERE email=$1';
 	conn.query(queryString, [email], function(error, results){
 		if(error){
@@ -408,7 +408,7 @@ app.get('/allpurchases', function(req, res){
 app.post('/knapsack', function(req, res){
 	console.log(req.body.hall);
 	var ratings = {};
-	var ratingsQuery = conn.query('SELECT item,rating from ratings WHERE email=$1',[getUser()]);
+	var ratingsQuery = conn.query('SELECT item,rating from ratings WHERE email=$1',[getUser(req)]);
 	ratingsQuery.on('row', function(row){
 		ratings[row.item] = row.rating;
 	});
@@ -452,7 +452,7 @@ app.post('/login', function(req, res, next) {
 });
 
 app.post('/review', function(req, res){
-	var email = getUser();
+	var email = getUser(req);
 	var item = req.body.item;
 	var rating = req.body.rating;
 	review(res, email, [item], [rating]);
@@ -461,7 +461,7 @@ app.post('/review', function(req, res){
 //TODO: fix security threat. By just concatenating the calls to RunML. someone could use some form of injection I think. 
 //My guess is that you could do something to turn the string into multiple lines, and then literally run anything serverside.
 app.post('/guess',function(req,res){
-	var username = getUser();
+	var username = getUser(req);
 	var item = req.body.item;
 	var rating = req.body.rating;
 	var queryString = "SELECT id FROM users WHERE username=$1";
@@ -500,7 +500,7 @@ app.get('/populateTests', function(req,res){
 });
 
 app.post('/suggest',function(req,res){
-  	var username = getUser();
+  	var username = getUser(req);
 	var numItems = req.body.numItems;
 	var k = 3;
 	console.log(username);
