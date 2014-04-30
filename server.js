@@ -123,7 +123,7 @@ var monthToNum = {'January' : 1, 'February' : 2, 'March' : 3, 'April' : 4, 'May'
 
 app.post("/flavor", function(req,res){
 	console.log("A FLAVOR!");
-	var user = req.user.emails[0].value;
+	var user = getUser(req);
 	var flavor= req.body.flavor;
 	var item = req.body.item;
 	var loc = req.body.location;
@@ -237,7 +237,7 @@ app.post('/bugs',function(req, res) {
 	console.log("A BUG!");
 	var user = 'not logged in!';
   	if (req.isAuthenticated()) {
-		user = req.user.emails[0].value;
+		user = getUser(req);
 	}
 	var message = req.body.message;
 	var queryString = 'INSERT INTO bugs VALUES ($1, $2, $3)';
@@ -271,7 +271,7 @@ app.get('/logincallback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
   	//check if in the db
-  	var email = req.user.emails[0].value;
+  	var email = getUser(req);
   	console.log(email);
   	var queryString = 'SELECT id FROM users WHERE username=$1';
     conn.query(queryString, [email], function(nameError, nameRes){
@@ -303,7 +303,7 @@ app.get('/isLoggedIn', function(req,res){
 });
 
 app.get('/newaccount', ensureAuthenticated, function(req, res){
-	res.render('newaccount.html', {name: req.user.displayName, email: req.user.emails[0].value});
+	res.render('newaccount.html', {name: req.user.displayName, email: getUser(req)});
 });
 
 //get 5 random items to rate, called in newaccount.js
@@ -383,7 +383,7 @@ app.post('/storeUser', function(req, res) {
 
 //Logs a purchase, used by mydininglog.js
 app.post('/logpurchase', function(req, res){
-	var email = req.user.emails[0].value;
+	var email = getUser(req);
 	var item = req.body.item;
 	var date = new Date().toDateString();
 	var queryString = 'INSERT INTO purchases VALUES ($1, $2, $3, $4)';
@@ -395,7 +395,7 @@ app.post('/logpurchase', function(req, res){
 });
 
 app.get('/allpurchases', function(req, res){
-	var email = req.user.emails[0].value;
+	var email = getUser(req);
 	var queryString = 'SELECT date,item from purchases WHERE email=$1';
 	conn.query(queryString, [email], function(error, results){
 		if(error){
@@ -407,30 +407,42 @@ app.get('/allpurchases', function(req, res){
 
 app.post('/knapsack', function(req, res){
 	console.log(req.body.hall);
-	var myQuery = conn.query('SELECT * from food WHERE location=$1',[req.body.hall]);
-	var foodList = '';
-	myQuery.on('row', function(row){
-		if (row !== undefined){
-				foodList += row.item + "," + row.price + ',';
-		}
+	var ratings = {};
+	var ratingsQuery = conn.query('SELECT item,rating from ratings WHERE email=$1',[getUser(req)]);
+	ratingsQuery.on('row', function(row){
+		ratings[row.item] = row.rating;
 	});
-	myQuery.on('end', function(){
-		foodList = foodList.substring(0, foodList.length -1);
-		
-		var ls = spawn('java',["Knapsack",foodList,req.body.maxMoney]);
-		var output = "";
-		ls.stdout.on('data', function (data) {
-		  output += data;
-		});
 
-		ls.stderr.on('data', function (data) {
-		  console.log('stderr: ' + data);
+	ratingsQuery.on('end', function(){
+		console.log('ratings:',ratings);
+		var myQuery = conn.query('SELECT * from food WHERE location=$1',[req.body.hall]);
+		var foodList = '';
+		myQuery.on('row', function(row){
+			if (row !== undefined) {
+				//only include items unrated or rated >= 3
+				if (!ratings[row.item] || ratings[row.item] >= 3){
+					foodList += row.item + "," + row.price + ',';
+				}
+			}
 		});
+		myQuery.on('end', function(){
+			foodList = foodList.substring(0, foodList.length -1);
+			
+			var ls = spawn('java',["Knapsack",foodList,req.body.maxMoney]);
+			var output = "";
+			ls.stdout.on('data', function (data) {
+			  output += data;
+			});	
 
-		ls.on('exit', function (code) {
-		  res.end(output);
+			ls.stderr.on('data', function (data) {
+			  console.log('stderr: ' + data);
+			});	
+
+			ls.on('exit', function (code) {
+			  res.end(output);
+			});	
+
 		});
-
 	});
 });
 
@@ -440,7 +452,7 @@ app.post('/login', function(req, res, next) {
 });
 
 app.post('/review', function(req, res){
-	var email = req.user.emails[0].value;
+	var email = getUser(req);
 	var item = req.body.item;
 	var rating = req.body.rating;
 	review(res, email, [item], [rating]);
@@ -449,7 +461,7 @@ app.post('/review', function(req, res){
 //TODO: fix security threat. By just concatenating the calls to RunML. someone could use some form of injection I think. 
 //My guess is that you could do something to turn the string into multiple lines, and then literally run anything serverside.
 app.post('/guess',function(req,res){
-	var username = req.user.emails[0].value;
+	var username = getUser(req);
 	var item = req.body.item;
 	var rating = req.body.rating;
 	var queryString = "SELECT id FROM users WHERE username=$1";
@@ -488,7 +500,7 @@ app.get('/populateTests', function(req,res){
 });
 
 app.post('/suggest',function(req,res){
-  	var username = req.user.emails[0].value;
+  	var username = getUser(req);
 	var numItems = req.body.numItems;
 	var k = 3;
 	console.log(username);
@@ -1156,6 +1168,10 @@ function fillUsersDB() {
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login');
+}
+
+function getUser(req){
+	return req.user.emails[0].value;
 }
 
 function addFoodToClient(foodList){
