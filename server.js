@@ -148,7 +148,7 @@ app.post("/approve", function(req,res){
 		if(Number(info.price) === info.price) //TODO: make this actually check that price is defined
 		{
 			var newfood = (item + " - " + flavor);
-			conn.query('INSERT INTO food VALUES ($1,$2,$3)', [newfood, info.price, info.location]);
+			conn.query('INSERT INTO food VALUES ($1,$2,$3, $4)', [null, newfood, info.price, info.location]);
 			addFoodToClient([newfood]);
 		}
 		var queryStringD = 'DELETE FROM flavors WHERE item=$1 AND flavor=$2';
@@ -168,7 +168,7 @@ app.post("/approveMissing", function(req,res){
 	console.log(food);
 	console.log(price);
 	console.log(location);
-	conn.query('INSERT INTO food VALUES ($1,$2,$3)', [food, price, location]).on('end',function(error, result){
+	conn.query('INSERT INTO food VALUES ($1,$2,$3,$4)', [null, food, price, location]).on('end',function(error, result){
 		console.log(error);});
 		addFoodToClient([food]);
 		var queryStringD = 'DELETE FROM missing WHERE food=$1 AND price=$2 AND location=$3';
@@ -1102,9 +1102,9 @@ function andrewsSpecials(res) {
 
 function fillFoodDB() {
 	var foodList = ['jos','aco', 'ivyroom', 'blueroom'];
-	conn.query('CREATE TABLE food (item TEXT PRIMARY KEY,price INT, location TEXT)');
+	conn.query('CREATE TABLE food (id INTEGER PRIMARY KEY AUTOINCREMENT,item TEXT,price INT, location TEXT)');
 	for (var locIndex=0; locIndex < foodList.length; locIndex ++){
-		var queryString = 'INSERT INTO food VALUES ($1, $2, $3)';
+		var queryString = 'INSERT INTO food VALUES ($1, $2, $3, $4)';
 		var curr = foodList[locIndex];
 		var data = fs.readFileSync('data/' + foodList[locIndex] + '.csv', 'utf8');
 		var lines = data.split('\n');
@@ -1117,7 +1117,7 @@ function fillFoodDB() {
 				var price = split[1].trim();
 				price = price.replace('$','');
 				price = Math.ceil(100 * parseFloat(price));
-				conn.query(queryString, [item, price,curr]);
+				conn.query(queryString, [null, item, price,curr]);
 			}
 		}
 		addFoodToClient(itemList);
