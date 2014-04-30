@@ -1,9 +1,5 @@
 var dininghalls = ['ratty','vdub', 'blueroom', 'ivyroom', 'aco', 'jos'];
 $(document).ready(function(){
-    //Logo redirects to home
-    $('#logo').click(function(){
-	$(location).attr('href','/');
-    });
 
     if ($("#status-ivyroom").hasClass('closed'))
 	$("#ivy-room-tab").css("border-bottom", "4px solid red");
