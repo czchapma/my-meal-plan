@@ -56,6 +56,15 @@ function generateStatues(){
 		$('#status-' + entry).text(parsed['message']);
 		$('#'+ entry + '-tab').css('border-bottom', '4px solid red');
 	    }
+
+	    if (entry === 'blueroom'){
+	    	//handle menu adjustment
+	    	var text = parsed['menu'];
+	    	text = text.replace(',', ', ');
+	    	text = text.replace('Main Dinner', $('#main-dinner').text());
+	    	text = text.replace("Soup", $('#soup').text());
+	    	$('#current-br').text(text);
+	    }
 	});
     });
 }
@@ -111,8 +120,10 @@ function generateMenus(){
 	var parsed = JSON.parse(JSON.stringify(result));
 	var soups ='<li>' + parsed['soups'] + '</li>';
 	var dinner ='<li>' + parsed['dinner'] + '</li>';
-	parent.append(soups);
-	parent.append(dinner);
+	$('#soup').text(parsed['soups']);
+	$('#main-dinner').text(parsed['dinner']);
+	$('#current-br').text($('#current-br').text().replace("Main Dinner", parsed['dinner']));
+	$('#current-br').text($('#current-br').text().replace("Soups", parsed['soups']));
 	// for (var i=0; i<split.length; i++){
 	// 	var li ='<li>'+ split[i] + '</li>';
 	// 	parent.append(li);

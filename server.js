@@ -800,6 +800,26 @@ app.get('/status/blueroom', function(req, res){
 			}
 		}
 	}
+
+	//Menu
+	toReturn['menu'] = '';
+	if (hour >= 8 && hour < 11){
+		toReturn['menu'] = 'Hot Breakfast,Real Smooth Smoothie and Parfait Bar,Egg Fritatta Sandwich of the Day made with cage-free eggs';
+	} else if (hour >= 11 && hour < 21){
+		toReturn['menu'] += 'Build Your Own Sandwich';
+		if (hour < 15){
+			toReturn['menu'] += ',Focaccia Deli Sandwiches';
+		}
+
+		if(hour < 20 || (hour === 20 && minute < 30)) {
+			toReturn['menu'] += ',Soup';
+		}
+	}
+
+	if (hour >= 16 && hour < 21){
+		toReturn['menu'] += ',Main Dinner';
+	}
+
 	res.json(JSON.stringify(toReturn));
 });
 
@@ -1264,4 +1284,4 @@ function getRattyUrl(){
 		url = 'http://www.brown.edu/Student_Services/Food_Services/eateries/refectory_menu.php?day=' + day;
 	}
 	return url;
-}
+}	
