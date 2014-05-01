@@ -1,5 +1,9 @@
 $(document).ready(function(){
     $('#missing-food-form').hide();
+    //Logo redirects to home
+    $('#logo').click(function(){
+	$(location).attr('href','/');
+    });
 
     $('#somethingmissing').click(function(){
         $('#missing-food-form').show();
@@ -78,9 +82,8 @@ $(document).ready(function(){
         for(var i = 0; i < foods.length; i++)
         {   
             var isknapsack = $(foods[i]).children('item').attr('fromKnapsack'); //need which ones were put automatically
-            if(isknapsack === "true") //only remove if the element was automatically chosen
+            if(isknapsack) //only remove if the element is not from myeat
             {
-                var eatery = $(foods[i]).children('item').attr('hall'); //need which list to put back in
                 $(foods[i]).children('item').attr('in-cart', 'false'); //cuz it's not in the cart anymore               
                  var ul= $('#log-form-list-' + eatery); 
                  $(foods[i]).css({"background-color":"transparent"});   //change background back                
@@ -118,11 +121,15 @@ $(document).ready(function(){
             var arr = data.split('\n');
             for (var i =0; i < arr.length - 1; i ++)
             {
-                var check = document.getElementById(arr[i]);
-                var myitem = document.getElementById(arr[i] + 'li');
-		        $(check).attr('in-cart', 'true');
-                $(check).attr('fromKnapsack','true');
-                myitem.setAttribute('style','background-color:gray');
+                var foodname = arr[i];
+                if(myhall === "ivyroom")
+                    var check = $("#log-form-list-ivy").find("."+foodname)[0];
+                else
+                    var check = $("#log-form-list-"+myhall).find('.'+foodname)[0];
+                var myitem = check.parent();
+		        check.attr('in-cart', 'true');
+                check.attr('fromKnapsack','true');
+                myitem.attr('style','background-color:gray');
                 cart.append(myitem);
                 updateTotal();
                 
@@ -309,10 +316,10 @@ function makeListOfItems(eatery, result) {
             var priceItemSplit = lineSplit[i].split(',');
             var li = $(document.createElement('li'));
             var check = document.createElement('item');
-            li.attr('id',priceItemSplit[0] + 'li');
+            //li.attr('id',priceItemSplit[0] + 'li');
             check.setAttribute('class',priceItemSplit[0])
             check.setAttribute('name','check-'+ priceItemSplit[0] );
-            check.setAttribute('id', priceItemSplit[0]);
+            //check.setAttribute('id', priceItemSplit[0]);
             check.setAttribute('price',priceItemSplit[1]);
             check.setAttribute('hall',eatery);
             check.setAttribute('fromKnapsack','false');
@@ -320,19 +327,19 @@ function makeListOfItems(eatery, result) {
 	    $(li).click(function() {
 		var input = $(this).children('item');
 		if (input.attr('in-cart') == 'true') {
-                    var myitem = document.getElementById(input.attr('id') + 'li');
-                    myitem.setAttribute("style","background-color:transparent;");
+                    //var myitem = document.getElementById(input.attr('id') + 'li');
+                    input.parent().attr("style","background-color:transparent;");
                     
-                    ul.append(myitem);
+                    ul.append(input.parent());
                     updateTotal();
 		    input.attr('in-cart', 'false');
 		} 
         else {
 
-                    var myitem = document.getElementById(input.attr('id') + 'li');
-                    myitem.setAttribute("style","background-color:white;");
+                   //var myitem = document.getElementById(input.attr('id') + 'li');
+                    input.parent().attr("style","background-color:white;");
                     input.attr('fromKnapsack','false');
-                    cart.append(myitem);
+                    cart.append(input.parent());
                     updateTotal();
 		            input.attr('in-cart', 'true');
 		    }
@@ -340,8 +347,7 @@ function makeListOfItems(eatery, result) {
         var reportitem = $(document.createElement('button'));
         reportitem.attr('id',priceItemSplit[0] + "button");
         reportitem.html("Add a flavor/type");
-        reportitem.click(function(event){
-            event.preventDefault();
+        reportitem.click(function(){
             var flavor = window.prompt("Enter the flavor or type")
             console.log("REPORTING ITEM" + this.id.substring(0, this.id.length - 6));
             $.post("/flavor", {item: this.id.substring(0, this.id.length - 6), location:getDiningHall(), flavor: flavor}, function(){});
