@@ -1,9 +1,4 @@
 $(document).ready(function(){    
-    //Logo redirects to home
-    $('#logo').click(function(){
-		$(location).attr('href','/');
-    });
-
     var $form = $('#track-credits-form');
     var $credits = $('#credits');
     var $points = $('#points');

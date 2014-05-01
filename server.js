@@ -308,7 +308,7 @@ app.get('/newaccount', ensureAuthenticated, function(req, res){
 
 //get 5 random items to rate, called in newaccount.js
 app.get('/random5', function(req, res){
-	var queryString = 'SELECT * FROM food ORDER BY RANDOM() LIMIT 5;';
+	var queryString = 'SELECT DISTINCT * FROM food ORDER BY RANDOM() LIMIT 5;';
 	conn.query(queryString, function(err, response){
 		if(err){
 			console.log(err);
@@ -800,6 +800,26 @@ app.get('/status/blueroom', function(req, res){
 			}
 		}
 	}
+
+	//Menu
+	toReturn['menu'] = '';
+	if (hour >= 8 && hour < 11){
+		toReturn['menu'] = 'Hot Breakfast,Real Smooth Smoothie and Parfait Bar,Egg Fritatta Sandwich of the Day made with cage-free eggs';
+	} else if (hour >= 11 && hour < 21){
+		toReturn['menu'] += 'Build Your Own Sandwich';
+		if (hour < 15){
+			toReturn['menu'] += ',Focaccia Deli Sandwiches';
+		}
+
+		if(hour < 20 || (hour === 20 && minute < 30)) {
+			toReturn['menu'] += ',Soup';
+		}
+	}
+
+	if (hour >= 16 && hour < 21){
+		toReturn['menu'] += ',Main Dinner';
+	}
+
 	res.json(JSON.stringify(toReturn));
 });
 
@@ -1035,7 +1055,7 @@ app.get('/itemlist', function(req, res){
 			map[result.rows[i]['item']] = result.rows[i]['rating'];
 		}
 		console.log(map);
-		var foodQuery = conn.query('SELECT * from food');
+		var foodQuery = conn.query('SELECT DISTINCT item, price from food');
 		foodQuery.on('row', function(row){
 			if (row !== undefined){
 				if (map[row.item]){
@@ -1052,16 +1072,18 @@ app.get('/itemlist', function(req, res){
 });
 
 app.get('/', function(req, res){
-  if (req.isAuthenticated()) {
-	res.render('home.html', {name : req.user.displayName});
-  } else{
-  	res.render('home.html');
-  }
+	res.redirect('/dininghalls');
+ //  if (req.isAuthenticated()) {
+	// res.render('home.html', {name : req.user.displayName});
+ //  } else{
+ //  	res.render('home.html');
+ //  }
 });
 
-app.get('/mod',function(req,res){
+app.get('/mod', isModerator, function(req,res){
 	res.render('mod.html');
 });
+
 app.get('*', function(req,res){
 });
 
@@ -1170,6 +1192,17 @@ function ensureAuthenticated(req, res, next) {
   res.redirect('/login');
 }
 
+function isModerator(req, res, next) {
+  if (req.isAuthenticated()) {
+  	var user = getUser(req);
+  	var modList = ['christine_chapman@brown.edu', 'steven_mcgarty@brown.edu', 'raymond_zeng@brown.edu', 'zachary_olstein@brown.edu'];
+  	if (modList.indexOf(user) > -1) {
+		return next();
+  	}
+  }
+  res.redirect('/');
+}
+
 function getUser(req){
 	return req.user.emails[0].value;
 }
@@ -1251,4 +1284,4 @@ function getRattyUrl(){
 		url = 'http://www.brown.edu/Student_Services/Food_Services/eateries/refectory_menu.php?day=' + day;
 	}
 	return url;
-}
+}	

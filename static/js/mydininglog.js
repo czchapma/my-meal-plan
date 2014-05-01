@@ -1,9 +1,5 @@
 $(document).ready(function(){
     $('#missing-food-form').hide();
-    //Logo redirects to home
-    $('#logo').click(function(){
-	$(location).attr('href','/');
-    });
 
     $('#somethingmissing').click(function(){
         $('#missing-food-form').show();
@@ -40,6 +36,60 @@ $(document).ready(function(){
     var knapsack = document.getElementById('knapsack');
     var knapsack2 = document.getElementById('knapsack2');
 
+    //*****************************************************************
+    //Code to make cart empty each time the user changes the database
+    $('#tab3').click(function(){
+        emptyCart("blueroom");
+    
+    });
+    $('#tab4').click(function(){
+        emptyCart("ivy");
+    });
+    $('#tab5').click(function(){
+        emptyCart("aco");
+    });
+    $('#tab6').click(function(){
+        emptyCart("jos");
+    });
+
+    //empties the cart of all foods from all dining halls except myeat
+    function emptyCart(myeat){
+        var foods = $("#cart").children();
+       
+        for(var i = 0; i < foods.length; i++)
+        {   
+            var eatery = $(foods[i]).children('item').attr('hall'); //need which list to put back in
+            if(eatery !== myeat) //only remove if the element is not from myeat
+            {
+                $(foods[i]).children('item').attr('in-cart', 'false'); //cuz it's not in the cart anymore               
+                 var ul= $('#log-form-list-' + eatery); 
+                 $(foods[i]).css({"background-color":"transparent"});   //change background back                
+                ul.append(foods[i]);  //put the li into the appropriate list
+            }           
+        }
+        updateTotal(); 
+    }
+
+    //*************************************************************************
+
+    $('#tryagain').click( function(){
+        var foods = $("#cart").children();
+       
+        for(var i = 0; i < foods.length; i++)
+        {   
+            var isknapsack = $(foods[i]).children('item').attr('fromKnapsack'); //need which ones were put automatically
+            if(isknapsack === "true") //only remove if the element was automatically chosen
+            {
+                var eatery = $(foods[i]).children('item').attr('hall'); //need which list to put back in
+                $(foods[i]).children('item').attr('in-cart', 'false'); //cuz it's not in the cart anymore               
+                 var ul= $('#log-form-list-' + eatery); 
+                 $(foods[i]).css({"background-color":"transparent"});   //change background back                
+                ul.append(foods[i]);  //put the li into the appropriate list
+            }           
+        }
+        updateTotal(); 
+    });
+
     console.log(knapsack);
     knapsack.addEventListener('click', function() {
         knapsack2.disabled=true; //stop the user from over clicking and pinging and getting concurency problems
@@ -71,6 +121,7 @@ $(document).ready(function(){
                 var check = document.getElementById(arr[i]);
                 var myitem = document.getElementById(arr[i] + 'li');
 		        $(check).attr('in-cart', 'true');
+                $(check).attr('fromKnapsack','true');
                 myitem.setAttribute('style','background-color:gray');
                 cart.append(myitem);
                 updateTotal();
@@ -98,6 +149,7 @@ $(document).ready(function(){
             {
                 var check = document.getElementById(arr[i]);
                 $(check).attr('in-cart', 'true');
+                $(check).attr('fromKnapsack','true');
                	var myitem = document.getElementById(arr[i] + 'li');
                 myitem.setAttribute('style','background-color:gray');
                 cart.append(myitem);
@@ -262,6 +314,8 @@ function makeListOfItems(eatery, result) {
             check.setAttribute('name','check-'+ priceItemSplit[0] );
             check.setAttribute('id', priceItemSplit[0]);
             check.setAttribute('price',priceItemSplit[1]);
+            check.setAttribute('hall',eatery);
+            check.setAttribute('fromKnapsack','false');
 	    check.setAttribute('in-cart', 'false');
 	    $(li).click(function() {
 		var input = $(this).children('item');
@@ -272,19 +326,22 @@ function makeListOfItems(eatery, result) {
                     ul.append(myitem);
                     updateTotal();
 		    input.attr('in-cart', 'false');
-		} else {
+		} 
+        else {
 
                     var myitem = document.getElementById(input.attr('id') + 'li');
                     myitem.setAttribute("style","background-color:white;");
+                    input.attr('fromKnapsack','false');
                     cart.append(myitem);
                     updateTotal();
-		    input.attr('in-cart', 'true');
-		}
+		            input.attr('in-cart', 'true');
+		    }
 	    });
         var reportitem = $(document.createElement('button'));
         reportitem.attr('id',priceItemSplit[0] + "button");
         reportitem.html("Add a flavor/type");
-        reportitem.click(function(){
+        reportitem.click(function(event){
+            event.preventDefault();
             var flavor = window.prompt("Enter the flavor or type")
             console.log("REPORTING ITEM" + this.id.substring(0, this.id.length - 6));
             $.post("/flavor", {item: this.id.substring(0, this.id.length - 6), location:getDiningHall(), flavor: flavor}, function(){});

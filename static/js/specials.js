@@ -2,21 +2,8 @@ var dininghalls = ['ratty','vdub', 'blueroom', 'ivyroom', 'aco', 'jos'];
 var hallToDescription = {'ratty' : 'The Ratty', 'vdub' : 'The VDub', 'blueroom' : 'The Blue Room', 'ivyroom': "The Ivy Room (Lunch)", 'aco': 'Andrews Commons', 'jos':"Jo's"};
 
 $(document).ready(function(){
-    $.ajax({
-        url: "/isLoggedIn"
-    }).done(function(result) {
-    	loggedIn = (result === 'yes');
-	});
-
-    //Logo redirects to home
-
     $('#suggestion').hide();
-    $('#logo').click(function(){
-	$(location).attr('href','/');
-    });
 
-
-    
     $('#suggest').click(function(){
     	if(!loggedIn){
            	$.ajax({
