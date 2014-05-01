@@ -303,7 +303,14 @@ app.get('/isLoggedIn', function(req,res){
 });
 
 app.get('/newaccount', ensureAuthenticated, function(req, res){
-	res.render('newaccount.html', {name: req.user.displayName, email: getUser(req)});
+	var queryString = 'SELECT id FROM users WHERE username=$1';
+    conn.query(queryString, [getUser(req)], function(nameError, nameRes){
+		if (nameRes.rows.length === 0){
+			res.render('newaccount.html', {name: req.user.displayName, email: getUser(req)});
+		} else{
+			res.redirect('/logpurchase');
+		}
+	});
 });
 
 //get 5 random items to rate, called in newaccount.js
@@ -352,7 +359,7 @@ app.post('/storeUser', function(req, res) {
 					console.log(csvString);
 					var addToML = spawn('java', ["RunML", "ADD",csvString]);
 					addToML.stdout.on('data', function(data) {
-						//console.log('stdout: ',data);
+						console.log('stdout: ',data);
 					});
 					addToML.stderr.on('data',function(data){
 						console.log('stderr:',data);
@@ -567,15 +574,15 @@ app.get('/mydining', function(req, res) {
   }
 });
 
-app.get('/browseitems', ensureAuthenticated, function(req,res) {
+app.get('/browseitems', ensureAuthenticatedAndInDB, function(req,res) {
 	res.render('browseitems.html', {name : req.user.displayName});
 });
 
-app.get('/logpurchase', ensureAuthenticated, function(req,res) {
+app.get('/logpurchase', ensureAuthenticatedAndInDB, function(req,res) {
 	res.render('logpurchase.html', {name : req.user.displayName});
 });
 
-app.get('/prevtransactions', ensureAuthenticated, function(req,res) {
+app.get('/prevtransactions', ensureAuthenticatedAndInDB, function(req,res) {
 	res.render('prevtransactions.html', {name : req.user.displayName});
 });
 
@@ -1190,6 +1197,26 @@ function fillUsersDB() {
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login');
+}
+
+function ensureAuthenticatedAndInDB(req, res, next){
+	if (req.isAuthenticated()) {
+		//Check DB
+		var queryString = 'SELECT id FROM users WHERE username=$1';
+   		conn.query(queryString, [getUser(req)], function(nameError, nameRes){
+			if (nameError || nameRes.rows.length === 0){
+				if(nameError){
+					console.error(nameError);
+				}
+				//not in DB
+				res.redirect('/newaccount');
+			} else{
+				return next();
+			}
+		});
+	} else {
+		res.redirect('/login');
+	}
 }
 
 function isModerator(req, res, next) {
