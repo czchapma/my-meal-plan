@@ -473,13 +473,13 @@ app.post('/guess',function(req,res){
 });
 
 app.get('/print',function(req,res){
-		exec('java RunML PRINT', function (error, stdout, stderr) {
-			console.log('errors',error);
-			console.log('stderr',stderr);
-			console.log('stdout',stdout);
-			
-			res.end(stdout);
-		});	
+	exec('java RunML PRINT', function (error, stdout, stderr) {
+		console.log('errors',error);
+		console.log('stderr',stderr);
+		console.log('stdout',stdout);
+		
+		res.end(stdout);
+	});	
 });
 
 //adds a bunch of testing data to the database
@@ -498,10 +498,12 @@ app.post('/suggest',function(req,res){
 		if(results.rows[0] !== undefined)
 		{
 			var id = String(results.rows[0].id);
+			console.log(id);
 			var ls = spawn('java', ["RunML", "PING", "SUGGEST",id, numItems, k]);
 			var output = "";
 			ls.stdout.on('data', function (data) {
-			  output += data;
+				console.log(data);
+			  	output += data;
 			});
 
 			ls.stderr.on('data', function (data) {
