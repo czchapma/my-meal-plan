@@ -1,11 +1,19 @@
-import java.util.*;
 import java.io.Serializable;
-import java.lang.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class ML_Client implements Serializable
 {
-	private HashMap<Integer, User_Reviews> users; // N users pointed to by their userId
-	private HashMap<Integer, HashMap<Integer,Double>> dists; //distances hashmap. So the hashmap provides a hashmap of distances. as in user number 3 points to a map wherein each other user will then point to a double. essentially a matrix, but done this way in case id numbers arent sequential
-	private ArrayList<String> foods; //The list of all foods in the universe.
+	// N users pointed to by their userId
+	private Map<Integer, User_Reviews> users; 
+	//distances hashmap. So the hashmap provides a hashmap of distances. as in user number 3 points to a map wherein each other user will then point to a double. essentially a matrix, but done this way in case id numbers arent sequential
+	private Map<Integer, Map<Integer,Double>> dists;
+	//The list of all foods in the universe.
+	private List<String> foods; 
 
 	//helper class to fasciliate sorting 
 	private static class Tupleish implements Comparable<Tupleish>
@@ -73,8 +81,8 @@ public class ML_Client implements Serializable
 
 	public ML_Client(ArrayList<String> f)
 	{
-		users = new HashMap<Integer,User_Reviews>();
-		dists = new HashMap<Integer, HashMap<Integer,Double>>();
+		users = new ConcurrentHashMap<Integer,User_Reviews>();
+		dists = new ConcurrentHashMap<Integer, Map<Integer,Double>>();
 		foods = f;
 	}
 
@@ -102,7 +110,7 @@ public class ML_Client implements Serializable
 	private void updateDists(User_Reviews existentUser)
 	{
 		//TODO: Issue warning if user does not already exist in client
-		HashMap<Integer, Double> newDist = new HashMap<Integer,Double>();
+		Map<Integer, Double> newDist = new ConcurrentHashMap<Integer,Double>();
 		for(User_Reviews user : users.values()) //now go through each user
 		{
 			newDist.put(user.getUserId(), user.diff(existentUser)); //add their dist to newUser to the newDist
@@ -110,7 +118,6 @@ public class ML_Client implements Serializable
 				dists.get(user.getUserId()).put(existentUser.getUserId(),user.diff(existentUser)); //and add the dist to the other user's dists.
 		}
 		dists.put(existentUser.getUserId(),newDist);//and add the newDist into dists.			
-
 	}
 	//TODO: test to make sure this works:  should go to the user in users indicated by the curId (j) and update the name
 	public void updateUserName(int curId, String newName)
@@ -212,7 +219,7 @@ public class ML_Client implements Serializable
 	//TODO: Get the k nearest neighbors to user indicated by curId that have reviewed item food, then average or majority rule (we can decide this later) their reviews, and return this number. Return -1 if there are not enough neighbors who have reviewed item food. 
 	public double getReviewGuess(String food, int k, int curId)
 	{
-		HashMap<Integer,Double> neighbors = dists.get(curId);
+		Map<Integer,Double> neighbors = dists.get(curId);
 		ArrayList<Tupleish> allNeighbors = new ArrayList<Tupleish>();
 		for(int otherId : neighbors.keySet())
 		{
@@ -243,7 +250,7 @@ public class ML_Client implements Serializable
 		int tempWanted = numWanted; //Store the old numwanted
 		numWanted = numWanted + (int) Math.ceil(.1 * foods.size());//Now make the client find 10% of the food database more 
 		//this way we can make it randomized so the user doesn't get the same suggestions each time.
-		HashMap<Integer,Double> neighbors = dists.get(curId);
+		Map<Integer,Double> neighbors = dists.get(curId);
 		ArrayList<Tupleish> allNeighbors = new ArrayList<Tupleish>();
 		String[] suggestions = new String[numWanted];
 		for(int otherId : neighbors.keySet())
@@ -301,7 +308,7 @@ public class ML_Client implements Serializable
 				suggestions[i] = foods.get((int)Math.floor(Math.random() * foods.size()));
 			}
 		}
-		ArrayList<String> suggest = new ArrayList<String>(Arrays.asList(suggestions));
+		List<String> suggest = new ArrayList<String>(Arrays.asList(suggestions));
 		Collections.shuffle(suggest);//randomizing woo!
 
 		return Arrays.copyOfRange((String[])suggest.toArray(),0,tempWanted);
