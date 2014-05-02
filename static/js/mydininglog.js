@@ -99,7 +99,7 @@ $(document).ready(function(){
         knapsack.disabled=true;
         console.log("CLicked");
         var cart = $('#cart');
-        var money = (680 - Number(total.innerHTML));
+        var money = (680 - toNumber(total.innerHTML));
         var tab3 = document.getElementById('tab3');
         var tab4 = document.getElementById('tab4');
         var tab5 = document.getElementById('tab5');
@@ -146,7 +146,7 @@ $(document).ready(function(){
         console.log("CLicked");
         
         var cart = $('#cart');
-        var money = (680 + 680 - Number(total.innerHTML));
+        var money = (680 + 680 - toNumber(total.innerHTML));
         var myhall = getDiningHall();        
         console.log(myhall);
         $.post( "/knapsack", {maxMoney:money, hall:myhall}, function(data,status){
@@ -372,6 +372,17 @@ function prettyPrint(price){
     return toReturn;
 }
 
+//Opposite of prettyPrint
+//$6.50 -> 650
+function toNumber(priceAsString){
+    console.log('original:',priceAsString);
+    priceAsString = priceAsString.replace('$','');
+    priceAsString = priceAsString.replace('.','');
+    priceAsString = Number(priceAsString);
+    console.log('number:',priceAsString);
+    return priceAsString;
+}
+
 
 function updateTotal(){
     total.innerHTML = "";
@@ -383,7 +394,7 @@ function updateTotal(){
         var myitem = $(foods[i]).children('item');
         sum+= Number(myitem.attr('price'));
     }
-    total.innerHTML = sum;
+    total.innerHTML = prettyPrint(sum);
 }
 
 function getDiningHall(){
