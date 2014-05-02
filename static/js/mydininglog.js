@@ -75,7 +75,7 @@ $(document).ready(function(){
     }
 
     //*************************************************************************
-
+    //Knapsack related functions and events
     $('#tryagain').click( function(){
         var foods = $("#cart").children();
        
@@ -94,25 +94,17 @@ $(document).ready(function(){
     });
 
     console.log(knapsack);
-    knapsack.addEventListener('click', function() {
+    function callKnapsack(cartleft){
         knapsack2.disabled=true; //stop the user from over clicking and pinging and getting concurency problems
         knapsack.disabled=true;
         console.log("CLicked");
         var cart = $('#cart');
-        var money = (680 - toNumber(total.innerHTML));
+        var money = cartleft;
         var tab3 = document.getElementById('tab3');
         var tab4 = document.getElementById('tab4');
         var tab5 = document.getElementById('tab5');
         var tab6 = document.getElementById('tab6');
-        var myhall = "";
-        if(tab3.checked)
-            myhall= "blueroom"
-        if(tab4.checked)
-            myhall = "ivyroom"
-        if(tab5.checked)
-            myhall = "aco"
-        if(tab6.checked)
-            myhall = "jos"
+        var myhall = getDiningHall();
         
         console.log(myhall);
 
@@ -121,13 +113,16 @@ $(document).ready(function(){
             var arr = data.split('\n');
             for (var i =0; i < arr.length - 1; i ++)
             {
-                var foodname = arr[i];
+                var foodname = removeSpaces(arr[i]);
+                console.log(foodname);
                 if(myhall === "ivyroom")
-                    var check = $("#log-form-list-ivy").find("."+foodname)[0];
+                    var myitem= $("#log-form-list-ivy").find("."+foodname);
                 else
-                    var check = $("#log-form-list-"+myhall).find('.'+foodname)[0];
-                var myitem = check.parent();
-		        check.attr('in-cart', 'true');
+                    var myitem = $("#log-form-list-"+myhall).find('.'+foodname);
+                var check = myitem.children('item');
+                console.log(myitem);
+                console.log(check);
+                check.attr('in-cart', 'true');
                 check.attr('fromKnapsack','true');
                 myitem.attr('style','background-color:gray');
                 cart.append(myitem);
@@ -136,51 +131,19 @@ $(document).ready(function(){
             }
             knapsack2.disabled=false; //let the user click again
             knapsack.disabled=false;
-        });
+        });  
+    } 
+    knapsack.addEventListener('click', function() {
+       var money = (680 - Number(total.innerHTML));
+       callKnapsack(money);
     });
     console.log(knapsack);
 
     knapsack2.addEventListener('click', function() {
-        knapsack2.disabled=true; //stop the user from over clicking and pinging and getting concurency problems
-        knapsack.disabled=true;
-        console.log("CLicked");
-        
-        var cart = $('#cart');
         var money = (680 + 680 - toNumber(total.innerHTML));
-        var myhall = getDiningHall();        
-        console.log(myhall);
-        $.post( "/knapsack", {maxMoney:money, hall:myhall}, function(data,status){
-            //TODO: make it so people can buy more than 1 of the same item. 
-            var arr = data.split('\n');
-            for (var i =0; i < arr.length - 1; i ++)
-            {
-                var check = document.getElementById(arr[i]);
-                $(check).attr('in-cart', 'true');
-                $(check).attr('fromKnapsack','true');
-               	var myitem = document.getElementById(arr[i] + 'li');
-                myitem.setAttribute('style','background-color:gray');
-                cart.append(myitem);
-                updateTotal();
-                
-            }
-            knapsack2.disabled=false; //let the user click again
-            knapsack.disabled=false;
-        });
+       callKnapsack(money);
     });
-    $('#log-form').submit(function(event){
-        event.preventDefault();
-        var items = [];
-        $('#cart .food-item').each(function(idx){
-            items[idx] = $(this).text();
-        });
-        console.log(items);
-        for(var i=0; i<items.length; i++){
-            $.post( "/logpurchase", {item: items[i]}, function(data,status){
-                window.location = '/prevtransactions';
-            });            
-        }
-    });
-
+    //************************************************************************
     $('#missing-food-form').submit(function(event){
         $('#missing-error').html("");
         event.preventDefault();
@@ -316,8 +279,8 @@ function makeListOfItems(eatery, result) {
             var priceItemSplit = lineSplit[i].split(',');
             var li = $(document.createElement('li'));
             var check = document.createElement('item');
-            //li.attr('id',priceItemSplit[0] + 'li');
-            check.setAttribute('class',priceItemSplit[0])
+            li.attr('class',removeSpaces(priceItemSplit[0]));
+            //check.setAttribute('class',priceItemSplit[0])
             check.setAttribute('name','check-'+ priceItemSplit[0] );
             //check.setAttribute('id', priceItemSplit[0]);
             check.setAttribute('price',priceItemSplit[1]);
@@ -413,6 +376,15 @@ function getDiningHall(){
         myhall = "jos"
 
     return myhall;
+}
+
+function removeSpaces(mystr){
+    newstr = mystr
+    while(newstr.indexOf(" ") !== -1)
+    {
+        newstr = newstr.replace(" ","");
+    }
+    return newstr;
 }
 
 

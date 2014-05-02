@@ -83,40 +83,24 @@ var connFlavors = anyDB.createConnection('sqlite3://flavors.db');
 
 var connMissing = anyDB.createConnection('sqlite3://missing.db');*/
 
-exec("rm -f locked.txt");
-exec("javac *.java", function(error, stdout, stderr){
-	if(error !== null) {
-		console.log(stderr);
-	}
-});
-
-
 //Should ideally only be called once
 function resetServer(){
 	//delete pre-existing databases
+    exec("rm -rf *.ser");
 	exec("rm -f *.db", function(error, stdout, stderr){
-		exec("rm -f *.ser", function(error2, stdout2, stderr2){
-			//connFood = anyDB.createConnection('sqlite3://food.db');
-			conn = anyDB.createConnection('sqlite3://myMealPlanData.db');
-			/*connBugs = anyDB.createConnection('sqlite3://bugs.db');
-			connPurchases = anyDB.createConnection('sqlite3://purchases.db');
-			connRatings = anyDB.createConnection('sqlite3://ratings.db');		
-			connMissing = anyDB.createConnection('sqlite3://missing.db');
-			connFlavors = anyDB.createConnection('sqlite3://flavors.db');*/
-			
-			conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, month TEXT,day TEXT, gender TEXT)');
-			fillFoodDB();
-			conn.query('CREATE TABLE bugs(user TEXT, time INTEGER, message TEXT)');
-			conn.query('CREATE TABLE purchases (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, date TEXT)');
-			conn.query('CREATE TABLE ratings (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, rating INTEGER)');
-			conn.query('CREATE TABLE flavors (user TEXT, item TEXT, flavor TEXT, location TEXT)');
-			conn.query('CREATE TABLE missing (food TEXT, price INTEGER, location TEXT)');
-		});
+		conn = anyDB.createConnection('sqlite3://myMealPlanData.db');
+		conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, month TEXT,day TEXT, gender TEXT)');
+		fillFoodDB();
+		conn.query('CREATE TABLE bugs(user TEXT, time INTEGER, message TEXT)');
+		conn.query('CREATE TABLE purchases (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, date TEXT)');
+		conn.query('CREATE TABLE ratings (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, rating INTEGER)');
+		conn.query('CREATE TABLE flavors (user TEXT, item TEXT, flavor TEXT, location TEXT)');
+		conn.query('CREATE TABLE missing (food TEXT, price INTEGER, location TEXT)');
 	});
 }
 
 //Comment out for for LIVE SITE!!
-//resetServer();
+resetServer();
 
 var monthToNum = {'January' : 1, 'February' : 2, 'March' : 3, 'April' : 4, 'May': 5, 'June': 6, 'July' : 7, 'August' : 8, 'September' : 9, 'October' : 10, 'November' : 11, 'December' : 12};
 
@@ -133,7 +117,6 @@ app.post("/flavor", function(req,res){
 	query.on('end', function(){
 		res.end();
 	});
-
 });
 
 app.post("/approve", function(req,res){
@@ -179,7 +162,6 @@ app.post("/approveMissing", function(req,res){
 		queryD.on('end', function(){
 			res.end();
 		});
-
 });
 
 app.post("/deny",function(req,res){
@@ -247,7 +229,7 @@ app.post('/bugs',function(req, res) {
 	query.on('end', function(){
 		res.end();
 	});
-	});
+});
 
 app.post('/missing',function(req, res) {
 	console.log("SOMETHING MISSING!");
@@ -497,8 +479,7 @@ app.get('/print',function(req,res){
 			console.log('stdout',stdout);
 			
 			res.end(stdout);
-		});
-	
+		});	
 });
 
 //adds a bunch of testing data to the database
@@ -1171,27 +1152,19 @@ function fillFoodDB() {
 
 function fillUsersDB() {
 	var queryString = 'INSERT INTO users VALUES ($1, $2, $3, $4, $5, $6, $7)';
-	conn.query(queryString, [null,'Steven','smcgarty@cs.brown.edu','****','March','1992','Male'], function(err1, res1){
-		conn.query(queryString, [null,'Christine','czchapma@cs.brown.edu','****','August','1992','Male'], function(err2, res2){
-			conn.query(queryString, [null,'Zach','zolstein@brown.edu','****','March','1992','Male'], function(err3, res3){
-				conn.query(queryString, [null,'Raymond','raymond_zeng@brown.edu','****','March','1992','Male'], function(err4, res4){
-				});
-			});
-		});
-	});
+	conn.query(queryString, [null,'Steven','smcgarty@cs.brown.edu','****','March','1992','Male'], function(err1, res1){});
+	conn.query(queryString, [null,'Christine','czchapma@cs.brown.edu','****','August','1992','Male'], function(err2, res2){});
+	conn.query(queryString, [null,'Zach','zolstein@brown.edu','****','March','1992','Male'], function(err3, res3){});
+	conn.query(queryString, [null,'Raymond','raymond_zeng@brown.edu','****','March','1992','Male'], function(err4, res4){}); 
 
 	var csvString = "1,Steven McGarty,Male,,1992,3,Chobani,4,Sandwich,5";
-	exec('java RunML ADD "' + csvString + '"', function (error, stdout, stderr) {
-		csvString = "2,Christine,Female,,1992,8,Sandwich,1,Chobani,3";
-		exec('java RunML ADD "' + csvString + '"', function (error, stdout, stderr) {
-			csvString = "3,Zach,Male,,1992,3,Falafel,5,Tuna,3";
-			exec('java RunML ADD "' + csvString + '"', function (error, stdout, stderr) {
-				csvString = "4,Raymond,Male,,1992,3,Chobani,5,Tuna,1";
-				exec('java RunML ADD "' + csvString + '"', function (error, stdout, stderr) {
-				});
-			});
-		});
-	});
+	exec('java RunML ADD "' + csvString + '"', function (error, stdout, stderr){});
+	csvString = "2,Christine,Female,,1992,8,Sandwich,1,Chobani,3";
+	exec('java RunML ADD "' + csvString + '"', function (error, stdout, stderr){});
+	csvString = "3,Zach,Male,,1992,3,Falafel,5,Tuna,3";
+    exec('java RunML ADD "' + csvString + '"', function (error, stdout, stderr){});
+	csvString = "4,Raymond,Male,,1992,3,Chobani,5,Tuna,1";
+	exec('java RunML ADD "' + csvString + '"', function (error, stdout, stderr){});
 }
 
 function ensureAuthenticated(req, res, next) {
