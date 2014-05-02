@@ -4,4 +4,4 @@ rm -f *.class
 javac *.java
 java ML_Request_Handler &
 
-node server.js 
+node server.js
