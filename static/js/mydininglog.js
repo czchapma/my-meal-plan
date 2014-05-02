@@ -122,6 +122,7 @@ $(document).ready(function(){
                     var myitem= $("#log-form-list-ivy").find("."+foodname).clone();
                 else
                     var myitem = $("#log-form-list-"+myhall).find('.'+foodname).clone();
+                myitem.click(foodClick);
                 var check = myitem.children('item');
                 console.log(myitem);
                 console.log(check);
