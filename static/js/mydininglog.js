@@ -145,7 +145,7 @@ $(document).ready(function(){
     console.log(knapsack);
 
     knapsack2.addEventListener('click', function() {
-        var money = (680 + 680 - Number(total.innerHTML));
+        var money = (680 + 680 - toNumber(total.innerHTML));
        callKnapsack(money);
     });
     //************************************************************************
@@ -340,6 +340,17 @@ function prettyPrint(price){
     return toReturn;
 }
 
+//Opposite of prettyPrint
+//$6.50 -> 650
+function toNumber(priceAsString){
+    console.log('original:',priceAsString);
+    priceAsString = priceAsString.replace('$','');
+    priceAsString = priceAsString.replace('.','');
+    priceAsString = Number(priceAsString);
+    console.log('number:',priceAsString);
+    return priceAsString;
+}
+
 
 function updateTotal(){
     total.innerHTML = "";
@@ -351,7 +362,7 @@ function updateTotal(){
         var myitem = $(foods[i]).children('item');
         sum+= Number(myitem.attr('price'));
     }
-    total.innerHTML = sum;
+    total.innerHTML = prettyPrint(sum);
 }
 
 function getDiningHall(){
