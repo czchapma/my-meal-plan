@@ -9,6 +9,17 @@ $(document).ready(function(){
         $('#missing-food-form').show();
         $('#somethingmissing').hide();
     });
+
+    $('#log-form').submit(function(event){
+        event.preventDefault();
+        console.log();
+        var items = $('#cart').find('.food-item');
+        for (var i=0; i<items.length; i++){
+            $.post( "/logpurchase", {item:items[i].innerHTML}, function(data,status){
+                $(location).attr('href','/prevtransactions');
+            });
+        }
+    });
     
     // $('#allpurchase').click(function() {
     //     $('#prev-transactions').show();
