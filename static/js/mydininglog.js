@@ -39,6 +39,8 @@ $(document).ready(function(){
     var total = document.getElementById('total');
     var knapsack = document.getElementById('knapsack');
     var knapsack2 = document.getElementById('knapsack2');
+    knapsack2.disabled=false; //make sure the buttons can be clicked
+    knapsack.disabled=false;
 
     //*****************************************************************
     //Code to make cart empty each time the user changes the database
@@ -65,6 +67,7 @@ $(document).ready(function(){
             var eatery = $(foods[i]).children('item').attr('hall'); //need which list to put back in
             if(eatery !== myeat) //only remove if the element is not from myeat
             {
+
                 $(foods[i]).children('item').attr('in-cart', 'false'); //cuz it's not in the cart anymore               
                  var ul= $('#log-form-list-' + eatery); 
                  $(foods[i]).css({"background-color":"transparent"});   //change background back                
@@ -81,6 +84,8 @@ $(document).ready(function(){
        
         for(var i = 0; i < foods.length; i++)
         {   
+            console.log(foods[i]);
+            var eatery = $(foods[i]).children('item').attr('hall'); //need which list to put back in
             var isknapsack = $(foods[i]).children('item').attr('fromKnapsack'); //need which ones were put automatically
             if(isknapsack) //only remove if the element is not from myeat
             {
@@ -366,14 +371,24 @@ function getDiningHall(){
 
     return myhall;
 }
-
+//removes spaces and other special characters that shouldn't be in class names
 function removeSpaces(mystr){
-    newstr = mystr
-    while(newstr.indexOf(" ") !== -1)
+    newstr = ""
+    for(var i = 0; i < mystr.length; i++)
     {
-        newstr = newstr.replace(" ","");
+        if(isLetterOrDigit(mystr.charAt(i)))
+            newstr = newstr + mystr.charAt(i);
     }
     return newstr;
+}
+
+console.log("TESTING:")
+console.log(isLetterOrDigit('4') + "Should be true");
+console.log(isLetterOrDigit('-') + "Should be false");
+console.log(isLetterOrDigit(' ')+ "Should be false");
+function isLetterOrDigit(mychar){
+    var regexstr = "[A-Z,a-z,0-9]"
+    return null !== mychar.match(regexstr);
 }
 
 
