@@ -69,9 +69,11 @@ $(document).ready(function(){
             {
 
                 $(foods[i]).children('item').attr('in-cart', 'false'); //cuz it's not in the cart anymore               
-                 var ul= $('#log-form-list-' + eatery); 
-                 $(foods[i]).css({"background-color":"transparent"});   //change background back                
-                ul.append(foods[i]);  //put the li into the appropriate list
+                // var ul= $('#log-form-list-' + eatery); 
+                 //$(foods[i]).css({"background-color":"transparent"});   //change background back                
+                //ul.append(foods[i]);  //put the li into the appropriate list
+
+                $(foods[i]).remove();
             }           
         }
         updateTotal(); 
@@ -87,12 +89,12 @@ $(document).ready(function(){
             console.log(foods[i]);
             var eatery = $(foods[i]).children('item').attr('hall'); //need which list to put back in
             var isknapsack = $(foods[i]).children('item').attr('fromKnapsack'); //need which ones were put automatically
-            if(isknapsack) //only remove if the element is not from myeat
+            if(isknapsack === 'true') //only remove if the element is not from myeat
             {
-                $(foods[i]).children('item').attr('in-cart', 'false'); //cuz it's not in the cart anymore               
-                 var ul= $('#log-form-list-' + eatery); 
-                 $(foods[i]).css({"background-color":"transparent"});   //change background back                
-                ul.append(foods[i]);  //put the li into the appropriate list
+               // $(foods[i]).children('item').attr('in-cart', 'false'); //cuz it's not in the cart anymore               
+                // var ul= $('#log-form-list-' + eatery); 
+                // $(foods[i]).css({"background-color":"transparent"});   //change background back                
+                $(foods[i]).remove();  //put the li into the appropriate list
             }           
         }
         updateTotal(); 
@@ -105,10 +107,6 @@ $(document).ready(function(){
         console.log("CLicked");
         var cart = $('#cart');
         var money = cartleft;
-        var tab3 = document.getElementById('tab3');
-        var tab4 = document.getElementById('tab4');
-        var tab5 = document.getElementById('tab5');
-        var tab6 = document.getElementById('tab6');
         var myhall = getDiningHall();
         
         console.log(myhall);
@@ -121,9 +119,9 @@ $(document).ready(function(){
                 var foodname = removeSpaces(arr[i]);
                 console.log(foodname);
                 if(myhall === "ivyroom")
-                    var myitem= $("#log-form-list-ivy").find("."+foodname);
+                    var myitem= $("#log-form-list-ivy").find("."+foodname).clone();
                 else
-                    var myitem = $("#log-form-list-"+myhall).find('.'+foodname);
+                    var myitem = $("#log-form-list-"+myhall).find('.'+foodname).clone();
                 var check = myitem.children('item');
                 console.log(myitem);
                 console.log(check);
@@ -139,15 +137,24 @@ $(document).ready(function(){
         });  
     } 
     knapsack.addEventListener('click', function() {
-       var money = (680 - Number(total.innerHTML));
+       var money = (680 - getTotal());
+       console.log(money);
        callKnapsack(money);
     });
     console.log(knapsack);
 
     knapsack2.addEventListener('click', function() {
-        var money = (680 + 680 - toNumber(total.innerHTML));
+        var money = (680 + 680 - getTotal());
+        console.log(money);
        callKnapsack(money);
     });
+
+    //ugly prints the pretty printed total
+    function getTotal(){
+        var mytotal = total.innerHTML;
+        mytotal = mytotal.substr(1);
+        return Number(mytotal)*100;
+    }
     //************************************************************************
     $('#missing-food-form').submit(function(event){
         $('#missing-error').html("");
@@ -292,26 +299,7 @@ function makeListOfItems(eatery, result) {
             check.setAttribute('hall',eatery);
             check.setAttribute('fromKnapsack','false');
 	    check.setAttribute('in-cart', 'false');
-	    $(li).click(function() {
-		var input = $(this).children('item');
-		if (input.attr('in-cart') == 'true') {
-                    //var myitem = document.getElementById(input.attr('id') + 'li');
-                    input.parent().attr("style","background-color:transparent;");
-                    
-                    ul.append(input.parent());
-                    updateTotal();
-		    input.attr('in-cart', 'false');
-		} 
-        else {
-
-                   //var myitem = document.getElementById(input.attr('id') + 'li');
-                    input.parent().attr("style","background-color:white;");
-                    input.attr('fromKnapsack','false');
-                    cart.append(input.parent());
-                    updateTotal();
-		            input.attr('in-cart', 'true');
-		    }
-	    });
+	    $(li).click(foodClick);
         var reportitem = $(document.createElement('button'));
         reportitem.attr('id',priceItemSplit[0] + "button");
         reportitem.html("Add a flavor/type");
@@ -329,6 +317,29 @@ function makeListOfItems(eatery, result) {
         }
     }
 }
+
+function foodClick(){
+    var cart = $('#cart');
+        var input = $(this).children('item');
+        if (input.attr('in-cart') == 'true') {
+           
+                    //var myitem = document.getElementById(input.attr('id') + 'li');
+                    $(this).remove();
+                    updateTotal();
+            input.attr('in-cart', 'false');
+        } 
+        else {
+                    var newparent = $(this).clone();
+                    newparent.click(foodClick);
+                    input = newparent.children('item');
+                   //var myitem = document.getElementById(input.attr('id') + 'li');
+                    input.parent().attr("style","background-color:white;");
+                    input.attr('fromKnapsack','false');
+                    cart.append(input.parent());
+                    updateTotal();
+                    input.attr('in-cart', 'true');
+            }
+        }
 
 //Converts 650 -> $6.50
 function prettyPrint(price){
