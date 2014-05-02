@@ -17,7 +17,7 @@ public class RunML {
 
 		StringBuilder sb = new StringBuilder();
 		for (String arg: args){
-			sb.append(arg).append(',');
+			sb.append(arg).append(';');
 		}
 		sb.deleteCharAt(sb.length()-1).append('\n');
 		String request = sb.toString();
@@ -47,12 +47,13 @@ public class RunML {
 			BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			bw.write(request);
 			bw.flush();
-			bw.close();
 			StringBuilder sb = new StringBuilder();
-			char c;
-			while((c = (char) br.read()) != -1){
+			int i;
+			while((i = br.read()) != -1){
+				char c = (char) i;
 				sb.append(c);
 			}
+			bw.close();
 			br.close();
 			System.out.print(sb.toString()); 
 	}

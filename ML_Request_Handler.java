@@ -10,21 +10,22 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class ML_Request_Handler {
 
 	private static final int CLIENT_SAVE_FREQUENCY = 5000;
-	private static final File CLIENT_FILE = new File("savedClient.ser");
-	private static final File TMP_FILE = new File("savedClient.ser.tmp");
+	private static final String CLIENT_FILE = "savedClient.ser";
+	private static final String TMP_FILE = "savedClient.ser.tmp";
 	
 	private ML_Client client;
 	private ReadWriteLock lock;
+	private AtomicBoolean updated;
 
 	public ML_Request_Handler() {
 		try {
@@ -34,6 +35,7 @@ public class ML_Request_Handler {
 			client = new ML_Client(foods);
 		}
 		lock = new ReentrantReadWriteLock();
+		updated = new AtomicBoolean();
 	}
 	
 	public static void main(String[] args){
@@ -53,7 +55,9 @@ public class ML_Request_Handler {
 		Runnable r = new Runnable(){
 			public void run(){
 				while (true){
-					saveClient();
+					if (updated.get()){
+						saveClient();
+					}
 					try {
 						Thread.sleep(CLIENT_SAVE_FREQUENCY);
 					} catch (InterruptedException e) {
@@ -73,11 +77,14 @@ public class ML_Request_Handler {
 		lock.writeLock().lock();
 		try {
 			//tmp file used to prevent file corruption in case of write error
+			File tf = new File(TMP_FILE);
+			File cf = new File(CLIENT_FILE);
 			ObjectOutputStream out = new ObjectOutputStream(
 					new FileOutputStream(TMP_FILE));
 			out.writeObject(client);
 			out.close();
-			Files.move(TMP_FILE.toPath(), CLIENT_FILE.toPath());
+			tf.renameTo(cf);
+			updated.set(false);
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.err.println("Error saving the Client: " + e.getMessage());
@@ -111,12 +118,11 @@ public class ML_Request_Handler {
 						BufferedWriter bw = new BufferedWriter(
 								new OutputStreamWriter(s.getOutputStream()));
 						String input = br.readLine();
-						br.close();
-						String[] args = input.split(",");
+						String[] args = input.split(";");
 						String result = handleRequest(args);
-						bw.write(result);
-						bw.write('\n');
+						bw.write(result + '\n');
 						bw.flush();
+						br.close();
 						bw.close();
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -173,6 +179,7 @@ public class ML_Request_Handler {
 				client.updateReview(arg2, args[3], arg4);
 				// input of type MODIFY NAME [id#] [newFood] [newReview]
 			}
+			updated.set(true);
 		} else if (args[0].equals("PING")) {
 			if (args[1].equals("SUGGEST")) {
 				// input of type PING SUGGEST [id#] [numWant] [k (how many
@@ -200,6 +207,7 @@ public class ML_Request_Handler {
 			return "PRINTING:\n" + client.toString();
 		} else if (args[0].equals("FOODLIST")) {
 			client.addToFoodList(args[1]);
+			updated.set(true);
 		}
 		return "";
 	}
