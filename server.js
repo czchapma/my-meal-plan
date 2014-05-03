@@ -469,7 +469,7 @@ app.post('/knapsack', function(req, res){
 							}
 							else
 							{
-								console.log("Removing" row.item);
+								console.log("Removing", row.item);
 							}
 						});
 					});
