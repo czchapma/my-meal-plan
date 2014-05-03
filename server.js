@@ -84,9 +84,19 @@ var connFlavors = anyDB.createConnection('sqlite3://flavors.db');
 var connMissing = anyDB.createConnection('sqlite3://missing.db');*/
 
 function runJava() {
-	exec('rm -f *.class', function (error, stdout, stderr) {});
-	exec('javac *.java', function (error, stdout, stderr) {});
-	exec('java ML_Request_Handler', function (error, stdout, stderr) {});
+	exec('rm -f *.class', function (error, stdout, stderr) {
+		if(error){
+			console.error(error);
+		}
+	});
+	exec('javac *.java', function (error, stdout, stderr) {
+		if(error){
+			console.error(error);
+		}
+		exec('java ML_Request_Handler', function (error, stdout, stderr) {
+			console.error(error);
+		});
+	});
 }
 
 runJava();
@@ -170,6 +180,19 @@ app.post("/approveMissing", function(req,res){
 		queryD.on('end', function(){
 			res.end();
 		});
+});
+
+app.post("/denyMissing",function(req,res){
+	var food = req.body.food;
+	var price = req.body.price;
+	var location = req.body.location;
+
+	var queryStringD = 'DELETE FROM missing WHERE food=$1 AND price=$2 AND location=$3';
+	var queryD = conn.query(queryStringD, [food, price,location]); 
+	queryD.on('error', console.error);
+	queryD.on('end', function(){
+		res.end();
+	});
 });
 
 app.post("/deny",function(req,res){
