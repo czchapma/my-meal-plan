@@ -447,11 +447,9 @@ app.post('/knapsack', function(req, res){
 				}
 				else if(!ratings[row.item]) //if unrated look at the client
 				{
-					console.log("getting guess");
 					var k = 1;
 					var queryString = "SELECT id FROM users WHERE username=$1";
 					conn.query(queryString, [uname], function(err, results){
-						console.log("FOUND USER");
 						var id = String(results.rows[0].id);
 						var ls = spawn('java', ["RunML", "PING", "GUESS",id,row.item,k]);
 						var output = "";
@@ -465,15 +463,19 @@ app.post('/knapsack', function(req, res){
 						});
 
 						ls.on('exit', function (code) {
-							console.log("ENDED?");
-							console.log(output);
+							if(Number(output) === -1 || Number(output) >= 3)
+							{
+								foodList += row.item + "," + row.price + ",";
+							}
 						});
 					});
 				}
 			}
 		});
 		myQuery.on('end', function(){
+
 			foodList = foodList.substring(0, foodList.length -1);
+			console.log(foodList);
 			
 			var ls = spawn('java',["Knapsack",foodList,req.body.maxMoney]);
 			var output = "";
