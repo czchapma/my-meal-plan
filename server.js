@@ -447,7 +447,7 @@ app.post('/knapsack', function(req, res){
 				}
 				else if(!ratings[row.item]) //if unrated look at the client
 				{
-					var k = 1;
+					var k = 3;
 					var queryString = "SELECT id FROM users WHERE username=$1";
 					conn.query(queryString, [uname], function(err, results){
 						var id = String(results.rows[0].id);
@@ -469,7 +469,7 @@ app.post('/knapsack', function(req, res){
 							}
 							else
 							{
-								console.log("Removing" row.item);
+								console.log("Removing", row.item);
 							}
 						});
 					});
