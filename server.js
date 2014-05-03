@@ -446,7 +446,28 @@ app.post('/knapsack', function(req, res){
 				}
 				else if(!ratings[row.item]) //if unrated look at the client
 				{
-					console.log(getGuess(uname, row.item));
+					console.log("getting guess");
+					var k = 1;
+					var queryString = "SELECT id FROM users WHERE username=$1";
+					conn.query(queryString, [uname], function(err, results){
+						console.log("FOUND USER");
+						var id = String(results.rows[0].id);
+						var ls = spawn('java', ["RunML", "PING", "GUESS",id,row.item,k]);
+						var output = "";
+						ls.stdout.on('data', function (data) {
+							console.log(data);
+						  output += data;
+						});
+
+						ls.stderr.on('data', function (data) {
+						  console.log('stderr: ' + data);
+						});
+
+						ls.on('exit', function (code) {
+							console.log("ENDED?");
+							console.log(output);
+						});
+					});
 				}
 			}
 		});
@@ -508,24 +529,7 @@ app.post('/guess',function(req,res){
 });
 
 function getGuess(username,item){
-	var k = 3;
-	var queryString = "SELECT id FROM users WHERE username=$1";
-	conn.query(queryString, [username], function(err, results){
-		var id = String(results.rows[0].id);
-		var ls = spawn('java', ["RunML", "PING", "GUESS",id,item,k]);
-		var output = "";
-		ls.stdout.on('data', function (data) {
-		  output += data;
-		});
-
-		ls.stderr.on('data', function (data) {
-		  console.log('stderr: ' + data);
-		});
-
-		ls.on('exit', function (code) {
-		  return output;
-		});
-	});
+	
 }
 
 app.get('/print',function(req,res){
