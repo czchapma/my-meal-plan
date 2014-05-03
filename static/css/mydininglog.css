@@ -1,6 +1,10 @@
 /*
   css for my dining subpages
 */
+
+body{
+    min-width: 800px;
+}
 .food-price {
     color: green;
 }
@@ -9,7 +13,7 @@
     display:block;
 }
 #mainstuff{
-    width:80%;
+    width:1000px;
     margin:auto;
 }
 

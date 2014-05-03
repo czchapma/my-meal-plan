@@ -714,7 +714,7 @@ app.get('/menu/jos', function(req, res){
 		}
 	}
 
-	res.end(getThreeBurners() + '\nCustom Salad\nSpicy With\nBeef Carb\nTurkey Carb\nChicken Carb\nMozerella Sticks\nFries\nOnion Rings');
+	res.end(getThreeBurners() + '\nCustom Salad\nSpicy With\nBeef Carb\nTurkey Carb\nChicken Carb\nMozzarella Sticks\nFries\nOnion Rings');
 });
 
 app.get('/status/ratty', function(req, res) {
