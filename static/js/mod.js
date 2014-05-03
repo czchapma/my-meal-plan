@@ -111,17 +111,17 @@ $(document).ready(function(){
     		});
     		console.log(approve);
     		deny.click(function(){
-    			var foodclass = this.getElementsByClassName("food");
-    			var priceclass = this.getElementsByClassName("flavor");
-    			var locationclass = this.getElementsByClassName("location");
-    			var iclass = this.getElementsByClassName("i");
-    			
-    			var myli = document.getElementById(iclass[0].innerHTML);
-    			console.log(myli);
-    			$(myli).hide();
-    			$.post("/denyMissing",{food: foodclass[0].innerHTML, price: Number(priceclass[0].innerHTML), location:locationclass[0].innerHTML}, function(){
+                var foodclass = this.getElementsByClassName("food");
+                var priceclass = this.getElementsByClassName("price");
+                var locationclass = this.getElementsByClassName("location");
+                var iclass = this.getElementsByClassName("i");
+                
+                var myli = document.getElementById(iclass[0].innerHTML);
+                console.log(myli);
+                $(myli).hide();
+                $.post("/denyMissing",{food: foodclass[0].innerHTML, price: Number(priceclass[0].innerHTML), location:locationclass[0].innerHTML}, function(){
 
-    			});
+                });
     		});
     		$("#" + i + "m").append(approve);
     		$("#" + i + "m").append(deny);
