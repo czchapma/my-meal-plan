@@ -88,14 +88,15 @@ function runJava() {
 		if(error){
 			console.error(error);
 		}
+		exec('javac *.java', function (error, stdout, stderr) {
+			if(error){
+				console.error(error);
+			}
+			exec('java ML_Request_Handler', function (error, stdout, stderr) {
+				console.error(error);
+			});
 	});
-	exec('javac *.java', function (error, stdout, stderr) {
-		if(error){
-			console.error(error);
-		}
-		exec('java ML_Request_Handler', function (error, stdout, stderr) {
-			console.error(error);
-		});
+
 	});
 }
 
