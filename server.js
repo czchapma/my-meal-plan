@@ -467,6 +467,10 @@ app.post('/knapsack', function(req, res){
 							{
 								foodList += row.item + "," + row.price + ",";
 							}
+							else
+							{
+								console.log("Removing" row.item);
+							}
 						});
 					});
 				}
@@ -476,7 +480,7 @@ app.post('/knapsack', function(req, res){
 
 			foodList = foodList.substring(0, foodList.length -1);
 			console.log(foodList);
-			
+
 			var ls = spawn('java',["Knapsack",foodList,req.body.maxMoney]);
 			var output = "";
 			ls.stdout.on('data', function (data) {
