@@ -426,6 +426,7 @@ app.get('/allpurchases', function(req, res){
 });
 
 app.post('/knapsack', function(req, res){
+	var uname = getUser(req);
 	console.log(req.body.hall);
 	var ratings = {};
 	var ratingsQuery = conn.query('SELECT item,rating from ratings WHERE email=$1',[getUser(req)]);
@@ -439,9 +440,13 @@ app.post('/knapsack', function(req, res){
 		var foodList = '';
 		myQuery.on('row', function(row){
 			if (row !== undefined) {
-				//only include items unrated or rated >= 3
-				if (!ratings[row.item] || ratings[row.item] >= 3){
+				//only include items rated >= 3
+				if (ratings[row.item] >= 3){
 					foodList += row.item + "," + row.price + ',';
+				}
+				else if(!ratings[row.item]) //if unrated look at the client
+				{
+					console.log(getGuess(uname, row.item));
 				}
 			}
 		});
@@ -478,8 +483,7 @@ app.post('/review', function(req, res){
 	review(res, email, [item], [rating]);
 });
 
-//TODO: fix security threat. By just concatenating the calls to RunML. someone could use some form of injection I think. 
-//My guess is that you could do something to turn the string into multiple lines, and then literally run anything serverside.
+
 app.post('/guess',function(req,res){
 	var username = getUser(req);
 	var item = req.body.item;
@@ -502,6 +506,27 @@ app.post('/guess',function(req,res){
 		});
 	});
 });
+
+function getGuess(username,item){
+	var k = 3;
+	var queryString = "SELECT id FROM users WHERE username=$1";
+	conn.query(queryString, [username], function(err, results){
+		var id = String(results.rows[0].id);
+		var ls = spawn('java', ["RunML", "PING", "GUESS",id,item,k]);
+		var output = "";
+		ls.stdout.on('data', function (data) {
+		  output += data;
+		});
+
+		ls.stderr.on('data', function (data) {
+		  console.log('stderr: ' + data);
+		});
+
+		ls.on('exit', function (code) {
+		  return output;
+		});
+	});
+}
 
 app.get('/print',function(req,res){
 	exec('java RunML PRINT', function (error, stdout, stderr) {
