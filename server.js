@@ -454,7 +454,7 @@ app.post('/knapsack', function(req, res){
 						var ls = spawn('java', ["RunML", "PING", "GUESS",id,row.item,k]);
 						var output = "";
 						ls.stdout.on('data', function (data) {
-							console.log(data);
+							//console.log(data);
 						  output += data;
 						});
 
@@ -463,6 +463,7 @@ app.post('/knapsack', function(req, res){
 						});
 
 						ls.on('exit', function (code) {
+							console.log("output is:",output);
 							if(Number(output) === -1 || Number(output) >= 3)
 							{
 								foodList += row.item + "," + row.price + ",";
