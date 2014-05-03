@@ -587,7 +587,7 @@ app.post('/menu/ratty', function(req, res) {
 		var bSrc = $('#Breakfast').attr('src');
 		var lSrc = $('#Lunch').attr('src');
 		var dSrc = $('#Dinner').attr('src');
-		var ignoreList = ["",".","OPENS FOR LUNCH", "Opens for lunch","Opens for Lunch", "Opens at lunch", "Opens at Lunch", "Roots & Shoots","Grill","Bistro","Chef\'s Corner"];
+		var ignoreList = ["",".","OPENS FOR LUNCH", "Opens for lunch","Opens for Lunch", "Opens at lunch", "Opens at Lunch", "Closed for Breakfast", "Roots & Shoots","Grill","Bistro","Chef\'s Corner"];
 		var time = new Date().getHours();
 		res.write(meal + '\n');
 		if (meal === 'breakfast'){
