@@ -42,6 +42,7 @@ TODO:
   - MLCLient not being populated with users
 
 * Features that would be nice
+  - Enter custom price (for blue room or ACo by-weight prices)
   - Previous transactions broken down by dining hall
   - Ratty menu broken down by stations
   - Scanning items, but seems impractical without BDS info

@@ -2,6 +2,7 @@
 
 rm -f *.class
 javac *.java
+pkill java
 java ML_Request_Handler &
 
 node server.js

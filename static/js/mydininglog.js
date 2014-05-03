@@ -9,6 +9,17 @@ $(document).ready(function(){
         $('#missing-food-form').show();
         $('#somethingmissing').hide();
     });
+
+    $('#log-form').submit(function(event){
+        event.preventDefault();
+        console.log();
+        var items = $('#cart').find('.food-item');
+        for (var i=0; i<items.length; i++){
+            $.post( "/logpurchase", {item:items[i].innerHTML}, function(data,status){
+                $(location).attr('href','/prevtransactions');
+            });
+        }
+    });
     
     // $('#allpurchase').click(function() {
     //     $('#prev-transactions').show();
@@ -39,6 +50,8 @@ $(document).ready(function(){
     var total = document.getElementById('total');
     var knapsack = document.getElementById('knapsack');
     var knapsack2 = document.getElementById('knapsack2');
+    knapsack2.disabled=false; //make sure the buttons can be clicked
+    knapsack.disabled=false;
 
     //*****************************************************************
     //Code to make cart empty each time the user changes the database
@@ -65,54 +78,47 @@ $(document).ready(function(){
             var eatery = $(foods[i]).children('item').attr('hall'); //need which list to put back in
             if(eatery !== myeat) //only remove if the element is not from myeat
             {
+
                 $(foods[i]).children('item').attr('in-cart', 'false'); //cuz it's not in the cart anymore               
-                 var ul= $('#log-form-list-' + eatery); 
-                 $(foods[i]).css({"background-color":"transparent"});   //change background back                
-                ul.append(foods[i]);  //put the li into the appropriate list
+                // var ul= $('#log-form-list-' + eatery); 
+                 //$(foods[i]).css({"background-color":"transparent"});   //change background back                
+                //ul.append(foods[i]);  //put the li into the appropriate list
+
+                $(foods[i]).remove();
             }           
         }
         updateTotal(); 
     }
 
     //*************************************************************************
-
+    //Knapsack related functions and events
     $('#tryagain').click( function(){
         var foods = $("#cart").children();
        
         for(var i = 0; i < foods.length; i++)
         {   
+            console.log(foods[i]);
+            var eatery = $(foods[i]).children('item').attr('hall'); //need which list to put back in
             var isknapsack = $(foods[i]).children('item').attr('fromKnapsack'); //need which ones were put automatically
-            if(isknapsack) //only remove if the element is not from myeat
+            if(isknapsack === 'true') //only remove if the element is not from myeat
             {
-                $(foods[i]).children('item').attr('in-cart', 'false'); //cuz it's not in the cart anymore               
-                 var ul= $('#log-form-list-' + eatery); 
-                 $(foods[i]).css({"background-color":"transparent"});   //change background back                
-                ul.append(foods[i]);  //put the li into the appropriate list
+               // $(foods[i]).children('item').attr('in-cart', 'false'); //cuz it's not in the cart anymore               
+                // var ul= $('#log-form-list-' + eatery); 
+                // $(foods[i]).css({"background-color":"transparent"});   //change background back                
+                $(foods[i]).remove();  //put the li into the appropriate list
             }           
         }
         updateTotal(); 
     });
 
     console.log(knapsack);
-    knapsack.addEventListener('click', function() {
+    function callKnapsack(cartleft){
         knapsack2.disabled=true; //stop the user from over clicking and pinging and getting concurency problems
         knapsack.disabled=true;
         console.log("CLicked");
         var cart = $('#cart');
-        var money = (680 - Number(total.innerHTML));
-        var tab3 = document.getElementById('tab3');
-        var tab4 = document.getElementById('tab4');
-        var tab5 = document.getElementById('tab5');
-        var tab6 = document.getElementById('tab6');
-        var myhall = "";
-        if(tab3.checked)
-            myhall= "blueroom"
-        if(tab4.checked)
-            myhall = "ivyroom"
-        if(tab5.checked)
-            myhall = "aco"
-        if(tab6.checked)
-            myhall = "jos"
+        var money = cartleft;
+        var myhall = getDiningHall();
         
         console.log(myhall);
 
@@ -121,13 +127,17 @@ $(document).ready(function(){
             var arr = data.split('\n');
             for (var i =0; i < arr.length - 1; i ++)
             {
-                var foodname = arr[i];
+                var foodname = removeSpaces(arr[i]);
+                console.log(foodname);
                 if(myhall === "ivyroom")
-                    var check = $("#log-form-list-ivy").find("."+foodname)[0];
+                    var myitem= $("#log-form-list-ivy").find("."+foodname).clone();
                 else
-                    var check = $("#log-form-list-"+myhall).find('.'+foodname)[0];
-                var myitem = check.parent();
-		        check.attr('in-cart', 'true');
+                    var myitem = $("#log-form-list-"+myhall).find('.'+foodname).clone();
+                myitem.click(foodClick);
+                var check = myitem.children('item');
+                console.log(myitem);
+                console.log(check);
+                check.attr('in-cart', 'true');
                 check.attr('fromKnapsack','true');
                 myitem.attr('style','background-color:gray');
                 cart.append(myitem);
@@ -136,51 +146,28 @@ $(document).ready(function(){
             }
             knapsack2.disabled=false; //let the user click again
             knapsack.disabled=false;
-        });
+        });  
+    } 
+    knapsack.addEventListener('click', function() {
+       var money = (680 - getTotal());
+       console.log(money);
+       callKnapsack(money);
     });
     console.log(knapsack);
 
     knapsack2.addEventListener('click', function() {
-        knapsack2.disabled=true; //stop the user from over clicking and pinging and getting concurency problems
-        knapsack.disabled=true;
-        console.log("CLicked");
-        
-        var cart = $('#cart');
-        var money = (680 + 680 - Number(total.innerHTML));
-        var myhall = getDiningHall();        
-        console.log(myhall);
-        $.post( "/knapsack", {maxMoney:money, hall:myhall}, function(data,status){
-            //TODO: make it so people can buy more than 1 of the same item. 
-            var arr = data.split('\n');
-            for (var i =0; i < arr.length - 1; i ++)
-            {
-                var check = document.getElementById(arr[i]);
-                $(check).attr('in-cart', 'true');
-                $(check).attr('fromKnapsack','true');
-               	var myitem = document.getElementById(arr[i] + 'li');
-                myitem.setAttribute('style','background-color:gray');
-                cart.append(myitem);
-                updateTotal();
-                
-            }
-            knapsack2.disabled=false; //let the user click again
-            knapsack.disabled=false;
-        });
-    });
-    $('#log-form').submit(function(event){
-        event.preventDefault();
-        var items = [];
-        $('#cart .food-item').each(function(idx){
-            items[idx] = $(this).text();
-        });
-        console.log(items);
-        for(var i=0; i<items.length; i++){
-            $.post( "/logpurchase", {item: items[i]}, function(data,status){
-                window.location = '/prevtransactions';
-            });            
-        }
+        var money = (680 + 680 - getTotal());
+        console.log(money);
+       callKnapsack(money);
     });
 
+    //ugly prints the pretty printed total
+    function getTotal(){
+        var mytotal = total.innerHTML;
+        mytotal = mytotal.substr(1);
+        return Number(mytotal)*100;
+    }
+    //************************************************************************
     $('#missing-food-form').submit(function(event){
         $('#missing-error').html("");
         event.preventDefault();
@@ -316,34 +303,15 @@ function makeListOfItems(eatery, result) {
             var priceItemSplit = lineSplit[i].split(',');
             var li = $(document.createElement('li'));
             var check = document.createElement('item');
-            //li.attr('id',priceItemSplit[0] + 'li');
-            check.setAttribute('class',priceItemSplit[0])
+            li.attr('class',removeSpaces(priceItemSplit[0]));
+            //check.setAttribute('class',priceItemSplit[0])
             check.setAttribute('name','check-'+ priceItemSplit[0] );
             //check.setAttribute('id', priceItemSplit[0]);
             check.setAttribute('price',priceItemSplit[1]);
             check.setAttribute('hall',eatery);
             check.setAttribute('fromKnapsack','false');
 	    check.setAttribute('in-cart', 'false');
-	    $(li).click(function() {
-		var input = $(this).children('item');
-		if (input.attr('in-cart') == 'true') {
-                    //var myitem = document.getElementById(input.attr('id') + 'li');
-                    input.parent().attr("style","background-color:transparent;");
-                    
-                    ul.append(input.parent());
-                    updateTotal();
-		    input.attr('in-cart', 'false');
-		} 
-        else {
-
-                   //var myitem = document.getElementById(input.attr('id') + 'li');
-                    input.parent().attr("style","background-color:white;");
-                    input.attr('fromKnapsack','false');
-                    cart.append(input.parent());
-                    updateTotal();
-		            input.attr('in-cart', 'true');
-		    }
-	    });
+	    $(li).click(foodClick);
         var reportitem = $(document.createElement('button'));
         reportitem.attr('id',priceItemSplit[0] + "button");
         reportitem.html("Add a flavor/type");
@@ -362,6 +330,29 @@ function makeListOfItems(eatery, result) {
     }
 }
 
+function foodClick(){
+    var cart = $('#cart');
+        var input = $(this).children('item');
+        if (input.attr('in-cart') == 'true') {
+           
+                    //var myitem = document.getElementById(input.attr('id') + 'li');
+                    $(this).remove();
+                    updateTotal();
+            input.attr('in-cart', 'false');
+        } 
+        else {
+                    var newparent = $(this).clone();
+                    newparent.click(foodClick);
+                    input = newparent.children('item');
+                   //var myitem = document.getElementById(input.attr('id') + 'li');
+                    input.parent().attr("style","background-color:white;");
+                    input.attr('fromKnapsack','false');
+                    cart.append(input.parent());
+                    updateTotal();
+                    input.attr('in-cart', 'true');
+            }
+        }
+
 //Converts 650 -> $6.50
 function prettyPrint(price){
     var toReturn = '$';
@@ -370,6 +361,17 @@ function prettyPrint(price){
     toReturn += '.';
     toReturn +=  price - (dollar * 100);
     return toReturn;
+}
+
+//Opposite of prettyPrint
+//$6.50 -> 650
+function toNumber(priceAsString){
+    console.log('original:',priceAsString);
+    priceAsString = priceAsString.replace('$','');
+    priceAsString = priceAsString.replace('.','');
+    priceAsString = Number(priceAsString);
+    console.log('number:',priceAsString);
+    return priceAsString;
 }
 
 
@@ -383,7 +385,7 @@ function updateTotal(){
         var myitem = $(foods[i]).children('item');
         sum+= Number(myitem.attr('price'));
     }
-    total.innerHTML = sum;
+    total.innerHTML = prettyPrint(sum);
 }
 
 function getDiningHall(){
@@ -402,6 +404,25 @@ function getDiningHall(){
         myhall = "jos"
 
     return myhall;
+}
+//removes spaces and other special characters that shouldn't be in class names
+function removeSpaces(mystr){
+    newstr = ""
+    for(var i = 0; i < mystr.length; i++)
+    {
+        if(isLetterOrDigit(mystr.charAt(i)))
+            newstr = newstr + mystr.charAt(i);
+    }
+    return newstr;
+}
+
+console.log("TESTING:")
+console.log(isLetterOrDigit('4') + "Should be true");
+console.log(isLetterOrDigit('-') + "Should be false");
+console.log(isLetterOrDigit(' ')+ "Should be false");
+function isLetterOrDigit(mychar){
+    var regexstr = "[A-Z,a-z,0-9]"
+    return null !== mychar.match(regexstr);
 }
 
 

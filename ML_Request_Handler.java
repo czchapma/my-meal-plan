@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -30,7 +31,10 @@ public class ML_Request_Handler {
 	public ML_Request_Handler() {
 		try {
 			client = loadClient();
-		} catch (IOException | ClassNotFoundException e) {
+		} catch (IOException e) {
+			ArrayList<String> foods = new ArrayList<String>();
+			client = new ML_Client(foods);
+		} catch (ClassNotFoundException e){
 			ArrayList<String> foods = new ArrayList<String>();
 			client = new ML_Client(foods);
 		}
@@ -44,6 +48,9 @@ public class ML_Request_Handler {
 		try {
 			h.accetpRequests();
 			//Nothing below here should ever really be reached
+		} catch(BindException e){
+			System.out.println("Client already running, kill process if you need to restart");
+			h.saveClient();
 		} catch (IOException e) {
 			e.printStackTrace();
 			h.saveClient();
@@ -103,7 +110,7 @@ public class ML_Request_Handler {
 		return client;
 	}
 
-	public void accetpRequests() throws IOException {
+	public void accetpRequests() throws IOException, BindException {
 		ServerSocket ss = new ServerSocket(8800);
 		int numCores = Runtime.getRuntime().availableProcessors();
 		ExecutorService e = Executors.newFixedThreadPool(numCores);
