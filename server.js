@@ -83,6 +83,14 @@ var connFlavors = anyDB.createConnection('sqlite3://flavors.db');
 
 var connMissing = anyDB.createConnection('sqlite3://missing.db');*/
 
+function runJava() {
+	exec('rm -f *.class', function (error, stdout, stderr) {});
+	exec('javac *.java', function (error, stdout, stderr) {});
+	exec('java ML_Request_Handler', function (error, stdout, stderr) {});
+}
+
+runJava();
+
 //Should ideally only be called once
 function resetServer(){
 	//delete pre-existing databases
