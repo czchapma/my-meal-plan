@@ -42,7 +42,7 @@ html,body {
 }
 
 /* login and new account*/
-#login-content, #newaccount-content {
+#login-content, #newaccount-content, #create {
     width: 100%;
     margin: 0;
 }
@@ -65,6 +65,10 @@ html,body {
     width: 100%;
 }
 
+#right-panel {
+    display: block;
+}
+
 /* my dining brown auth page*/
 #content {
     width: 100%;
@@ -85,6 +89,7 @@ html,body {
 
 /* my dining log */
 #left-panel, #browse-form {
+    display: block;
     float: none;
     margin: 10px;
     padding: 5px;
