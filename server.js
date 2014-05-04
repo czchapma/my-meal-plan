@@ -653,7 +653,7 @@ app.get('/menu/vdub', function(req,res) {
 	makeRequest(res, 'http://www.brown.edu/Student_Services/Food_Services/eateries/verneywoolley_menu.php', function(body){
 		$ = cheerio.load(body);
 		var src = $('iframe').first().attr('src');
-		var ignoreList = ["",".","OPENS FOR LUNCH","Opens for lunch","Opens for Lunch",'spring 1', 'spring 2', 'spring 3', 'spring 4', 'spring 5', 'spring 6', 'spring 7', 'spring 8', 'Breakfast','Lunch','Dinner', 'Daily Sidebars'];
+		var ignoreList = ["",".","OPENS FOR LUNCH","Opens for lunch","Opens for Lunch",'spring 1', 'spring 2', 'spring 3', 'spring 4', 'spring 5', 'spring 6', 'spring 7', 'spring 8', 'spring 9', 'Breakfast','Lunch','Dinner', 'Daily Sidebars'];
 
 		function callback(body){
 			var toReturn = ["","","",""];
@@ -965,7 +965,7 @@ app.get('/specials/vdub', function(req, res){
 	makeRequest(res, 'http://www.brown.edu/Student_Services/Food_Services/eateries/verneywoolley_menu.php', function(body){
 		$ = cheerio.load(body);
 		var src = $('iframe').first().attr('src');
-		var ignoreList = ["",".","OPENS FOR LUNCH","Opens for lunch","Opens for Lunch",'spring 1', 'spring 2', 'spring 3', 'spring 4', 'spring 5', 'spring 6', 'spring 7', 'spring 8', 'Breakfast','Lunch','Dinner', 'Daily Sidebars'];
+		var ignoreList = ["",".","OPENS FOR LUNCH","Opens for lunch","Opens for Lunch",'spring 1', 'spring 2', 'spring 3', 'spring 4', 'spring 5', 'spring 6', 'spring 7', 'spring 8', 'spring 9', 'Breakfast','Lunch','Dinner', 'Daily Sidebars'];
 
 		function callback(body){
 			var toReturn = ["","","",""];
