@@ -111,7 +111,7 @@ function resetServer(){
 		conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, month TEXT,day TEXT, gender TEXT)');
 		fillFoodDB();
 		conn.query('CREATE TABLE bugs(user TEXT, time INTEGER, message TEXT)');
-		conn.query('CREATE TABLE purchases (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, date TEXT)');
+		conn.query('CREATE TABLE purchases (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, date TEXT, time TEXT)');
 		conn.query('CREATE TABLE ratings (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, rating INTEGER)');
 		conn.query('CREATE TABLE flavors (user TEXT, item TEXT, flavor TEXT, location TEXT)');
 		conn.query('CREATE TABLE missing (food TEXT, price INTEGER, location TEXT)');
@@ -407,8 +407,9 @@ app.post('/logpurchase', function(req, res){
 	var email = getUser(req);
 	var item = req.body.item;
 	var date = new Date().toDateString();
-	var queryString = 'INSERT INTO purchases VALUES ($1, $2, $3, $4)';
-	var query = conn.query(queryString, [null,email, item, date]);
+	var time = new Date().toTimeString();
+	var queryString = 'INSERT INTO purchases VALUES ($1, $2, $3, $4,$5)';
+	var query = conn.query(queryString, [null,email, item, date, time]);
 	query.on('error', console.error);
 	query.on('end', function(){
 		res.end();
@@ -417,7 +418,7 @@ app.post('/logpurchase', function(req, res){
 
 app.get('/allpurchases', function(req, res){
 	var email = getUser(req);
-	var queryString = 'SELECT date,item from purchases WHERE email=$1';
+	var queryString = 'SELECT date,item, time from purchases WHERE email=$1';
 	conn.query(queryString, [email], function(error, results){
 		if(error){
 			console.error(error);
@@ -436,66 +437,50 @@ app.post('/knapsack', function(req, res){
 	});
 
 	ratingsQuery.on('end', function(){
+		var username = getUser(req);
 		console.log('ratings:',ratings);
 		var myQuery = conn.query('SELECT * from food WHERE location=$1',[req.body.hall]);
-		var foodList = '';
+		var foodList = new Array();
 		myQuery.on('row', function(row){
 			if (row !== undefined) {
-				//only include items rated >= 3
-				if (ratings[row.item] >= 3){
-					foodList += row.item + "," + row.price + ',';
-				}
-				else if(!ratings[row.item]) //if unrated look at the client
-				{
-					var k = 3;
-					var queryString = "SELECT id FROM users WHERE username=$1";
-					conn.query(queryString, [uname], function(err, results){
-						var id = String(results.rows[0].id);
-						var ls = spawn('java', ["RunML", "PING", "GUESS",id,row.item,k]);
-						var output = "";
-						ls.stdout.on('data', function (data) {
-							//console.log(data);
-						  output += data;
-						});
-
-						ls.stderr.on('data', function (data) {
-						  console.log('stderr: ' + data);
-						});
-
-						ls.on('exit', function (code) {
-							console.log("output is:",output);
-							if(Number(output) === -1 || Number(output) >= 3)
-							{
-								foodList += row.item + "," + row.price + ",";
-							}
-							else
-							{
-								console.log("Removing", row.item);
-							}
-						});
-					});
-				}
+				//only include items rated >= 3 or not rated
+				if (ratings[row.item] >= 3 || !ratings[row.item]){
+					foodList.push(row.item);
+					foodList.push(row.price);
+				}			
 			}
 		});
-		myQuery.on('end', function(){
+		myQuery.on('end', function(){ //now we have all foods
+			var queryString = "SELECT id FROM users WHERE username=$1";
+			conn.query(queryString, [username], function(err, results){	
+				var id = String(results.rows[0].id);
+				var k = 3;		
+				console.log(foodList);
+				var firsthalf = ['RunML',"PING", "KNAPSACKGUESS",id,k];
+				console.log(firsthalf.concat(foodList));
+				var guesses = spawn('java', firsthalf.concat(foodList));//run knapsack guess with foodlist
+				var output = "";
+				guesses.stdout.on('data', function (data) {
+				 	var ls = spawn('java',["Knapsack",data,req.body.maxMoney]);
+					var output = "";
+					ls.stdout.on('data', function (data) {
+				  		output += data;
+					});	
 
-			foodList = foodList.substring(0, foodList.length -1);
-			console.log(foodList);
+					ls.stderr.on('data', function (data) {
+				  		console.log('stderr: ' + data);
+					});	
 
-			var ls = spawn('java',["Knapsack",foodList,req.body.maxMoney]);
-			var output = "";
-			ls.stdout.on('data', function (data) {
-			  output += data;
+					ls.on('exit', function (code) {
+				  		res.end(output);
+					});	
+
+				});
+				
+				guesses.stderr.on('data', function (data) {
+				  	console.log('stderr: ' + data);
+				});	
 			});	
-
-			ls.stderr.on('data', function (data) {
-			  console.log('stderr: ' + data);
-			});	
-
-			ls.on('exit', function (code) {
-			  res.end(output);
-			});	
-
 		});
 	});
 });
