@@ -67,13 +67,6 @@ html,body {
     min-width: 0;
 }
 
-#right-panel, #left-panel {
-    display: block;
-    width: 100%;
-    padding: 0;
-    margin: 0;
-}
-
 #create {
     font-size: 20pt;
 }
@@ -104,7 +97,7 @@ html,body {
 #mainstuff {
     width: 100%;
 }
-#left-panel, #browse-form {
+#left-panel, #right-panel, #browse-form {
     display: block;
     float: none;
     margin: 10px;
