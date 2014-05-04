@@ -12,6 +12,9 @@ import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -189,19 +192,47 @@ public class ML_Request_Handler {
 			updated.set(true);
 		} else if (args[0].equals("PING")) {
 			if (args[1].equals("SUGGEST")) {
-				// input of type PING SUGGEST [id#] [numWant] [k (how many
-				// nearest neighbors you want)]
-				int arg2 = Integer.parseInt(args[2]);
-				int arg3 = Integer.parseInt(args[3]);
-				int arg4 = Integer.parseInt(args[4]);
-				String[] recs = client.getRec(arg2, arg4, arg3);
-				StringBuilder sb = new StringBuilder();
-				sb.append("Foods Suggested:");
-				for (int i = 0; i < recs.length - 1; i++) {
-					sb.append(recs[i] + ",");
+				// input of type PING SUGGEST [id#] [k (how many
+				// nearest neighbors you want)] [food1] [food2] [food3]
+				// int arg2 = Integer.parseInt(args[2]);
+				// int arg3 = Integer.parseInt(args[3]);
+				// int arg4 = Integer.parseInt(args[4]);
+				// String[] recs = client.getRec(arg2, arg4, arg3);
+				// StringBuilder sb = new StringBuilder();
+				// sb.append("Foods Suggested:");
+				// for (int i = 0; i < recs.length - 1; i++) {
+				// 	sb.append(recs[i] + ",");
+				// }
+				// sb.append(recs[recs.length - 1]);
+				// return sb.toString();
+				int id = Integer.parseInt(args[2]);
+				int k = Integer.parseInt(args[3]);
+				Random r = new Random();
+				HashMap<Integer, List<String>> results = new HashMap<Integer, List<String>>();
+				results.put(-1,new ArrayList<String>());
+				for (int i=1; i<=5; i++){
+					results.put(i, new ArrayList<String>());
 				}
-				sb.append(recs[recs.length - 1]);
-				return sb.toString();
+				//go through foods
+				for (int i=4; i<args.length; i++){
+					String currFood = args[i];
+					int guess = (int) client.getReviewGuess(currFood,k, id);
+					results.get(guess).add(currFood);
+					System.out.println("Guess: " + guess + ", Food:" + currFood);
+				}
+				for (int i=5; i > 2; i--){
+					//if there is a result
+					if (results.get(i).size() > 0){
+						int index = r.nextInt(results.get(i).size());
+						return results.get(i).get(index);
+					}
+				}
+				if (results.get(-1).size() > 0){
+					int index = r.nextInt(results.get(-1).size());
+					return results.get(-1).get(index);
+				}
+				else
+					return "No results";
 			} else if (args[1].equals("GUESS")) {
 				// input of type PING GUESS [id#] [foodName] [k]
 				int arg2 = Integer.parseInt(args[2]);

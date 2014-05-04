@@ -19,7 +19,8 @@ $(document).ready(function(){
 	    		});
     		} else {
     			//logged in - ML results
-	    		$.post("/suggest",{numItems : 1},function(data,status){
+	    		$.post("/suggest",function(data,status){
+	    			console.log(data);
 				    var start = data.indexOf("Foods Suggested:") + "Foods Suggested:".length;
 				    var word = data.substring(start);
 				    var end = word.indexOf("/n");

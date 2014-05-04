@@ -544,31 +544,43 @@ app.get('/populateTests', function(req,res){
 
 app.post('/suggest',function(req,res){
   	var username = getUser(req);
-	var numItems = req.body.numItems;
 	var k = 3;
-	console.log(username);
-	console.log(numItems);
-	var queryString = "SELECT id FROM users WHERE username=$1";
-	conn.query(queryString, [username], function(err, results){
-		if(results.rows[0] !== undefined)
-		{
-			var id = String(results.rows[0].id);
-			console.log(id);
-			var ls = spawn('java', ["RunML", "PING", "SUGGEST",id, numItems, k]);
-			var output = "";
-			ls.stdout.on('data', function (data) {
-				console.log(data);
-			  	output += data;
-			});
-
-			ls.stderr.on('data', function (data) {
-			  console.log('stderr: ' + data);
-			});
-
-			ls.on('exit', function (code) {
-			  res.end(output);
-			});
+	var myQuery = conn.query('SELECT * from food WHERE location=$1',[req.body.hall]);
+	var foodList = new Array();
+	myQuery.on('row', function(row){
+		if (row !== undefined) {
+			//only include items rated >= 3 or not rated
+			if (ratings[row.item] >= 3 || !ratings[row.item]){
+				foodList.push(row.item);
+				foodList.push(row.price);
+			}			
 		}
+	});
+
+	myQuery.on('end', function(){ //now we have all foods
+		var queryString = "SELECT id FROM users WHERE username=$1";
+		conn.query(queryString, [username], function(err, results){
+			if(results.rows[0] !== undefined)
+			{
+				var id = String(results.rows[0].id);
+				console.log(id);
+				var firsthalf = ['RunML',"PING", "SUGGEST",id,k];
+				var guesses = spawn('java', firsthalf.concat(foodList));//run suggest  with foodlist
+				var ls = spawn('java', guesses);
+				var output = "";
+				ls.stdout.on('data', function (data) {
+				  	output += data.toString('utf-8');
+				});	
+
+				ls.stderr.on('data', function (data) {
+				  console.log('stderr: ' + data);
+				});	
+
+				ls.on('exit', function (code) {
+				  res.end(output);
+				});
+			}
+		});
 	});
 });
 
