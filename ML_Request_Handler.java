@@ -211,7 +211,6 @@ public class ML_Request_Handler {
 			} else if(args[1].equals("KNAPSACKGUESS")) {
 				// input of type PING GUESS [id#] [k] [foodName1] [price1] [foodName2] [price2] [foodName3] [price3]...
 				//note that k and foodName are flipped from GUESS
-				System.out.println('in function');
 				int id = Integer.parseInt(args[2]);
 				int k = Integer.parseInt(args[3]);
 				String foodPriceOutput = "";
@@ -223,8 +222,6 @@ public class ML_Request_Handler {
 					if (guess == -1 || guess >= 3){
 						//include in output
 						foodPriceOutput += currFood + "," + currPrice + ",";
-					} else {
-						System.out.println("skupping");
 					}
 				}
 				if (foodPriceOutput.length() > 0){
