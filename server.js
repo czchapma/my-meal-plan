@@ -634,15 +634,15 @@ app.post('/menu/ratty', function(req, res) {
 		var bSrc = $('#Breakfast').attr('src');
 		var lSrc = $('#Lunch').attr('src');
 		var dSrc = $('#Dinner').attr('src');
-		var ignoreList = ["",".","OPENS FOR LUNCH", "Opens for lunch","Opens for Lunch", "Opens at lunch", "Opens at Lunch", "Closed for Breakfast", "Roots & Shoots","Grill","Bistro","Chef\'s Corner"];
+		var ignoreList = ["",".","OPENS FOR LUNCH", "Opens for lunch","Opens for Lunch", "Opens at lunch", "Opens at Lunch"];
 		var time = new Date().getHours();
 		res.write(meal + '\n');
 		if (meal === 'breakfast'){
-			makeRattyIvyMenu(res,bSrc,ignoreList, false);
+            makeRattyMenu(res,bSrc,ignoreList,false);
 		} else if (meal === 'lunch'){
-			makeRattyIvyMenu(res,lSrc,ignoreList, false);
+            makeRattyMenu(res,lSrc,ignoreList,false);
 		} else if (meal === 'dinner'){
-			makeRattyIvyMenu(res,dSrc,ignoreList, false);
+            makeRattyMenu(res,dSrc,ignoreList,false); 
 		} else {
 			res.end('invalid meal type ' + meal);
 		}
@@ -653,7 +653,7 @@ app.get('/menu/vdub', function(req,res) {
 	makeRequest(res, 'http://www.brown.edu/Student_Services/Food_Services/eateries/verneywoolley_menu.php', function(body){
 		$ = cheerio.load(body);
 		var src = $('iframe').first().attr('src');
-		var ignoreList = ["",".","OPENS FOR LUNCH","Opens for lunch","Opens for Lunch",'spring 1', 'spring 2', 'spring 3', 'spring 4', 'spring 5', 'spring 6', 'spring 7', 'spring 8', 'Breakfast','Lunch','Dinner', 'Daily Sidebars'];
+		var ignoreList = ["",".","OPENS FOR LUNCH","Opens for lunch","Opens for Lunch",'spring 1', 'spring 2', 'spring 3', 'spring 4', 'spring 5', 'spring 6', 'spring 7', 'spring 8', 'spring 9', 'Breakfast','Lunch','Dinner', 'Daily Sidebars'];
 
 		function callback(body){
 			var toReturn = ["","","",""];
@@ -965,7 +965,7 @@ app.get('/specials/vdub', function(req, res){
 	makeRequest(res, 'http://www.brown.edu/Student_Services/Food_Services/eateries/verneywoolley_menu.php', function(body){
 		$ = cheerio.load(body);
 		var src = $('iframe').first().attr('src');
-		var ignoreList = ["",".","OPENS FOR LUNCH","Opens for lunch","Opens for Lunch",'spring 1', 'spring 2', 'spring 3', 'spring 4', 'spring 5', 'spring 6', 'spring 7', 'spring 8', 'Breakfast','Lunch','Dinner', 'Daily Sidebars'];
+		var ignoreList = ["",".","OPENS FOR LUNCH","Opens for lunch","Opens for Lunch",'spring 1', 'spring 2', 'spring 3', 'spring 4', 'spring 5', 'spring 6', 'spring 7', 'spring 8', 'spring 9', 'Breakfast','Lunch','Dinner', 'Daily Sidebars'];
 
 		function callback(body){
 			var toReturn = ["","","",""];
@@ -1149,6 +1149,44 @@ function makeRequest(res, url, callback){
 	}
 }
 
+function makeRattyMenu(response, menuUrl, ignoreList, specials){
+    //console.log(menuUrl);
+    function callback(body){
+         var toReturn = "";
+        function pushText(text){
+            if (ignoreList.indexOf(text) === -1){
+                toReturn += text+"\n";
+            }
+        }
+        function pushListText(list){
+            list.forEach(pushText);
+        }
+        var itemsByLine = [[],[],[],[],[]];
+        var specials = [];
+        $ = cheerio.load(body);
+		$('td').each(function(idx, elem) { 
+            var text = $(this).text();
+            //console.log(idx + " " + text);
+            itemsByLine[idx % 5].push(text);
+        });
+        itemsByLine.splice(0,1);
+        itemsByLine.forEach(function(list){
+            var last = list.pop();
+            if (ignoreList.indexOf(last) === -1){
+                specials.push(last);
+            }
+            pushListText(list);
+        });
+        if (specials.length > 0){
+            pushText("Specials");
+            pushListText(specials);
+        }
+        //console.log(toReturn);
+        response.end(toReturn.substr(0,toReturn.length - 1));   
+    }
+    makeRequest(response, menuUrl, callback);
+}
+
 function makeRattyIvyMenu(response, menuUrl, ignoreList, specials){
 	function callback(body){
 		var toReturn = ""
@@ -1157,7 +1195,7 @@ function makeRattyIvyMenu(response, menuUrl, ignoreList, specials){
 			var text = $(this).text();
 			//items not to include in our menu
 			if (!specials && ignoreList.indexOf(text) === -1) {
-				toReturn += text + '\n';
+                toReturn += text + '\n';
 			} else if (specials){
 				//Specials for Ratty: Bistro item and Salad Bar
 				if (idx === 14){
