@@ -69,6 +69,7 @@ body{
 
 [id^=log-form-list-] {
     overflow-y: auto;
+    overflow-x: auto;
     height: 300px;
 }
 
