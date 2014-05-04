@@ -89,14 +89,10 @@ button {
     background-color:#7309AA;
 }
 
-#dining_buttons {
-    margin-left: 175px;
-}
-
 #dining_buttons a {
+    text-align: center;
+    width: 33%;
     display:inline-block;
-    height:20px;
-    padding:0 10px 0 10px;
     color: white;
     font-size:12pt;
     text-decoration:none;
