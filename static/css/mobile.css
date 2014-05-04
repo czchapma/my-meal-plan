@@ -61,7 +61,7 @@ html,body {
     width: 40%;
 }
 
-#newaccount-content {
+#newaccount-content, #new-account-form {
     width: 100%;
 }
 
