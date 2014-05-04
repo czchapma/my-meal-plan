@@ -203,14 +203,38 @@ public class ML_Request_Handler {
 				sb.append(recs[recs.length - 1]);
 				return sb.toString();
 			} else if (args[1].equals("GUESS")) {
-				// input of type PING SUGGEST [id#] [foodName] [k]
+				// input of type PING GUESS [id#] [foodName] [k]
 				int arg2 = Integer.parseInt(args[2]);
 				int arg4 = Integer.parseInt(args[4]);
 				double guess = client.getReviewGuess(args[3], arg4, arg2);
 				return "" + guess;
+			} else if(args[1].equals("KNAPSACKGUESS")) {
+				// input of type PING GUESS [id#] [k] [foodName1] [price1] [foodName2] [price2] [foodName3] [price3]...
+				//note that k and foodName are flipped from GUESS
+				System.out.println('in function');
+				int id = Integer.parseInt(args[2]);
+				int k = Integer.parseInt(args[3]);
+				String foodPriceOutput = "";
+				//go through foods
+				for (int i=4; i<args.length; i+=2){
+					String currFood = args[i];
+					String currPrice = args[i + 1];
+					double guess = client.getReviewGuess(currFood,k, id);
+					if (guess == -1 || guess >= 3){
+						//include in output
+						foodPriceOutput += currFood + "," + currPrice + ",";
+					} else {
+						System.out.println("skupping");
+					}
+				}
+				if (foodPriceOutput.length() > 0){
+					//remove comma
+					foodPriceOutput = foodPriceOutput.substring(0, foodPriceOutput.length() - 1);
+				}
+				return foodPriceOutput;
 			}
-
-		} else if (args[0].equals("PRINT")) {
+		}
+		else if (args[0].equals("PRINT")) {
 			return "PRINTING:\n" + client.toString();
 		} else if (args[0].equals("FOODLIST")) {
 			client.addToFoodList(args[1]);
