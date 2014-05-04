@@ -166,6 +166,10 @@ h2 {
     top: 3px;
 }
 
+#dining_buttons {
+    margin-left: 5px;
+}
+
 #missing-food-form{
     display:block;
 }
