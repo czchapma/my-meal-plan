@@ -20,9 +20,10 @@ body{
 #cart{
     height:300px;
     overflow-y:scroll;
+    overflow-x: hidden;
 }
-#right-panel
-{
+
+#right-panel {
     display:inline-block;
     margin-left:50px;
     margin-top:50px;
@@ -69,6 +70,7 @@ body{
 
 [id^=log-form-list-] {
     overflow-y: auto;
+    overflow-x: hidden;
     height: 300px;
 }
 

@@ -27,7 +27,8 @@ $(document).ready(function(){
 
             var item = json['item'];
             var date = json['date'];
-            var li = '<li><div class="prev-trans-item">'+ json['item'] + '</div><div class="prev-trans-date">' + json['date'] + '</div></li>';
+            var time = json['time'];
+            var li = '<li><div class="prev-trans-item">'+ item + ': </div><div class="prev-trans-date">' + date + '</div>' + time+ '</li>';
             if(prevdates.indexOf(date) !== -1)
             {
                 console.log(item);

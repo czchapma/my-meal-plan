@@ -1,0 +1,110 @@
+#login-content, #newaccount-content {
+    padding: 10px;
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 100px;
+    background-color:#E8E8E8;
+}
+
+#newaccount-content {
+    margin-top: 50px;
+}
+
+#login-content label, #newaccount-content label {
+    font-size: 20px;
+}
+
+#login-content p input, #newaccount-content p input {
+    float: right;
+    width: 300px;
+}
+
+#login-content button {
+    float: right;
+    width: 100px;
+    height: 30px;
+    margin-left: 10px;
+}
+#right-panel{
+    display:inline-block;
+    width:40%;
+    padding:2%;
+}
+#left-panel{
+    display:inline-block;
+    width:40%;
+    padding:2%;
+}
+
+#create{
+    width:100%;
+    text-align:center;
+    font-family:"Vollkorn", sans-serif;
+    font-size:32pt;
+}
+#rate {
+    font-family:"Vollkorn", sans-serif;
+    width: 60%;
+    background-color:#F5F5F5;
+    border:2px;
+    border-style:solid;
+    border-color:#A4A4A4;
+    height:200px;
+    overflow-y:auto;
+    margin-left:30%;
+}
+#rate li {
+    font-family:"Vollkorn", sans-serif;
+    color: black;
+    list-style: decimal;
+    font-size: 16pt;
+}
+
+#rate img {
+    width: 35px;
+    opacity: .5;
+}
+
+#rate img:hover {
+    cursor: pointer;
+}
+
+#rate_msg {
+    display: none;
+    color: red;
+}
+
+.submit {
+    margin:auto;
+    background-color:#4A068F;
+    -moz-border-radius:2px;
+    -webkit-border-radius:2px;
+    border-radius:2px;
+    display:block;
+    cursor:pointer;
+    color:#E8E8E8;
+    font-family:"Vollkorn", sans-serif;
+    font-size:24px;
+    font-weight:bold;
+    padding:20px 50px;
+    padding-bottom:50px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #4A068F;
+}
+.submit:hover {
+    background-color:#C6B5C9;
+    color: #4A068F;
+}
+
+.submit:active {
+    position:relative;
+    top:1px;
+}
+
+#new-account-form{
+    min-width:700px;
+}
+
+#creating {
+    display: none;
+}
