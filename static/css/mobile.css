@@ -65,10 +65,20 @@ html,body {
     width: 100%;
 }
 
-#right-panel {
+#right-panel, #left-panel {
     display: block;
+    width: 100%;
+    padding: 0;
 }
 
+#create {
+    font-size: 20pt;
+}
+
+#rate {
+    width: 100%;
+    margin-left: 0;
+}
 /* my dining brown auth page*/
 #content {
     width: 100%;
