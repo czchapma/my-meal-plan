@@ -461,7 +461,9 @@ app.post('/knapsack', function(req, res){
 				var guesses = spawn('java', firsthalf.concat(foodList));//run knapsack guess with foodlist
 				var output = "";
 				guesses.stdout.on('data', function (data) {
-				 	var ls = spawn('java',["Knapsack",data,req.body.maxMoney]);
+					var mystr = data.toString("utf-8");
+					console.log(mystr.substr(0,mystr.length - 1));
+				 	var ls = spawn('java',["Knapsack",mystr.substr(0,mystr.length - 1),req.body.maxMoney]);
 					var output = "";
 					ls.stdout.on('data', function (data) {
 				  		output += data;
@@ -476,7 +478,7 @@ app.post('/knapsack', function(req, res){
 					});	
 
 				});
-				
+
 				guesses.stderr.on('data', function (data) {
 				  	console.log('stderr: ' + data);
 				});	
