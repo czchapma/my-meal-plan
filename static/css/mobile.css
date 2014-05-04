@@ -166,8 +166,8 @@ h2 {
     top: 3px;
 }
 
-#dining_buttons {
-    margin-left: 5px;
+#dining_buttons a {
+    width: 32%;
 }
 
 #missing-food-form{
