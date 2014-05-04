@@ -9,6 +9,7 @@
 html,body {
     margin: 0;
     padding: 0;
+    min-width: 0;
     overflow-x: hidden;
 }
 
@@ -42,7 +43,7 @@ html,body {
 }
 
 /* login and new account*/
-#login-content, #newaccount-content {
+#login-content, #newaccount-content, #create {
     width: 100%;
     margin: 0;
 }
@@ -61,10 +62,25 @@ html,body {
     width: 40%;
 }
 
-#newaccount-content {
+#newaccount-content, #new-account-form {
     width: 100%;
+    min-width: 0;
 }
 
+#right-panel, #left-panel {
+    display: block;
+    width: 100%;
+    padding: 0;
+}
+
+#create {
+    font-size: 20pt;
+}
+
+#rate {
+    width: 100%;
+    margin-left: 0;
+}
 /* my dining brown auth page*/
 #content {
     width: 100%;
@@ -85,6 +101,7 @@ html,body {
 
 /* my dining log */
 #left-panel, #browse-form {
+    display: block;
     float: none;
     margin: 10px;
     padding: 5px;

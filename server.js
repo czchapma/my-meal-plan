@@ -84,9 +84,20 @@ var connFlavors = anyDB.createConnection('sqlite3://flavors.db');
 var connMissing = anyDB.createConnection('sqlite3://missing.db');*/
 
 function runJava() {
-	exec('rm -f *.class', function (error, stdout, stderr) {});
-	exec('javac *.java', function (error, stdout, stderr) {});
-	exec('java ML_Request_Handler', function (error, stdout, stderr) {});
+	exec('rm -f *.class', function (error, stdout, stderr) {
+		if(error){
+			console.error(error);
+		}
+		exec('javac *.java', function (error, stdout, stderr) {
+			if(error){
+				console.error(error);
+			}
+			exec('java ML_Request_Handler', function (error, stdout, stderr) {
+				console.error(error);
+			});
+	});
+
+	});
 }
 
 runJava();
@@ -100,7 +111,7 @@ function resetServer(){
 		conn.query('CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,username TEXT, month TEXT,day TEXT, gender TEXT)');
 		fillFoodDB();
 		conn.query('CREATE TABLE bugs(user TEXT, time INTEGER, message TEXT)');
-		conn.query('CREATE TABLE purchases (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, date TEXT)');
+		conn.query('CREATE TABLE purchases (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, date TEXT, time TEXT)');
 		conn.query('CREATE TABLE ratings (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, item TEXT, rating INTEGER)');
 		conn.query('CREATE TABLE flavors (user TEXT, item TEXT, flavor TEXT, location TEXT)');
 		conn.query('CREATE TABLE missing (food TEXT, price INTEGER, location TEXT)');
@@ -170,6 +181,19 @@ app.post("/approveMissing", function(req,res){
 		queryD.on('end', function(){
 			res.end();
 		});
+});
+
+app.post("/denyMissing",function(req,res){
+	var food = req.body.food;
+	var price = req.body.price;
+	var location = req.body.location;
+
+	var queryStringD = 'DELETE FROM missing WHERE food=$1 AND price=$2 AND location=$3';
+	var queryD = conn.query(queryStringD, [food, price,location]); 
+	queryD.on('error', console.error);
+	queryD.on('end', function(){
+		res.end();
+	});
 });
 
 app.post("/deny",function(req,res){
@@ -383,8 +407,9 @@ app.post('/logpurchase', function(req, res){
 	var email = getUser(req);
 	var item = req.body.item;
 	var date = new Date().toDateString();
-	var queryString = 'INSERT INTO purchases VALUES ($1, $2, $3, $4)';
-	var query = conn.query(queryString, [null,email, item, date]);
+	var time = new Date().toTimeString();
+	var queryString = 'INSERT INTO purchases VALUES ($1, $2, $3, $4,$5)';
+	var query = conn.query(queryString, [null,email, item, date, time]);
 	query.on('error', console.error);
 	query.on('end', function(){
 		res.end();
@@ -393,7 +418,7 @@ app.post('/logpurchase', function(req, res){
 
 app.get('/allpurchases', function(req, res){
 	var email = getUser(req);
-	var queryString = 'SELECT date,item from purchases WHERE email=$1';
+	var queryString = 'SELECT date,item, time from purchases WHERE email=$1';
 	conn.query(queryString, [email], function(error, results){
 		if(error){
 			console.error(error);
@@ -403,6 +428,7 @@ app.get('/allpurchases', function(req, res){
 });
 
 app.post('/knapsack', function(req, res){
+	var uname = getUser(req);
 	console.log(req.body.hall);
 	var ratings = {};
 	var ratingsQuery = conn.query('SELECT item,rating from ratings WHERE email=$1',[getUser(req)]);
@@ -411,34 +437,52 @@ app.post('/knapsack', function(req, res){
 	});
 
 	ratingsQuery.on('end', function(){
+		var username = getUser(req);
 		console.log('ratings:',ratings);
 		var myQuery = conn.query('SELECT * from food WHERE location=$1',[req.body.hall]);
-		var foodList = '';
+		var foodList = new Array();
 		myQuery.on('row', function(row){
 			if (row !== undefined) {
-				//only include items unrated or rated >= 3
-				if (!ratings[row.item] || ratings[row.item] >= 3){
-					foodList += row.item + "," + row.price + ',';
-				}
+				//only include items rated >= 3 or not rated
+				if (ratings[row.item] >= 3 || !ratings[row.item]){
+					foodList.push(row.item);
+					foodList.push(row.price);
+				}			
 			}
 		});
-		myQuery.on('end', function(){
-			foodList = foodList.substring(0, foodList.length -1);
-			
-			var ls = spawn('java',["Knapsack",foodList,req.body.maxMoney]);
-			var output = "";
-			ls.stdout.on('data', function (data) {
-			  output += data;
-			});	
+		myQuery.on('end', function(){ //now we have all foods
+			var queryString = "SELECT id FROM users WHERE username=$1";
+			conn.query(queryString, [username], function(err, results){	
+				var id = String(results.rows[0].id);
+				var k = 3;		
+				console.log(foodList);
+				var firsthalf = ['RunML',"PING", "KNAPSACKGUESS",id,k];
+				console.log(firsthalf.concat(foodList));
+				var guesses = spawn('java', firsthalf.concat(foodList));//run knapsack guess with foodlist
+				var output = "";
+				guesses.stdout.on('data', function (data) {
+					var mystr = data.toString("utf-8");
+					console.log(mystr.substr(0,mystr.length - 1));
+				 	var ls = spawn('java',["Knapsack",mystr.substr(0,mystr.length - 1),req.body.maxMoney]);
+					var output = "";
+					ls.stdout.on('data', function (data) {
+				  		output += data;
+					});	
 
-			ls.stderr.on('data', function (data) {
-			  console.log('stderr: ' + data);
-			});	
+					ls.stderr.on('data', function (data) {
+				  		console.log('stderr: ' + data);
+					});	
 
-			ls.on('exit', function (code) {
-			  res.end(output);
-			});	
+					ls.on('exit', function (code) {
+				  		res.end(output);
+					});	
 
+				});
+
+				guesses.stderr.on('data', function (data) {
+				  	console.log('stderr: ' + data);
+				});	
+			});	
 		});
 	});
 });
@@ -455,8 +499,7 @@ app.post('/review', function(req, res){
 	review(res, email, [item], [rating]);
 });
 
-//TODO: fix security threat. By just concatenating the calls to RunML. someone could use some form of injection I think. 
-//My guess is that you could do something to turn the string into multiple lines, and then literally run anything serverside.
+
 app.post('/guess',function(req,res){
 	var username = getUser(req);
 	var item = req.body.item;
@@ -479,6 +522,10 @@ app.post('/guess',function(req,res){
 		});
 	});
 });
+
+function getGuess(username,item){
+	
+}
 
 app.get('/print',function(req,res){
 	exec('java RunML PRINT', function (error, stdout, stderr) {
@@ -696,7 +743,7 @@ app.get('/menu/jos', function(req, res){
 		}
 	}
 
-	res.end(getThreeBurners() + '\nCustom Salad\nSpicy With\nBeef Carb\nTurkey Carb\nChicken Carb\nMozerella Sticks\nFries\nOnion Rings');
+	res.end(getThreeBurners() + '\nCustom Salad\nSpicy With\nBeef Carb\nTurkey Carb\nChicken Carb\nMozzarella Sticks\nFries\nOnion Rings');
 });
 
 app.get('/status/ratty', function(req, res) {

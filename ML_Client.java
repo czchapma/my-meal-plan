@@ -219,6 +219,11 @@ public class ML_Client implements Serializable
 	//TODO: Get the k nearest neighbors to user indicated by curId that have reviewed item food, then average or majority rule (we can decide this later) their reviews, and return this number. Return -1 if there are not enough neighbors who have reviewed item food. 
 	public double getReviewGuess(String food, int k, int curId)
 	{
+
+		if (users.get(curId).getReviews().keySet().contains(food))
+		{
+			return users.get(curId).getReviews().get(food);
+		}
 		Map<Integer,Double> neighbors = dists.get(curId);
 		ArrayList<Tupleish> allNeighbors = new ArrayList<Tupleish>();
 		for(int otherId : neighbors.keySet())
@@ -238,7 +243,6 @@ public class ML_Client implements Serializable
 			
 			reviewCumul += users.get(allNeighbors.get(i).getId()).getReviews().get(food);
 		}
-
 		return reviewCumul / k;			
 			
 		

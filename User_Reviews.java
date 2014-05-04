@@ -1,14 +1,17 @@
-import java.util.*;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 public class User_Reviews implements Serializable {
 		
 	private int userId; //NOTE: UserIds should be COMPLETELY unique. In MySQL should do autoincrement thingy to ensure. start at 1 or 0, whichever that does, then increment by 1. This'll help with the distances matrix in ML_Client
 	private String userName;
-	private Gender genderIdentity; //not a boolean because gender is a spectrum. 0 for male, 1 for female, 2 for other
-	private String other; //if gender id is 0 or 1, this should be '', otherwise it has the individual's gender identity
+	private Gender genderIdentity; //Male, Female, or Other
+	private String other; //if gender is Male or Female, this should be '', otherwise it has the individual's gender identity
 	private int birthYear;  // -1 if not given
 	private int birthMonth; // -1 if not given
-	private HashMap<String,Integer> reviews; //Hash map of all items the user has reviewed.
+	private Map<String,Integer> reviews; //Hash map of all items the user has reviewed.
 	
 	//default user constructor
 	public User_Reviews(){
@@ -18,13 +21,14 @@ public class User_Reviews implements Serializable {
 		other = "";
 		birthYear = -1;
 		birthMonth = -1;
-		reviews = new HashMap<String,Integer>();
+		reviews = new ConcurrentHashMap<String,Integer>();
 	}
 	
 
 	//user constructor with a CSV row containing all the data (probably the easiest input from node)
 	public User_Reviews(String myCSV)
 	{
+		System.out.println(myCSV);
 		String[] vals = myCSV.split(","); //stick the csv into a buffer
 		userId = Integer.parseInt(vals[0]);
 		userName = vals[1];
@@ -39,7 +43,7 @@ public class User_Reviews implements Serializable {
 		}
 	}
 	
-	public HashMap<String,Integer> getReviews()
+	public Map<String,Integer> getReviews()
 	{
 		return reviews;
 	}
