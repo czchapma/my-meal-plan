@@ -632,21 +632,16 @@ app.post('/menu/ratty', function(req, res) {
 		$ = cheerio.load(body);
 		var day = moment().day();
 		var bSrc = $('#Breakfast').attr('src');
-        console.log(bSrc);
 		var lSrc = $('#Lunch').attr('src');
 		var dSrc = $('#Dinner').attr('src');
-		var ignoreList = ["",".","OPENS FOR LUNCH", "Opens for lunch","Opens for Lunch", "Opens at lunch", "Opens at Lunch"/*, "Roots & Shoots","Grill","Bistro","Chef\'s Corner"*/];
+		var ignoreList = ["",".","OPENS FOR LUNCH", "Opens for lunch","Opens for Lunch", "Opens at lunch", "Opens at Lunch"];
 		var time = new Date().getHours();
 		res.write(meal + '\n');
 		if (meal === 'breakfast'){
-			//makeRattyIvyMenu(res,bSrc,ignoreList, false);
-            //debugger;
-            //makeRattyMenu(res,bSrc,ignoreList,false);
+            makeRattyMenu(res,bSrc,ignoreList,false);
 		} else if (meal === 'lunch'){
-			//makeRattyIvyMenu(res,lSrc,ignoreList, false);
             makeRattyMenu(res,lSrc,ignoreList,false);
 		} else if (meal === 'dinner'){
-			//makeRattyIvyMenu(res,dSrc,ignoreList, false);
             makeRattyMenu(res,dSrc,ignoreList,false); 
 		} else {
 			res.end('invalid meal type ' + meal);
@@ -1155,7 +1150,7 @@ function makeRequest(res, url, callback){
 }
 
 function makeRattyMenu(response, menuUrl, ignoreList, specials){
-    console.log(menuUrl);
+    //console.log(menuUrl);
     function callback(body){
          var toReturn = "";
         function pushText(text){
