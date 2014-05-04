@@ -12,6 +12,7 @@ $(document).ready(function(){
 
 function setupDiningBar(){
 	var halls = ['ratty','vdub'];
+
 	halls.forEach(function(entry){
 		$('#' + entry + '_breakfast_link').click(function(){
 			$('#' + entry + '_breakfast').show();
@@ -180,9 +181,14 @@ function generateRatty(){
 			    var li ='<li>'+ split[i] + '</li>';
 			    parent.append(li);
 			}
+			if (split.length === 2){
+				$('#ratty_breakfast_link').hide();
+				$('#ratty_lunch_link').trigger('click');
+				$('#ratty_lunch_link').text('Brunch');
+			}
     	});
    		var date = new Date();
-		if (date.getHours() < 11 || date.getHours() >= 20){
+		if (date.getHours() < 11 || date.getHours() >= 20) {
 			$('#ratty_breakfast_link').trigger('click');
 		} else if (date.getHours() < 16){
 			$('#ratty_lunch_link').trigger('click');
