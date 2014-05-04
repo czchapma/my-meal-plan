@@ -63,6 +63,7 @@ html,body {
 
 #newaccount-content, #new-account-form {
     width: 100%;
+    min-width: 0;
 }
 
 #right-panel, #left-panel {
