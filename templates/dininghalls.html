@@ -1,123 +1,156 @@
 <!DOCTYPE html />
 <html>
-  <head>
-    <title>MyMealPlan</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-    <meta name="name" content="{{name}}">
-    <link rel="icon" href="static/imgs/avocado.png" type="image/x-icon">
-    <link rel="stylesheet" type="text/css" href="static/css/base.css" />
-    <link rel="stylesheet" type="text/css" href="static/css/dininghalls.css" />
-    <link href="http://fonts.googleapis.com/css?family=Vollkorn:400,400italic,700" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="static/css/mobile.css" type="text/css" media="only screen and (max-width: 760px)"/>
+    <head>
+        <title>MyMealPlan</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+        <meta name="name" content="{{name}}">
+        <link rel="icon" href="static/imgs/avocado.png" type="image/x-icon">
+        <link rel="stylesheet" type="text/css" href="static/css/base.css" />
+        <link rel="stylesheet" type="text/css" href="static/css/dininghalls.css" />
+        <link href="http://fonts.googleapis.com/css?family=Vollkorn:400,400italic,700" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="static/css/mobile.css" type="text/css" media="only screen and (max-width: 760px)"/>
 
-    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="static/js/dininghalls.js"></script>
-    <script type="text/javascript" src="static/js/base.js"></script>
-  </head>
-  <body>
-    <div id="nav_bar">
-      <a id="logo" ><strong>My Meal Plan</strong></a>
-      <div id="nav_buttons">
-      <a id="dininghalls" href="/dininghalls">Dining Halls</a>
-      <a id="mydining" href="/mydining">My Dining</a>
-      <a id="specials" href="/specials">Specials at a Glance</a>
-      <a id="login" href="/login">Login</a>
-      <a id="logout" href="/logout">Logout</a>
-       <button id="logerror"> Report a bug </button>
-      <span id="welcomeMsg"></span>
-      </div>
-    </div>
-    <div id="content">
-      <ul class="tabs">
-        <li>
-          <input type="radio" checked name="tabs" id="tab1">
-          <label id="ratty-tab" for="tab1">Ratty</label>
-          <div id="tab-content1" class="tab-content animated fadeIn">
-            <div id="status-ratty" class="open"></div>
-            <ul class="times"></ul>
-	    <img src="static/imgs/ratty.jpg"/>
-          <div id="dining_bar">
-      <div id="dining_buttons">
-        <a id="ratty_breakfast_link" href="#"> Breakfast </a>
-        <a id="ratty_lunch_link" href="#"> Lunch </a>
-        <a id="ratty_dinner_link" href="#"> Dinner </a>
-      </div>
-    </div>
-            <ul class="menus" id="ratty_breakfast"></ul>
-            <ul class="menus" id="ratty_lunch"></ul>
-            <ul class="menus" id="ratty_dinner"></ul>
-          </div>
-        </li>
-        <li>
-          <input type="radio" name="tabs" id="tab2">
-          <label id="vdub-tab" for="tab2">VDub</label>
-          <div id="tab-content2" class="tab-content animated fadeIn">
-            <div id="status-vdub" class="open"></div>
-            <ul class="times"></ul>
-	    <img src="static/imgs/vdub.jpg"></img>
-                <div id="dining_bar">
-      <div id="dining_buttons">
-        <a id="vdub_breakfast_link" href="#"> Breakfast </a>
-        <a id="vdub_lunch_link" href="#"> Lunch </a>
-        <a id="vdub_dinner_link" href="#"> Dinner </a>
-      </div>
-    </div>
-            <ul class="menus" id="vdub_breakfast"></ul>
-            <ul class="menus" id="vdub_lunch"></ul>
-            <ul class="menus" id="vdub_dinner"></ul>
-          </div>
-        </li>
-        <li>
-          <input type="radio" name="tabs" id="tab3">
-          <label id="blueroom-tab" for="tab3">Blue Room</label>
-          <div id="tab-content3" class="tab-content animated fadeIn">
-            <div id="status-blueroom" class="open"></div>
-            <ul class="times"></ul>
-	    <img src="static/imgs/blue-room.jpg"/>
-            <ul class="menus">
-              <strong>Currently Serving:</strong><li class"menu-header" id="current-br"></li>
-              <strong>8AM - 11AM</strong>
-              <li class="menu-header">Hot Breakfast</li>
-              <li class="menu-header">Real Smooth Smoothie and Parfait Bar</li>
-              <li class="menu-header">Egg Fritatta Sandwich of the Day made with cage-free eggs</li>
-              <strong>11AM - 8:30PM</strong><li id="soup" class="menu-header">Soups</li>
-              <strong>11AM - 3PM</strong><li class="menu-header">Focaccia Deli Sandwiches</li>
-              <strong>11AM - 9PM</strong><li class="menu-header">Build Your Own Sandwich</li>
-              <strong>4PM - 9PM</strong><li id="main-dinner" class="menu-header">Main Dinner</li>
+        <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="static/js/dininghalls.js"></script>
+        <script type="text/javascript" src="static/js/base.js"></script>
+    </head>
+    <body>
+        <div id="nav_bar">
+            <a id="logo" ><strong>My Meal Plan</strong></a>
+            <div id="nav_buttons">
+                <a id="dininghalls" href="/dininghalls">Dining Halls</a>
+                <a id="mydining" href="/mydining">My Dining</a>
+                <a id="specials" href="/specials">Specials at a Glance</a>
+                <a id="login" href="/login">Login</a>
+                <a id="logout" href="/logout">Logout</a>
+                <button id="logerror"> Report a bug </button>
+                <span id="welcomeMsg"></span>
+            </div>
+        </div>
+        <div id="content">
+            <ul class="tabs">
+                <li>
+                <input type="radio" checked name="tabs" id="tab1">
+                <label id="ratty-tab" for="tab1">Ratty</label>
+                <div id="tab-content1" class="tab-content animated fadeIn">
+                    <div id="status-ratty" class="open"></div>
+                    <ul class="times"></ul>
+                    <img src="static/imgs/ratty.jpg"/>
+                    <div id="dining_bar">
+                        <div id="dining_buttons">
+                            <a id="ratty_breakfast_link" href="#"> Breakfast </a>
+                            <a id="ratty_lunch_link" href="#"> Lunch </a>
+                            <a id="ratty_dinner_link" href="#"> Dinner </a>
+                        </div>
+                    </div>
+                    <div class="ratty_div" id="ratty_breakfast">
+                        <h4 class="sub_menu_header">Roots & Shoots</h4>
+                        <ul class="menus" id="ras_breakfast"></ul>
+                        <h4 class="sub_menu_header">Grill</h4>
+                        <ul class="menus" id="grill_breakfast"></ul>
+                        <h4 class="sub_menu_header">Chef's Corner</h4>
+                        <ul class="menus" id="cc_breakfast"></ul>
+                        <h4 class="sub_menu_header">Bistro</h4>
+                        <ul class="menus" id="bistro_breakfast"></ul>
+                        <h4 class="sub_menu_header">Specials</h4>
+                        <ul class="menus" id="specials_breakfast"></ul>
+                    </div>
+                    <div class="ratty_div" id="ratty_lunch">
+                        <h4 class="sub_menu_header">Roots & Shoots</h4>
+                        <ul class="menus ras" id="ras_lunch"></ul>
+                        <h4 class="sub_menu_header">Grill</h4>
+                        <ul class="menus grill" id="grill_lunch"></ul>
+                        <h4 class="sub_menu_header">Chef's Corner</h4>
+                        <ul class="menus cc" id="cc_lunch"></ul>
+                        <h4 class="sub_menu_header">Bistro</h4>
+                        <ul class="menus bistro" id="bistro_lunch"></ul>
+                        <h4 class="sub_menu_header">Specials</h4>
+                        <ul class="menus" id="specials_lunch"></ul>
+                    </div>
+                    <div class="ratty_div" id="ratty_dinner">
+                        <h4 class="sub_menu_header">Roots & Shoots</h4>
+                        <ul class="menus" id="ras_dinner"></ul>
+                        <h4 class="sub_menu_header">Grill</h4>
+                        <ul class="menus" id="grill_dinner"></ul>
+                        <h4 class="sub_menu_header">Chef's Corner</h4>
+                        <ul class="menus" id="cc_dinner"></ul>
+                        <h4 class="sub_menu_header">Bistro</h4>
+                        <ul class="menus" id="bistro_dinner"></ul>
+                        <h4 class="sub_menu_header">Specials</h4>
+                        <ul class="menus" id="specials_dinner"></ul>
+                    </div>
+                </div>
+                </li>
+                <li>
+                <input type="radio" name="tabs" id="tab2">
+                <label id="vdub-tab" for="tab2">VDub</label>
+                <div id="tab-content2" class="tab-content animated fadeIn">
+                    <div id="status-vdub" class="open"></div>
+                    <ul class="times"></ul>
+                    <img src="static/imgs/vdub.jpg"></img>
+                    <div id="dining_bar">
+                        <div id="dining_buttons">
+                            <a id="vdub_breakfast_link" href="#"> Breakfast </a>
+                            <a id="vdub_lunch_link" href="#"> Lunch </a>
+                            <a id="vdub_dinner_link" href="#"> Dinner </a>
+                        </div>
+                    </div>
+                    <ul class="menus" id="vdub_breakfast"></ul>
+                    <ul class="menus" id="vdub_lunch"></ul>
+                    <ul class="menus" id="vdub_dinner"></ul>
+                </div>
+                </li>
+                <li>
+                <input type="radio" name="tabs" id="tab3">
+                <label id="blueroom-tab" for="tab3">Blue Room</label>
+                <div id="tab-content3" class="tab-content animated fadeIn">
+                    <div id="status-blueroom" class="open"></div>
+                    <ul class="times"></ul>
+                    <img src="static/imgs/blue-room.jpg"/>
+                    <ul class="menus">
+                        <strong>Currently Serving:</strong><li class"menu-header" id="current-br"></li>
+                        <strong>8AM - 11AM</strong>
+                        <li class="menu-header">Hot Breakfast</li>
+                        <li class="menu-header">Real Smooth Smoothie and Parfait Bar</li>
+                        <li class="menu-header">Egg Fritatta Sandwich of the Day made with cage-free eggs</li>
+                        <strong>11AM - 8:30PM</strong><li id="soup" class="menu-header">Soups</li>
+                        <strong>11AM - 3PM</strong><li class="menu-header">Focaccia Deli Sandwiches</li>
+                        <strong>11AM - 9PM</strong><li class="menu-header">Build Your Own Sandwich</li>
+                        <strong>4PM - 9PM</strong><li id="main-dinner" class="menu-header">Main Dinner</li>
+                    </ul>
+                </div>
+                </li>
+                <li>
+                <input type="radio" name="tabs" id="tab4">
+                <label id="ivyroom-tab" for="tab4">Ivy Room</label>
+                <div id="tab-content4" class="tab-content animated fadeIn">
+                    <div id="status-ivyroom" class="open"></div>
+                    <ul class="times"></ul>
+                    <img src="static/imgs/ivy-room.jpg">
+                    <ul class="menus"></ul>
+                </div>
+                </li>
+                <li>
+                <input type="radio" name="tabs" id="tab5">
+                <label id="aco-tab" for="tab5">Commons</label>
+                <div id="tab-content5" class="tab-content animated fadeIn">
+                    <div id="status-aco" class="open"></div>
+                    <ul class="times"></ul>
+                    <img src="static/imgs/commons.jpg"/>
+                    <ul class="menus"></ul>
+                </div>
+                </li>
+                <li>
+                <input type="radio" name="tabs" id="tab6">
+                <label id="jos-tab" for="tab6">Jo's</label>
+                <div id="tab-content6" class="tab-content animated fadeIn">
+                    <div id="status-jos" class="open"></div>
+                    <ul class="times"></ul>
+                    <img src="static/imgs/jos.jpg"/>
+                    <ul class="menus"></ul>
+                </div>
+                </li>
             </ul>
-          </div>
-        </li>
-        <li>
-          <input type="radio" name="tabs" id="tab4">
-          <label id="ivyroom-tab" for="tab4">Ivy Room</label>
-          <div id="tab-content4" class="tab-content animated fadeIn">
-            <div id="status-ivyroom" class="open"></div>
-            <ul class="times"></ul>
-	    <img src="static/imgs/ivy-room.jpg">
-            <ul class="menus"></ul>
-          </div>
-        </li>
-        <li>
-          <input type="radio" name="tabs" id="tab5">
-          <label id="aco-tab" for="tab5">Commons</label>
-          <div id="tab-content5" class="tab-content animated fadeIn">
-            <div id="status-aco" class="open"></div>
-            <ul class="times"></ul>
-	    <img src="static/imgs/commons.jpg"/>
-            <ul class="menus"></ul>
-          </div>
-        </li>
-        <li>
-          <input type="radio" name="tabs" id="tab6">
-          <label id="jos-tab" for="tab6">Jo's</label>
-          <div id="tab-content6" class="tab-content animated fadeIn">
-            <div id="status-jos" class="open"></div>
-            <ul class="times"></ul>
-	    <img src="static/imgs/jos.jpg"/>
-            <ul class="menus"></ul>
-          </div>
-        </li>
-      </ul>
-    </div>
-</body>
+        </div>
+    </body>
 </html>

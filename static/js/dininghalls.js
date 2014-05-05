@@ -168,6 +168,7 @@ function generateMenus(){
 }
 function generateRatty(){
     var meals = ['breakfast','lunch','dinner'];
+    var lines = ['Roots & Shoots', 'Chef\'s Corner', 'Bistro', 'Grill', 'Specials'];
     for (var mealId=0; mealId<meals.length; mealId++){
     	$.post( "/menu/ratty", {meal:meals[mealId]}, function(data,status){
     		if (data === ''){
@@ -176,10 +177,28 @@ function generateRatty(){
 			}
     		var split = data.split('\n');
     		var meal = split[0];
-			var parent = $('#tab-content1 #ratty_' + meal);
-			for (var i=1; i<split.length; i++){
-			    var li ='<li>'+ split[i] + '</li>';
-			    parent.append(li);
+			var parents = $('#tab-content1 #ratty_' + meal).children('ul');
+			var parentIdx = 0;
+            var parent = parents[0];
+            var numInLine = 0;
+            for (var i=1; i<split.length; i++){
+                var text = split[i];
+                if (lines.indexOf(text) !== -1){
+                    //Add blank element to make even number of elements
+                    //Fixes weird CSS glitch
+                    if (numInLine % 2 !== 0){
+                        var li = document.createElement('li');
+                        li.innerHTML = "&nbsp;";
+                        parent.appendChild(li);
+                    }
+                    parent = parents[parentIdx++];
+                    numInLine = 0;
+                    continue;
+                }
+                var li = document.createElement('li');
+                li.innerHTML = text;
+			    parent.appendChild(li);
+                numInLine++;
 			}
 			if (split.length === 2){
 				$('#ratty_breakfast_link').hide();
@@ -188,9 +207,11 @@ function generateRatty(){
 			}
     	});
    		var date = new Date();
-		if (date.getHours() < 11 || date.getHours() >= 20) {
+        //Skip Sunday breakfast because doesn't exist
+		if (date.getHours() < 11 && date.getDay() != 0 || 
+                date.getHours() >= 20 && date.getDay() != 6) {
 			$('#ratty_breakfast_link').trigger('click');
-		} else if (date.getHours() < 16){
+		} else if (date.getHours() < 16 || date.getHours() >= 20){
 			$('#ratty_lunch_link').trigger('click');
 		} else {
 			$('#ratty_dinner_link').trigger('click');
