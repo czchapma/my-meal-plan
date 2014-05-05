@@ -5,32 +5,40 @@ $(document).ready(function(){
     $('#suggestion').hide();
 
     $('#suggest').click(function(){
-	    $.ajax({
-	        url: "/isLoggedIn"
-	    }).done(function(result) {
-	    	if(result === 'no'){
-	    		//not logged in -- random results
-	           	$.ajax({
-	                url: "/random"
-	            }).done(function(results) { 
-	            	var json = JSON.parse(JSON.stringify(results));
-				    $('#suggestion').show();
-				    $('#foodPicked').html(json[0]['item']);
-	    		});
-    		} else {
-    			//logged in - ML results
-	    		$.post("/suggest",function(data,status){
-	    			console.log(data);
-				    var start = data.indexOf("Foods Suggested:") + "Foods Suggested:".length;
-				    var word = data.substring(start);
-				    var end = word.indexOf("/n");
-				    word= word.substring(start,end);
-				    console.log(word);
-				    $('#suggestion').show();
-				    $('#foodPicked').html(word);
-				});
-			}
-    	});
+ 		$.ajax({
+              url: "/random"
+        }).done(function(results) { 
+          	var json = JSON.parse(JSON.stringify(results));
+	    $('#suggestion').show();
+	    $('#foodPicked').html(json[0]['item']);
+  		});
+
+	  //   $.ajax({
+	  //       url: "/isLoggedIn"
+	  //   }).done(function(result) {
+	  //   	if(result === 'no'){
+	  //   		//not logged in -- random results
+	  //          	$.ajax({
+	  //               url: "/random"
+	  //           }).done(function(results) { 
+	  //           	var json = JSON.parse(JSON.stringify(results));
+			// 	    $('#suggestion').show();
+			// 	    $('#foodPicked').html(json[0]['item']);
+	  //   		});
+   //  		} else {
+   //  			//logged in - ML results
+	  //   		$.post("/suggest",function(data,status){
+	  //   			console.log(data);
+			// 	    var start = data.indexOf("Foods Suggested:") + "Foods Suggested:".length;
+			// 	    var word = data.substring(start);
+			// 	    var end = word.indexOf("/n");
+			// 	    word= word.substring(start,end);
+			// 	    console.log(word);
+			// 	    $('#suggestion').show();
+			// 	    $('#foodPicked').html(word);
+			// 	});
+			// }
+   //  	});
 	});
 
     dininghalls.forEach(function(entry){
